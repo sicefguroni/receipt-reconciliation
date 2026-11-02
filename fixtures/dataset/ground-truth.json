@@ -1,0 +1,1351 @@
+{
+  "monthKey": "2026-10",
+  "generatedBy": "scripts/generate-dataset.ts",
+  "seed": 20261001,
+  "receipts": [
+    {
+      "id": "R01",
+      "testCases": [
+        "TC01"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Sample Café",
+        "date": "2026-10-02",
+        "total": 18.5,
+        "currency": "AUD",
+        "tax": 1.68,
+        "summary": "Flat white; Ham & cheese croissant; Banana bread"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L03",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 18.5,
+      "duplicateOf": null
+    },
+    {
+      "id": "R02",
+      "testCases": [
+        "TC02"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Nimbus Compute Inc.",
+        "date": "2026-10-05",
+        "total": 49,
+        "currency": "USD",
+        "tax": null,
+        "summary": "Compute plan: Team (October 2026)"
+      },
+      "isReceipt": true,
+      "category": "AI & Cloud",
+      "statementLineId": "L08",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 77.12,
+      "duplicateOf": null,
+      "note": "Statement shows USD 49.00 original plus AUD charge including a 3% foreign transaction fee. Match on the USD amount (R-CUR-4)."
+    },
+    {
+      "id": "R03",
+      "testCases": [
+        "TC03"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Nordhavn Analytics GmbH",
+        "date": "2026-10-06",
+        "total": 89,
+        "currency": "AUD",
+        "tax": null,
+        "summary": "Analytics dashboard licence: October"
+      },
+      "isReceipt": true,
+      "category": "Software",
+      "statementLineId": "L09",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 89,
+      "duplicateOf": null,
+      "note": "Foreign vendor that bills in AUD (printed 'AUD 89.00'). Must stay AUD and count in totals (R-CUR-1, E2 regression)."
+    },
+    {
+      "id": "R04",
+      "testCases": [
+        "TC04"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "QuickFix Repairs",
+        "date": "2026-10-08",
+        "total": 500,
+        "currency": "AUD",
+        "tax": 45.45,
+        "summary": "Call-out and labour: replace office door closer; Door closer unit"
+      },
+      "isReceipt": true,
+      "category": "Repairs & Maintenance",
+      "statementLineId": "L16",
+      "matchStatus": "amount_differs",
+      "exceptions": [
+        "AMOUNT_DIFFERS_OVER_THRESHOLD"
+      ],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 560,
+      "duplicateOf": null,
+      "note": "Receipt 500.00, charged 560.00 (12%, over the 10% threshold)."
+    },
+    {
+      "id": "R05",
+      "testCases": [
+        "TC05"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Harbour Lane Cafe",
+        "date": "2026-10-09",
+        "total": 42,
+        "currency": "AUD",
+        "tax": 3.82,
+        "summary": "Lunch special x2; Long black x2"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L15",
+      "matchStatus": "amount_differs",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 44,
+      "duplicateOf": null,
+      "note": "Receipt 42.00, charged 44.00 (tip added on the terminal). Within threshold."
+    },
+    {
+      "id": "R06",
+      "testCases": [
+        "TC06"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Metro Taxi Co.",
+        "date": "2026-10-12",
+        "total": 36.4,
+        "currency": "AUD",
+        "tax": 3.31,
+        "summary": "Fare; Booking fee"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": "L18",
+      "matchStatus": "matched",
+      "exceptions": [
+        "MISSING_PURPOSE"
+      ],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 36.4,
+      "duplicateOf": null,
+      "note": "Blank business purpose."
+    },
+    {
+      "id": "R07",
+      "testCases": [
+        "TC06"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Sample Stationers",
+        "date": "2026-10-13",
+        "total": 27.95,
+        "currency": "AUD",
+        "tax": 2.54,
+        "summary": "A4 copy paper, 5 ream box; Ballpoint pens, 10 pack"
+      },
+      "isReceipt": true,
+      "category": "Office Supplies",
+      "statementLineId": "L23",
+      "matchStatus": "matched",
+      "exceptions": [
+        "MISSING_PURPOSE"
+      ],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 27.95,
+      "duplicateOf": null,
+      "note": "Placeholder business purpose 'n/a'."
+    },
+    {
+      "id": "R08",
+      "testCases": [
+        "TC07"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Bayside Catering Co.",
+        "date": "2026-10-15",
+        "total": 312,
+        "currency": "AUD",
+        "tax": 28.36,
+        "summary": "Working lunch platter (12 people); Juice and sparkling water"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L25",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 312,
+      "duplicateOf": null,
+      "note": "Original of the duplicate pair R09 (same file) and R10 (re-photographed)."
+    },
+    {
+      "id": "R09",
+      "testCases": [
+        "TC07"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Bayside Catering Co.",
+        "date": "2026-10-15",
+        "total": 312,
+        "currency": "AUD",
+        "tax": 28.36,
+        "summary": "Working lunch platter (12 people); Juice and sparkling water"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": null,
+      "matchStatus": "unmatched",
+      "exceptions": [
+        "DUPLICATE"
+      ],
+      "reimbursement": false,
+      "excludedFromTotals": true,
+      "ledgerAmountAud": null,
+      "duplicateOf": "R08",
+      "note": "Byte-identical re-upload of R08 (same file hash)."
+    },
+    {
+      "id": "R10",
+      "testCases": [
+        "TC07"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Bayside Catering Co.",
+        "date": "2026-10-15",
+        "total": 312,
+        "currency": "AUD",
+        "tax": 28.36,
+        "summary": "Working lunch platter (12 people); Juice and sparkling water"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": null,
+      "matchStatus": "unmatched",
+      "exceptions": [
+        "DUPLICATE"
+      ],
+      "reimbursement": false,
+      "excludedFromTotals": true,
+      "ledgerAmountAud": null,
+      "duplicateOf": "R08",
+      "note": "Phone photo of the printed R08 invoice: different file, same vendor, date, total, and currency."
+    },
+    {
+      "id": "R11",
+      "testCases": [
+        "TC08"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Corner Bistro Restaurant",
+        "date": "2026-10-16",
+        "total": 65.5,
+        "currency": "AUD",
+        "tax": 5.95,
+        "summary": "Grilled barramundi; Caesar salad; Sparkling water"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L27",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 65.5,
+      "duplicateOf": null,
+      "note": "Portrait phone photo, 900 x 1200, skewed. Must pass the gate (R-QUA-1, E5)."
+    },
+    {
+      "id": "R12",
+      "testCases": [
+        "TC09"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Test Airline",
+        "date": "2026-10-04",
+        "total": 389,
+        "currency": "AUD",
+        "tax": 35.36,
+        "summary": "Fare: Sample City to Example Bay, Economy; Seat selection; Checked bag 23 kg"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": "L05",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 389,
+      "duplicateOf": null,
+      "note": "Crisp digital PDF with large white areas. Blur check must be skipped (R-QUA-2, E5)."
+    },
+    {
+      "id": "R13",
+      "testCases": [
+        "TC10"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Station Kiosk Cafe",
+        "date": "2026-10-20",
+        "total": 14.7,
+        "currency": "AUD",
+        "tax": 1.34,
+        "summary": "Cappuccino; Toasted sandwich"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": null,
+      "matchStatus": "unmatched",
+      "exceptions": [],
+      "reimbursement": true,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 14.7,
+      "duplicateOf": null,
+      "note": "Personal card, no statement line. Offer reimbursement; not an error (R-MAT-3)."
+    },
+    {
+      "id": "R14",
+      "testCases": [
+        "TC10"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Metro Taxi Co.",
+        "date": "2026-10-21",
+        "total": 52.1,
+        "currency": "AUD",
+        "tax": 4.74,
+        "summary": "Fare; Booking fee"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": null,
+      "matchStatus": "unmatched",
+      "exceptions": [],
+      "reimbursement": true,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 52.1,
+      "duplicateOf": null,
+      "note": "Personal card, no statement line. Offer reimbursement; not an error (R-MAT-3)."
+    },
+    {
+      "id": "R15",
+      "testCases": [
+        "TC11"
+      ],
+      "fileKind": "png",
+      "fields": {
+        "vendor": "Sample App Store",
+        "date": "2026-10-14",
+        "total": 19.99,
+        "currency": "AUD",
+        "tax": 1.82,
+        "summary": "Pro subscription: monthly"
+      },
+      "isReceipt": true,
+      "category": "Software",
+      "statementLineId": "L22",
+      "matchStatus": "ambiguous",
+      "exceptions": [
+        "AMBIGUOUS_MATCH"
+      ],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 19.99,
+      "duplicateOf": null,
+      "note": "Two identical 19.99 lines on adjacent days (see noise line on 2026-10-15). Never auto-pick (R-MAT-2)."
+    },
+    {
+      "id": "R16",
+      "testCases": [
+        "TC12"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Brightreach Ads Pty Ltd",
+        "date": "2026-10-07",
+        "total": 750,
+        "currency": "AUD",
+        "tax": 68.18,
+        "summary": "Campaign: Spring promo (clicks); Campaign: Brand awareness (impressions)"
+      },
+      "isReceipt": true,
+      "category": "Advertising & Marketing",
+      "statementLineId": "L11",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 750,
+      "duplicateOf": null,
+      "note": "Ad-platform invoice. Must not land in 'Other' (E3)."
+    },
+    {
+      "id": "R17",
+      "testCases": [
+        "TC12"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Demo Cloud Pty Ltd",
+        "date": "2026-10-03",
+        "total": 182.4,
+        "currency": "AUD",
+        "tax": 16.58,
+        "summary": "Cloud compute (September usage); Object storage; Data transfer"
+      },
+      "isReceipt": true,
+      "category": "AI & Cloud",
+      "statementLineId": "L06",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 182.4,
+      "duplicateOf": null,
+      "note": "Cloud bill. Must be AI & Cloud, not Software (E3)."
+    },
+    {
+      "id": "R18",
+      "testCases": [
+        "TC12"
+      ],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Hub Coworking",
+        "date": "2026-10-19",
+        "total": 135,
+        "currency": "AUD",
+        "tax": 12.27,
+        "summary": "Day pass x3"
+      },
+      "isReceipt": true,
+      "category": "Rent & Workspace",
+      "statementLineId": "L29",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 135,
+      "duplicateOf": null,
+      "note": "Coworking pass. Must be Rent & Workspace, not Utilities (E3)."
+    },
+    {
+      "id": "R19",
+      "testCases": [
+        "TC12"
+      ],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Ironbark Hardware",
+        "date": "2026-10-22",
+        "total": 429,
+        "currency": "AUD",
+        "tax": 39,
+        "summary": "Ergonomic office chair, mesh back"
+      },
+      "isReceipt": true,
+      "category": "Equipment",
+      "statementLineId": "L34",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 429,
+      "duplicateOf": null,
+      "note": "Office chair from a hardware store. Must be Equipment, not Office Supplies (E3)."
+    },
+    {
+      "id": "R20",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Sample Harbour Hotel",
+        "date": "2026-10-31",
+        "total": 268,
+        "currency": "AUD",
+        "tax": 24.36,
+        "summary": "Room: 1 night, standard king; Breakfast"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": null,
+      "matchStatus": "unmatched",
+      "exceptions": [
+        "NO_PAYMENT_FOUND"
+      ],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": null,
+      "duplicateOf": null,
+      "note": "Company card charge posts after the statement period ends, so there is no line."
+    },
+    {
+      "id": "R21",
+      "testCases": [],
+      "fileKind": "png",
+      "fields": {
+        "vendor": "Teamline Inc.",
+        "date": "2026-10-03",
+        "total": 12,
+        "currency": "USD",
+        "tax": null,
+        "summary": "Team plan: 1 seat (monthly)"
+      },
+      "isReceipt": true,
+      "category": "Software",
+      "statementLineId": "L04",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 18.94,
+      "duplicateOf": null,
+      "note": "Payment source unknown: allowed, visible, editable (R-REQ-2, E8). Not an exception."
+    },
+    {
+      "id": "R22",
+      "testCases": [],
+      "fileKind": "png",
+      "fields": {
+        "vendor": "Teamline Inc.",
+        "date": "2026-10-17",
+        "total": 12,
+        "currency": "USD",
+        "tax": null,
+        "summary": "Team plan: 1 seat (monthly)"
+      },
+      "isReceipt": true,
+      "category": "Software",
+      "statementLineId": "L28",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 18.84,
+      "duplicateOf": null,
+      "note": "Same vendor and amount as R21 on a different date. Not a duplicate (R-DUP-2)."
+    },
+    {
+      "id": "R23",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Pixelboard Inc.",
+        "date": "2026-10-01",
+        "total": 15,
+        "currency": "USD",
+        "tax": null,
+        "summary": "Design workspace: Pro (monthly)"
+      },
+      "isReceipt": true,
+      "category": "Software",
+      "statementLineId": "L01",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 23.73,
+      "duplicateOf": null
+    },
+    {
+      "id": "R24",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Example Telco Pty Ltd",
+        "date": "2026-10-10",
+        "total": 89.95,
+        "currency": "AUD",
+        "tax": 8.18,
+        "summary": "Business internet 100: October"
+      },
+      "isReceipt": true,
+      "category": "Utilities",
+      "statementLineId": "L14",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 89.95,
+      "duplicateOf": null,
+      "note": "Paid from the bank account by direct debit. Intake has no 'bank' payment source, so it is company_card."
+    },
+    {
+      "id": "R25",
+      "testCases": [],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Sample Café",
+        "date": "2026-10-23",
+        "total": 22,
+        "currency": "AUD",
+        "tax": 2,
+        "summary": "Flat white x4"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L35",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 22,
+      "duplicateOf": null,
+      "note": "A different Sample Café charge of 19.00 posts the next day (distractor)."
+    },
+    {
+      "id": "R26",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Test Airline",
+        "date": "2026-10-26",
+        "total": 214,
+        "currency": "AUD",
+        "tax": 19.45,
+        "summary": "Fare: Example Bay to Sample City, Economy"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": "L38",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 214,
+      "duplicateOf": null
+    },
+    {
+      "id": "R27",
+      "testCases": [],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Metro Taxi Co.",
+        "date": "2026-10-27",
+        "total": 28.7,
+        "currency": "AUD",
+        "tax": 2.61,
+        "summary": "Fare; Booking fee"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": "L39",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 28.7,
+      "duplicateOf": null,
+      "note": "Another Metro Taxi charge of 31.20 posts the same day (distractor within the amount threshold)."
+    },
+    {
+      "id": "R28",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Sample Harbour Hotel",
+        "date": "2026-10-25",
+        "total": 189,
+        "currency": "AUD",
+        "tax": 17.18,
+        "summary": "Room: 1 night, standard queen"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": "L37",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 189,
+      "duplicateOf": null
+    },
+    {
+      "id": "R29",
+      "testCases": [],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Ironbark Hardware",
+        "date": "2026-10-11",
+        "total": 64.85,
+        "currency": "AUD",
+        "tax": 5.9,
+        "summary": "Printer ink cartridge, black; A4 copy paper, 2 ream; Sticky notes, 12 pack"
+      },
+      "isReceipt": true,
+      "category": "Office Supplies",
+      "statementLineId": "L17",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 64.85,
+      "duplicateOf": null
+    },
+    {
+      "id": "R30",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Brightreach Ads Pty Ltd",
+        "date": "2026-10-28",
+        "total": 420,
+        "currency": "AUD",
+        "tax": 38.18,
+        "summary": "Campaign: Retargeting (clicks)"
+      },
+      "isReceipt": true,
+      "category": "Advertising & Marketing",
+      "statementLineId": "L41",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 420,
+      "duplicateOf": null
+    },
+    {
+      "id": "R31",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Nimbus Compute Inc.",
+        "date": "2026-10-18",
+        "total": 112.4,
+        "currency": "USD",
+        "tax": null,
+        "summary": "GPU inference credits"
+      },
+      "isReceipt": true,
+      "category": "AI & Cloud",
+      "statementLineId": "L30",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 177.36,
+      "duplicateOf": null
+    },
+    {
+      "id": "R32",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Bayside Catering Co.",
+        "date": "2026-10-29",
+        "total": 156,
+        "currency": "AUD",
+        "tax": 14.18,
+        "summary": "Morning tea platter (8 people)"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L42",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 156,
+      "duplicateOf": null,
+      "note": "Same amount as R40 (156.00) but a different vendor and date."
+    },
+    {
+      "id": "R33",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Hub Coworking",
+        "date": "2026-10-09",
+        "total": 60,
+        "currency": "AUD",
+        "tax": 5.45,
+        "summary": "Meeting room: 2 hours"
+      },
+      "isReceipt": true,
+      "category": "Rent & Workspace",
+      "statementLineId": "L13",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 60,
+      "duplicateOf": null
+    },
+    {
+      "id": "R34",
+      "testCases": [],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Corner Bistro Restaurant",
+        "date": "2026-10-30",
+        "total": 88.2,
+        "currency": "AUD",
+        "tax": 8.02,
+        "summary": "Set menu x2; Soft drinks x2"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L43",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 88.2,
+      "duplicateOf": null
+    },
+    {
+      "id": "R35",
+      "testCases": [],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Sample Stationers",
+        "date": "2026-10-06",
+        "total": 41.3,
+        "currency": "AUD",
+        "tax": 3.75,
+        "summary": "Whiteboard markers, 8 pack; Spiral notebooks, 5 pack; Desk organiser"
+      },
+      "isReceipt": true,
+      "category": "Office Supplies",
+      "statementLineId": "L10",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 41.3,
+      "duplicateOf": null
+    },
+    {
+      "id": "R36",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "QuickFix Repairs",
+        "date": "2026-10-20",
+        "total": 220,
+        "currency": "AUD",
+        "tax": 20,
+        "summary": "Laptop screen replacement: labour; Replacement screen panel"
+      },
+      "isReceipt": true,
+      "category": "Repairs & Maintenance",
+      "statementLineId": "L33",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 220,
+      "duplicateOf": null
+    },
+    {
+      "id": "R37",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Example Energy Pty Ltd",
+        "date": "2026-10-14",
+        "total": 146.55,
+        "currency": "AUD",
+        "tax": 13.32,
+        "summary": "Electricity: September billing period"
+      },
+      "isReceipt": true,
+      "category": "Utilities",
+      "statementLineId": "L21",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 146.55,
+      "duplicateOf": null
+    },
+    {
+      "id": "R38",
+      "testCases": [],
+      "fileKind": "photo",
+      "fields": {
+        "vendor": "Harbour Lane Cafe",
+        "date": "2026-10-05",
+        "total": 15.5,
+        "currency": "AUD",
+        "tax": 1.41,
+        "summary": "Long black; Blueberry muffin; English breakfast tea"
+      },
+      "isReceipt": true,
+      "category": "Meals & Entertainment",
+      "statementLineId": "L07",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 15.5,
+      "duplicateOf": null
+    },
+    {
+      "id": "R39",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Vectorly Inc.",
+        "date": "2026-10-12",
+        "total": 24,
+        "currency": "USD",
+        "tax": null,
+        "summary": "Vector editor: Individual (monthly)"
+      },
+      "isReceipt": true,
+      "category": "Software",
+      "statementLineId": "L20",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 37.67,
+      "duplicateOf": null
+    },
+    {
+      "id": "R40",
+      "testCases": [],
+      "fileKind": "pdf",
+      "fields": {
+        "vendor": "Test Airline",
+        "date": "2026-10-19",
+        "total": 156,
+        "currency": "AUD",
+        "tax": 14.18,
+        "summary": "Fare: Sample City to Example Bay, Economy"
+      },
+      "isReceipt": true,
+      "category": "Travel",
+      "statementLineId": "L31",
+      "matchStatus": "matched",
+      "exceptions": [],
+      "reimbursement": false,
+      "excludedFromTotals": false,
+      "ledgerAmountAud": 156,
+      "duplicateOf": null
+    }
+  ],
+  "statementLines": [
+    {
+      "id": "L01",
+      "date": "2026-10-02",
+      "description": "PIXELBOARD INC SAMPLE TOWN US",
+      "amountAud": 23.73,
+      "originalAmount": {
+        "amount": 15,
+        "currency": "USD"
+      },
+      "account": "company_card",
+      "receiptId": "R23"
+    },
+    {
+      "id": "L02",
+      "date": "2026-10-02",
+      "description": "SAMPLE PHARMACY",
+      "amountAud": 12.4,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "No receipt."
+    },
+    {
+      "id": "L03",
+      "date": "2026-10-02",
+      "description": "SQ *SAMPLE CAFE SAMPLE CITY AU",
+      "amountAud": 18.5,
+      "account": "company_card",
+      "receiptId": "R01"
+    },
+    {
+      "id": "L04",
+      "date": "2026-10-04",
+      "description": "TEAMLINE INC SAMPLE TOWN US",
+      "amountAud": 18.94,
+      "originalAmount": {
+        "amount": 12,
+        "currency": "USD"
+      },
+      "account": "company_card",
+      "receiptId": "R21"
+    },
+    {
+      "id": "L05",
+      "date": "2026-10-04",
+      "description": "TEST AIRLINE SAMPLE CITY",
+      "amountAud": 389,
+      "account": "company_card",
+      "receiptId": "R12"
+    },
+    {
+      "id": "L06",
+      "date": "2026-10-05",
+      "description": "DEMO CLOUD PTY LTD SAMPLE CITY",
+      "amountAud": 182.4,
+      "account": "company_card",
+      "receiptId": "R17"
+    },
+    {
+      "id": "L07",
+      "date": "2026-10-05",
+      "description": "HARBOUR LANE CAFE SAMPLE CITY",
+      "amountAud": 15.5,
+      "account": "company_card",
+      "receiptId": "R38"
+    },
+    {
+      "id": "L08",
+      "date": "2026-10-06",
+      "description": "NIMBUS COMPUTE INC 800-555-0100 US",
+      "amountAud": 77.12,
+      "originalAmount": {
+        "amount": 49,
+        "currency": "USD"
+      },
+      "account": "company_card",
+      "receiptId": "R02"
+    },
+    {
+      "id": "L09",
+      "date": "2026-10-07",
+      "description": "NORDHAVN ANALYTICS BERLIN DE",
+      "amountAud": 89,
+      "account": "company_card",
+      "receiptId": "R03"
+    },
+    {
+      "id": "L10",
+      "date": "2026-10-07",
+      "description": "SAMPLE STATIONERS SAMPLE CITY",
+      "amountAud": 41.3,
+      "account": "company_card",
+      "receiptId": "R35"
+    },
+    {
+      "id": "L11",
+      "date": "2026-10-08",
+      "description": "BRIGHTREACH ADS SAMPLE CITY",
+      "amountAud": 750,
+      "account": "company_card",
+      "receiptId": "R16"
+    },
+    {
+      "id": "L12",
+      "date": "2026-10-08",
+      "description": "SAMPLE PARKING STATION",
+      "amountAud": 18,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "No receipt."
+    },
+    {
+      "id": "L13",
+      "date": "2026-10-09",
+      "description": "HUB COWORKING SAMPLE CITY",
+      "amountAud": 60,
+      "account": "company_card",
+      "receiptId": "R33"
+    },
+    {
+      "id": "L14",
+      "date": "2026-10-10",
+      "description": "DIRECT DEBIT EXAMPLE TELCO",
+      "amountAud": 89.95,
+      "account": "bank",
+      "receiptId": "R24"
+    },
+    {
+      "id": "L15",
+      "date": "2026-10-10",
+      "description": "HARBOUR LANE CAFE SAMPLE CITY",
+      "amountAud": 44,
+      "account": "company_card",
+      "receiptId": "R05"
+    },
+    {
+      "id": "L16",
+      "date": "2026-10-10",
+      "description": "QUICKFIX REPAIRS SAMPLE CITY",
+      "amountAud": 560,
+      "account": "company_card",
+      "receiptId": "R04"
+    },
+    {
+      "id": "L17",
+      "date": "2026-10-12",
+      "description": "IRONBARK HARDWARE SAMPLE CITY",
+      "amountAud": 64.85,
+      "account": "company_card",
+      "receiptId": "R29"
+    },
+    {
+      "id": "L18",
+      "date": "2026-10-12",
+      "description": "METRO TAXI CO SAMPLE CITY",
+      "amountAud": 36.4,
+      "account": "company_card",
+      "receiptId": "R06"
+    },
+    {
+      "id": "L19",
+      "date": "2026-10-13",
+      "description": "SAMPLE COURIER SERVICES",
+      "amountAud": 23.5,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "No receipt."
+    },
+    {
+      "id": "L20",
+      "date": "2026-10-13",
+      "description": "VECTORLY INC SAMPLE TOWN US",
+      "amountAud": 37.67,
+      "originalAmount": {
+        "amount": 24,
+        "currency": "USD"
+      },
+      "account": "company_card",
+      "receiptId": "R39"
+    },
+    {
+      "id": "L21",
+      "date": "2026-10-14",
+      "description": "DIRECT DEBIT EXAMPLE ENERGY",
+      "amountAud": 146.55,
+      "account": "bank",
+      "receiptId": "R37"
+    },
+    {
+      "id": "L22",
+      "date": "2026-10-14",
+      "description": "SAMPLE APP STORE SAMPLE CITY",
+      "amountAud": 19.99,
+      "account": "company_card",
+      "receiptId": "R15"
+    },
+    {
+      "id": "L23",
+      "date": "2026-10-14",
+      "description": "SAMPLE STATIONERS SAMPLE CITY",
+      "amountAud": 27.95,
+      "account": "company_card",
+      "receiptId": "R07"
+    },
+    {
+      "id": "L24",
+      "date": "2026-10-15",
+      "description": "SAMPLE APP STORE SAMPLE CITY",
+      "amountAud": 19.99,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "TC11 twin: same amount as R15, one day later."
+    },
+    {
+      "id": "L25",
+      "date": "2026-10-16",
+      "description": "BAYSIDE CATERING CO SAMPLE CITY",
+      "amountAud": 312,
+      "account": "company_card",
+      "receiptId": "R08"
+    },
+    {
+      "id": "L26",
+      "date": "2026-10-16",
+      "description": "SAMPLE PETROL SAMPLE CITY",
+      "amountAud": 75.2,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "No receipt."
+    },
+    {
+      "id": "L27",
+      "date": "2026-10-17",
+      "description": "CORNER BISTRO RESTAURANT EXAMPLE BAY",
+      "amountAud": 65.5,
+      "account": "company_card",
+      "receiptId": "R11"
+    },
+    {
+      "id": "L28",
+      "date": "2026-10-18",
+      "description": "TEAMLINE INC SAMPLE TOWN US",
+      "amountAud": 18.84,
+      "originalAmount": {
+        "amount": 12,
+        "currency": "USD"
+      },
+      "account": "company_card",
+      "receiptId": "R22"
+    },
+    {
+      "id": "L29",
+      "date": "2026-10-19",
+      "description": "HUB COWORKING SAMPLE CITY",
+      "amountAud": 135,
+      "account": "company_card",
+      "receiptId": "R18"
+    },
+    {
+      "id": "L30",
+      "date": "2026-10-19",
+      "description": "NIMBUS COMPUTE INC 800-555-0100 US",
+      "amountAud": 177.36,
+      "originalAmount": {
+        "amount": 112.4,
+        "currency": "USD"
+      },
+      "account": "company_card",
+      "receiptId": "R31"
+    },
+    {
+      "id": "L31",
+      "date": "2026-10-20",
+      "description": "TEST AIRLINE SAMPLE CITY",
+      "amountAud": 156,
+      "account": "company_card",
+      "receiptId": "R40"
+    },
+    {
+      "id": "L32",
+      "date": "2026-10-21",
+      "description": "SAMPLE BOOKSHOP",
+      "amountAud": 34.95,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "No receipt."
+    },
+    {
+      "id": "L33",
+      "date": "2026-10-22",
+      "description": "QUICKFIX REPAIRS SAMPLE CITY",
+      "amountAud": 220,
+      "account": "company_card",
+      "receiptId": "R36"
+    },
+    {
+      "id": "L34",
+      "date": "2026-10-23",
+      "description": "IRONBARK HARDWARE SAMPLE CITY",
+      "amountAud": 429,
+      "account": "company_card",
+      "receiptId": "R19"
+    },
+    {
+      "id": "L35",
+      "date": "2026-10-23",
+      "description": "SQ *SAMPLE CAFE SAMPLE CITY AU",
+      "amountAud": 22,
+      "account": "company_card",
+      "receiptId": "R25"
+    },
+    {
+      "id": "L36",
+      "date": "2026-10-24",
+      "description": "SQ *SAMPLE CAFE SAMPLE CITY AU",
+      "amountAud": 19,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "Distractor for R25."
+    },
+    {
+      "id": "L37",
+      "date": "2026-10-26",
+      "description": "SAMPLE HARBOUR HOTEL EXAMPLE BAY",
+      "amountAud": 189,
+      "account": "company_card",
+      "receiptId": "R28"
+    },
+    {
+      "id": "L38",
+      "date": "2026-10-26",
+      "description": "TEST AIRLINE SAMPLE CITY",
+      "amountAud": 214,
+      "account": "company_card",
+      "receiptId": "R26"
+    },
+    {
+      "id": "L39",
+      "date": "2026-10-27",
+      "description": "METRO TAXI CO SAMPLE CITY",
+      "amountAud": 28.7,
+      "account": "company_card",
+      "receiptId": "R27"
+    },
+    {
+      "id": "L40",
+      "date": "2026-10-27",
+      "description": "METRO TAXI CO SAMPLE CITY",
+      "amountAud": 31.2,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "Distractor for R27, within the amount threshold, same day."
+    },
+    {
+      "id": "L41",
+      "date": "2026-10-29",
+      "description": "BRIGHTREACH ADS SAMPLE CITY",
+      "amountAud": 420,
+      "account": "company_card",
+      "receiptId": "R30"
+    },
+    {
+      "id": "L42",
+      "date": "2026-10-30",
+      "description": "BAYSIDE CATERING CO SAMPLE CITY",
+      "amountAud": 156,
+      "account": "company_card",
+      "receiptId": "R32"
+    },
+    {
+      "id": "L43",
+      "date": "2026-10-31",
+      "description": "CORNER BISTRO RESTAURANT EXAMPLE BAY",
+      "amountAud": 88.2,
+      "account": "company_card",
+      "receiptId": "R34"
+    },
+    {
+      "id": "L44",
+      "date": "2026-10-31",
+      "description": "MONTHLY CARD FEE",
+      "amountAud": 10,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "Bank fee."
+    }
+  ]
+}

@@ -9,14 +9,14 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
-Day 1 in progress. Scaffold done. Next action: Day 1 block 2, `scripts/generate-dataset.ts`. Human: book the interview and B0 slots. See `days/day-1-discover-and-baseline/README.md`.
+Day 1 in progress. Scaffold and dataset done. Next action: Day 1 interview (human), then block 3 (interview notes into `01`/`02`/`03`/`05`). The B0 kit is ready in `fixtures/dataset/baseline/b0-kit/`. Open issue: TC04 cannot reach `AMOUNT_DIFFERS_OVER_THRESHOLD` under the R-MAT scoring as written (see known risks, 2026-11-02 session). See `days/day-1-discover-and-baseline/README.md`.
 
 ## Tasks
 
 ### Day 1: Discover, map, and baseline
 
 - [x] Scaffold the repository and `.env.example`: `Done` 2026-11-02. Paths: `package.json`, `tsconfig.json`, `biome.json`, `vitest.config.ts`, `next.config.ts`, `drizzle.config.ts`, `.env.example`, `.gitignore`, `src/config/env.ts`, `src/adapters/db/{client,schema}.ts`, `src/core/boundary.test.ts`, `src/app/{layout,page}.tsx`, `drizzle/0000_*.sql`. Validation: `pnpm typecheck` OK; `pnpm lint` 0 errors; `pnpm test` 3 files, 8 tests passed; `pnpm db:generate` created `run_log` migration; `pnpm build` OK; `pnpm start` served `/` showing "Mode: replay" with no `.env`.
-- [ ] Synthetic dataset, ground truth, splits, baseline subset
+- [x] Synthetic dataset, ground truth, splits, baseline subset: `Done` 2026-11-02. Paths: `scripts/generate-dataset.ts`, `scripts/dataset/*`, `src/core/schemas.ts`, `fixtures/dataset/**`. 40 receipts (23 PDF, 14 phone-photo JPEG, 3 PNG; 6 layouts), 44 statement lines in two CSV formats, splits 24/16 (stratified), 20-item baseline subset plus the B0 kit. Validation: `pnpm dataset` OK (about 12 s); `pnpm test` 5 files, 36 tests passed (spec invariants plus fixture hashes and sizes); `pnpm lint` and `pnpm typecheck` clean; R02, R10, and R11 inspected by eye.
 - [ ] Interview the Accounting user; notes in `days/day-1-discover-and-baseline/interview-notes.md` (human)
 - [ ] Confirm `CONFIRM WITH USER` rules in `05` (human)
 - [ ] B0 manual baseline, timed and scored (human + agent)
@@ -69,6 +69,10 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-02 | Biome instead of ESLint + Prettier | ESLint flat config | One tool for lint and format; Next 16 no longer ships `next lint`. Markdown excluded so the formatter never rewrites docs. | Yes |
 | 2026-11-02 | Enforce the `src/core` boundary with a test (`src/core/boundary.test.ts`) | Lint rule (Biome `noRestrictedImports`); documentation only | A test fails `pnpm test` the moment core imports an adapter, Node I/O, `process.env`, or `fetch`. It checks the "money rules are pure" claim rather than just stating it. | Yes |
 | 2026-11-02 | Policy thresholds live in `.env`, validated by Zod with defaults equal to `05` | Hard-coded constants; JSON config | `04` lists thresholds in `.env`; Zod defaults mean replay mode runs with no `.env`; `CONFIRM WITH USER` values (R-AMT-2, R-QUA-1) change without a code edit | Yes |
+| 2026-11-02 | Ground truth written by hand per scenario, never computed by `src/core` | Derive expected codes by running the rules | If the rules computed the answers, the eval would only check the code against itself | Yes |
+| 2026-11-02 | Stratified tuning/holdout split (hard vs routine, each 60/40) | Plain seeded shuffle | The plain shuffle put TC04, TC05, TC06, and TC11 all in tuning, so "0% wrong auto-match on holdout" would have passed without being tested | Yes |
+| 2026-11-02 | Both statement formats hold the same transactions | Two different accounts, one per format | Day 3 column mapping can then be checked by confirming both formats give identical lines | Yes |
+| 2026-11-02 | Duplicates expect only `DUPLICATE` (no `NO_PAYMENT_FOUND`), status `unmatched`, excluded from totals | Also expect `NO_PAYMENT_FOUND` | A duplicate is resolved by discarding it; a second flag would double-count one problem in the queue | Yes |
 | 2026-11-02 | `pnpm` scripts limited to ones that work today (`dev`, `build`, `test`, `typecheck`, `lint`, `db:*`). `seed`, `eval`, `eval:compare` are added when their scripts exist. | Stub scripts that print "not yet" | A command that exists but does nothing would be a claim the code does not back | Yes |
 
 ## AI corrections log
@@ -87,6 +91,17 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: `pnpm typecheck` OK · `pnpm lint` clean · `pnpm test` 8/8 passed · `pnpm build` OK · `pnpm start` served `/` in replay mode with no `.env`.
 - Remaining: Day 1 blocks 2–6. Nothing committed yet; the first commit is waiting for the human's go-ahead.
 - Known risks: Biome's first `format` run (before Markdown was excluded) re-padded the tables in `CLAUDE.md`; this was whitespace only, with no content change. The Frankfurter URL in `.env.example` is not yet verified (planned for Day 2 per `04`).
+
+### 2026-11-02: Day 1, block 2, dataset generator
+
+- Work done: `pnpm dataset` renders 6 HTML layouts with Playwright (PDF, PNG, and phone photos degraded with `sharp`), writes intake metadata, ground truth, two statement formats, stratified splits, the baseline subset, and a ready-to-use B0 kit. Private GitHub repo `sicefguroni/receipt-reconciliation` created and the scaffold pushed.
+- Decisions: four rows added to the decision log (hand-written ground truth, stratified split, same transactions in both formats, duplicate expectations).
+- Validation: 36/36 tests passed, including checks that the committed fixtures match the spec (hashes, pixel sizes, exact-duplicate hash).
+- Remaining: Day 1 blocks 3 to 6; most need the interview first.
+- Known risks:
+  - **TC04 cannot reach its expected outcome under R-MAT as written.** A 12% difference earns no amount points (it is outside the threshold), so the best score is 25 (date) + 20 (vendor) + 5 (account) = 50. That gives `ambiguous`, not `amount_differs` with `AMOUNT_DIFFERS_OVER_THRESHOLD`. Decide in block 6 / Day 2: either score over-threshold amounts when date and vendor are strong, or accept TC04 as ambiguous-then-flagged. Ground truth keeps the intent from `06`.
+  - R27's same-day distractor (31.20 vs 28.70) leaves a margin of exactly 20, the R-MAT-1 boundary. This is deliberate, and sensitive to Day 4 tuning.
+  - The intake `paymentSource` enum has no `bank` value; direct-debit receipts (R24, R37) are recorded as `company_card`, so they never earn the +5 account point.
 
 ### YYYY-MM-DD: Session title
 

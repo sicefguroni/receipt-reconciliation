@@ -1,0 +1,559 @@
+{
+  "monthKey": "2026-10",
+  "receipts": [
+    {
+      "id": "R01",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Coffee with prospective client",
+      "uploadOrder": 1,
+      "file": {
+        "path": "receipts/R01.pdf",
+        "mime": "application/pdf",
+        "sha256": "82a362560ac2e46cde9ae26a76aded564ec471edde8cab13bca9e555d73881d1"
+      }
+    },
+    {
+      "id": "R02",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Model hosting for internal tools",
+      "uploadOrder": 2,
+      "file": {
+        "path": "receipts/R02.pdf",
+        "mime": "application/pdf",
+        "sha256": "3ae13be33c4af320b7f4a7c57a20968c575bb6cb4f3c5b92b9e320c6ede7444e"
+      }
+    },
+    {
+      "id": "R03",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Marketing analytics dashboard",
+      "uploadOrder": 3,
+      "file": {
+        "path": "receipts/R03.pdf",
+        "mime": "application/pdf",
+        "sha256": "baa135a0bc0c1384ff4d81519d67cd55e3b5229c75649911f8611e9a8369bfde"
+      }
+    },
+    {
+      "id": "R04",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Fix office front door closer",
+      "uploadOrder": 4,
+      "file": {
+        "path": "receipts/R04.pdf",
+        "mime": "application/pdf",
+        "sha256": "c22a633543913f190265f57514d84c2c01f27ec6a5a894fbc319287043803881"
+      }
+    },
+    {
+      "id": "R05",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Lunch with contractor during site visit",
+      "uploadOrder": 5,
+      "file": {
+        "path": "receipts/R05.jpg",
+        "mime": "image/jpeg",
+        "width": 900,
+        "height": 1200,
+        "sha256": "ef453987bd11614e74d11dd9607ca186aff08d753b09acc4d5b8e1dbdfbdcc72"
+      }
+    },
+    {
+      "id": "R06",
+      "monthKey": "2026-10",
+      "submitterId": "staff-d",
+      "paymentSource": "company_card",
+      "businessPurpose": "",
+      "uploadOrder": 6,
+      "file": {
+        "path": "receipts/R06.jpg",
+        "mime": "image/jpeg",
+        "width": 750,
+        "height": 1000,
+        "sha256": "c573db6281926d10be25ee0773dba5bd89f8afaa4091ad644fff0e49355c0d98"
+      }
+    },
+    {
+      "id": "R07",
+      "monthKey": "2026-10",
+      "submitterId": "staff-e",
+      "paymentSource": "company_card",
+      "businessPurpose": "n/a",
+      "uploadOrder": 7,
+      "file": {
+        "path": "receipts/R07.jpg",
+        "mime": "image/jpeg",
+        "width": 750,
+        "height": 1000,
+        "sha256": "333cbf4dffb11d0e85c1616ca032b83b20f620eb955d1c30d7aa52aecd4786d9"
+      }
+    },
+    {
+      "id": "R08",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Quarterly planning workshop lunch",
+      "uploadOrder": 8,
+      "file": {
+        "path": "receipts/R08.pdf",
+        "mime": "application/pdf",
+        "sha256": "ac099c160244269adedcfc19e62953bdf04060547bd22aab0a5060941695fc94"
+      }
+    },
+    {
+      "id": "R09",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Quarterly planning workshop lunch",
+      "uploadOrder": 9,
+      "file": {
+        "path": "receipts/R09.pdf",
+        "mime": "application/pdf",
+        "sha256": "ac099c160244269adedcfc19e62953bdf04060547bd22aab0a5060941695fc94"
+      }
+    },
+    {
+      "id": "R10",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Workshop catering",
+      "uploadOrder": 10,
+      "file": {
+        "path": "receipts/R10.jpg",
+        "mime": "image/jpeg",
+        "width": 810,
+        "height": 1080,
+        "sha256": "5996f3af073e4aca44dc7dde58bed69d80954b55f86f3c19aaad4ba8c1d7f4ed"
+      }
+    },
+    {
+      "id": "R11",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Dinner while travelling for client onsite",
+      "uploadOrder": 11,
+      "file": {
+        "path": "receipts/R11.jpg",
+        "mime": "image/jpeg",
+        "width": 900,
+        "height": 1200,
+        "sha256": "8433e83f101c223eff435649d0bd23063e265ad83ce52605212c0fdd88d0d45d"
+      }
+    },
+    {
+      "id": "R12",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Flight to client workshop",
+      "uploadOrder": 12,
+      "file": {
+        "path": "receipts/R12.pdf",
+        "mime": "application/pdf",
+        "sha256": "368dc3fbb56732b622c985adf6fdd6189751cead50904692b7552990e650e045"
+      }
+    },
+    {
+      "id": "R13",
+      "monthKey": "2026-10",
+      "submitterId": "staff-d",
+      "paymentSource": "personal_card",
+      "businessPurpose": "Coffee during off-site meeting",
+      "uploadOrder": 13,
+      "file": {
+        "path": "receipts/R13.jpg",
+        "mime": "image/jpeg",
+        "width": 810,
+        "height": 1080,
+        "sha256": "dd2a585cd032414f70f5178553613168e6357e70266d769a0203f3635566659a"
+      }
+    },
+    {
+      "id": "R14",
+      "monthKey": "2026-10",
+      "submitterId": "staff-e",
+      "paymentSource": "personal_card",
+      "businessPurpose": "Taxi home after late client event",
+      "uploadOrder": 14,
+      "file": {
+        "path": "receipts/R14.jpg",
+        "mime": "image/jpeg",
+        "width": 900,
+        "height": 1200,
+        "sha256": "37210d7a40e763d62f1be609a105720385f27c63429709109b064998edc5ce40"
+      }
+    },
+    {
+      "id": "R15",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Design asset app for social posts",
+      "uploadOrder": 15,
+      "file": {
+        "path": "receipts/R15.png",
+        "mime": "image/png",
+        "width": 1588,
+        "height": 2246,
+        "sha256": "44cefde4c87cdc760f262f752995184f89149b02c33ad11c7359c181aa3f42ee"
+      }
+    },
+    {
+      "id": "R16",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "October paid social campaigns",
+      "uploadOrder": 16,
+      "file": {
+        "path": "receipts/R16.pdf",
+        "mime": "application/pdf",
+        "sha256": "9857c1883fa77d49f7f6bd97b5aa179302c796fa6b115b2cd54b0d2bea3f39bb"
+      }
+    },
+    {
+      "id": "R17",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Hosting for customer portal",
+      "uploadOrder": 17,
+      "file": {
+        "path": "receipts/R17.pdf",
+        "mime": "application/pdf",
+        "sha256": "199754babb01b12c13f3e0aa117554028c21ba1b9e151b4964bfcc97e5c459aa"
+      }
+    },
+    {
+      "id": "R18",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Desk space for interstate team visit",
+      "uploadOrder": 18,
+      "file": {
+        "path": "receipts/R18.pdf",
+        "mime": "application/pdf",
+        "sha256": "6ff74759de50d52a5c79db1c84c94ba8b12002acf799ab6c24fd6cbf9c042e2d"
+      }
+    },
+    {
+      "id": "R19",
+      "monthKey": "2026-10",
+      "submitterId": "staff-d",
+      "paymentSource": "company_card",
+      "businessPurpose": "Chair for new team member",
+      "uploadOrder": 19,
+      "file": {
+        "path": "receipts/R19.jpg",
+        "mime": "image/jpeg",
+        "width": 810,
+        "height": 1080,
+        "sha256": "ed278c8e0568cfc42236cbb1c8f8a02584c6ff35b2fbe3fbe68451e9f7e7b2f4"
+      }
+    },
+    {
+      "id": "R20",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Overnight stay for early client meeting",
+      "uploadOrder": 20,
+      "file": {
+        "path": "receipts/R20.pdf",
+        "mime": "application/pdf",
+        "sha256": "771df394ec2de6889eec6b86d79c03c990b3f2e51d0d17d500ec0845ff61ef6f"
+      }
+    },
+    {
+      "id": "R21",
+      "monthKey": "2026-10",
+      "submitterId": "staff-e",
+      "paymentSource": "unknown",
+      "businessPurpose": "Team chat seat for new contractor",
+      "uploadOrder": 21,
+      "file": {
+        "path": "receipts/R21.png",
+        "mime": "image/png",
+        "width": 1588,
+        "height": 2246,
+        "sha256": "85ac3a9b69aab8cf7078c48d953976489de01ea0b85516a43993118d8a323458"
+      }
+    },
+    {
+      "id": "R22",
+      "monthKey": "2026-10",
+      "submitterId": "staff-e",
+      "paymentSource": "company_card",
+      "businessPurpose": "Team chat seat for second contractor",
+      "uploadOrder": 22,
+      "file": {
+        "path": "receipts/R22.png",
+        "mime": "image/png",
+        "width": 1588,
+        "height": 2246,
+        "sha256": "a8816d5c5846051a4bfc56e3c4aa1bb3fc579c03ad124b722245dfc191fe5863"
+      }
+    },
+    {
+      "id": "R23",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Design tool subscription",
+      "uploadOrder": 23,
+      "file": {
+        "path": "receipts/R23.pdf",
+        "mime": "application/pdf",
+        "sha256": "a206e01fb16ad3082d0c8b8d5d8600ed11f2a0820b52fc178c3fb15215f9bb99"
+      }
+    },
+    {
+      "id": "R24",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Office internet",
+      "uploadOrder": 24,
+      "file": {
+        "path": "receipts/R24.pdf",
+        "mime": "application/pdf",
+        "sha256": "28db956abd49157820505215efdf0d004666953636f6facd81cc09eae146063a"
+      }
+    },
+    {
+      "id": "R25",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Coffee for stand-up with visiting client",
+      "uploadOrder": 25,
+      "file": {
+        "path": "receipts/R25.jpg",
+        "mime": "image/jpeg",
+        "width": 900,
+        "height": 1200,
+        "sha256": "ceae3d260a71e78953bdbfd3c9e7d1853d9036794b8d2c8dea365d3b54ebe38f"
+      }
+    },
+    {
+      "id": "R26",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Return flight from client workshop",
+      "uploadOrder": 26,
+      "file": {
+        "path": "receipts/R26.pdf",
+        "mime": "application/pdf",
+        "sha256": "2813698346080f9f6f7ecb38b5cf91997a26625dc367b4a21aa0c75cc7bfbef1"
+      }
+    },
+    {
+      "id": "R27",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Taxi to client office",
+      "uploadOrder": 27,
+      "file": {
+        "path": "receipts/R27.jpg",
+        "mime": "image/jpeg",
+        "width": 750,
+        "height": 1000,
+        "sha256": "ca1e283dac9b1f080a631f24e6a3e169906048503807876df21485f09bd98731"
+      }
+    },
+    {
+      "id": "R28",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Accommodation for client workshop",
+      "uploadOrder": 28,
+      "file": {
+        "path": "receipts/R28.pdf",
+        "mime": "application/pdf",
+        "sha256": "9a1fc4e2619f852e51134aea59ab46083ca83beed595509823672add1d7c712f"
+      }
+    },
+    {
+      "id": "R29",
+      "monthKey": "2026-10",
+      "submitterId": "staff-e",
+      "paymentSource": "company_card",
+      "businessPurpose": "Printer supplies for office",
+      "uploadOrder": 29,
+      "file": {
+        "path": "receipts/R29.jpg",
+        "mime": "image/jpeg",
+        "width": 810,
+        "height": 1080,
+        "sha256": "df2c603e2de5f76d80098f9dc63fc6d603c3d6240163c447ef2bdd999e20c8ee"
+      }
+    },
+    {
+      "id": "R30",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Retargeting campaign",
+      "uploadOrder": 30,
+      "file": {
+        "path": "receipts/R30.pdf",
+        "mime": "application/pdf",
+        "sha256": "2d3fa879e0f92aa216a693ff4e79d73d5aec233529283723064802364bba2d72"
+      }
+    },
+    {
+      "id": "R31",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Inference credits for document pilot",
+      "uploadOrder": 31,
+      "file": {
+        "path": "receipts/R31.pdf",
+        "mime": "application/pdf",
+        "sha256": "e6de7a140f4755059a2371398d227e45ce4b5212eeb9ae2ba9bbc3b5ce6005aa"
+      }
+    },
+    {
+      "id": "R32",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Client onboarding session morning tea",
+      "uploadOrder": 32,
+      "file": {
+        "path": "receipts/R32.pdf",
+        "mime": "application/pdf",
+        "sha256": "b4922a6271c4abcebaf1d63752cec0e663a02d9c5996742be069517dbe920009"
+      }
+    },
+    {
+      "id": "R33",
+      "monthKey": "2026-10",
+      "submitterId": "staff-d",
+      "paymentSource": "company_card",
+      "businessPurpose": "Meeting room for candidate interviews",
+      "uploadOrder": 33,
+      "file": {
+        "path": "receipts/R33.pdf",
+        "mime": "application/pdf",
+        "sha256": "231f4e643bf6d6cfdcb2f47c97e3f920afd71ef2022bc8c5a3c74e3660194842"
+      }
+    },
+    {
+      "id": "R34",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Dinner with partner agency",
+      "uploadOrder": 34,
+      "file": {
+        "path": "receipts/R34.jpg",
+        "mime": "image/jpeg",
+        "width": 900,
+        "height": 1200,
+        "sha256": "b941ad456f86f4ec2e4f4f866e9ccdb8e97db1375959208c18bce02f49124e98"
+      }
+    },
+    {
+      "id": "R35",
+      "monthKey": "2026-10",
+      "submitterId": "staff-e",
+      "paymentSource": "company_card",
+      "businessPurpose": "Stationery restock",
+      "uploadOrder": 35,
+      "file": {
+        "path": "receipts/R35.jpg",
+        "mime": "image/jpeg",
+        "width": 900,
+        "height": 1200,
+        "sha256": "829522ee977accc46b3903f53cd2d103e58b2e07db22bbab2c2b18cc95791fe7"
+      }
+    },
+    {
+      "id": "R36",
+      "monthKey": "2026-10",
+      "submitterId": "staff-d",
+      "paymentSource": "company_card",
+      "businessPurpose": "Repair cracked laptop screen",
+      "uploadOrder": 36,
+      "file": {
+        "path": "receipts/R36.pdf",
+        "mime": "application/pdf",
+        "sha256": "6bb7cc2431f0cf730e55edfff3912ccde1878e5b03a0f071615a298e495fc6bf"
+      }
+    },
+    {
+      "id": "R37",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Office electricity",
+      "uploadOrder": 37,
+      "file": {
+        "path": "receipts/R37.pdf",
+        "mime": "application/pdf",
+        "sha256": "b8825cb7cd96ee8efadb3639357f10cec6438261f0a651b71c4ae46f9ceea0d6"
+      }
+    },
+    {
+      "id": "R38",
+      "monthKey": "2026-10",
+      "submitterId": "staff-d",
+      "paymentSource": "company_card",
+      "businessPurpose": "Coffee meeting with supplier",
+      "uploadOrder": 38,
+      "file": {
+        "path": "receipts/R38.jpg",
+        "mime": "image/jpeg",
+        "width": 810,
+        "height": 1080,
+        "sha256": "4479d7283467cb69a35b67255032d1f7b968717de921180c459164d3f9032a19"
+      }
+    },
+    {
+      "id": "R39",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Illustration tool for marketing",
+      "uploadOrder": 39,
+      "file": {
+        "path": "receipts/R39.pdf",
+        "mime": "application/pdf",
+        "sha256": "fda5b0ea7f8464cb7f3047b41633b2a240db6220f37516461079855e01cc469e"
+      }
+    },
+    {
+      "id": "R40",
+      "monthKey": "2026-10",
+      "submitterId": "staff-e",
+      "paymentSource": "company_card",
+      "businessPurpose": "Flight for trade expo",
+      "uploadOrder": 40,
+      "file": {
+        "path": "receipts/R40.pdf",
+        "mime": "application/pdf",
+        "sha256": "0e677f0c1baa27ba6f46564b0659436b00b1bdd727d5b74d0d4845e3bb38940a"
+      }
+    }
+  ]
+}
