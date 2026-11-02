@@ -3,3 +3,5 @@
 *.png binary
 *.jpg binary
 *.pdf binary
+# Bank exports use CRLF; keep fixture CSVs byte-for-byte so the parser sees real input.
+fixtures/**/*.csv -text
