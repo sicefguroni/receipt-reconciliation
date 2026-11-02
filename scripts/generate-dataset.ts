@@ -26,6 +26,13 @@ function sha256(path: string): string {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
+// Chromium stamps each PDF with the current time, so every rerun changed every hash.
+// Pin the timestamps to a fixed value of the same length so xref byte offsets stay valid.
+function stabilisePdf(pdf: Buffer): Buffer {
+  const text = pdf.toString("latin1").replace(/D:\d{14}/g, "D:20261101000000");
+  return Buffer.from(text, "latin1");
+}
+
 async function renderAll(receipts: DatasetReceipt[]) {
   const browser = await chromium.launch();
   try {
@@ -52,7 +59,7 @@ async function renderAll(receipts: DatasetReceipt[]) {
           printBackground: true,
           pageRanges: "1",
         });
-        writeFileSync(target, pdf);
+        writeFileSync(target, stabilisePdf(pdf));
       } else if (r.fileKind === "png") {
         writeFileSync(target, await doc.screenshot({ type: "png" }));
       } else {

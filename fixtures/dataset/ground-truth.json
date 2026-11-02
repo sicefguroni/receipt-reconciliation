@@ -25,6 +25,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 18.5,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -49,6 +50,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 77.12,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Statement shows USD 49.00 original plus AUD charge including a 3% foreign transaction fee. Match on the USD amount (R-CUR-4)."
     },
@@ -74,6 +76,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 89,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Foreign vendor that bills in AUD (printed 'AUD 89.00'). Must stay AUD and count in totals (R-CUR-1, E2 regression)."
     },
@@ -94,15 +97,19 @@
       "isReceipt": true,
       "category": "Repairs & Maintenance",
       "statementLineId": "L16",
-      "matchStatus": "amount_differs",
+      "matchStatus": "ambiguous",
       "exceptions": [
+        "AMBIGUOUS_MATCH"
+      ],
+      "exceptionsAfterMatchChoice": [
         "AMOUNT_DIFFERS_OVER_THRESHOLD"
       ],
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 560,
+      "amountDifferenceAud": 60,
       "duplicateOf": null,
-      "note": "Receipt 500.00, charged 560.00 (12%, over the 10% threshold)."
+      "note": "Receipt 500.00, charged 560.00 (12%, over the 10% threshold). Never auto-paired; the 560.00 line is a candidate. Choosing it fires the over-threshold flag (R-AMT-2, confirmed 2026-11-02)."
     },
     {
       "id": "R05",
@@ -121,13 +128,14 @@
       "isReceipt": true,
       "category": "Meals & Entertainment",
       "statementLineId": "L15",
-      "matchStatus": "amount_differs",
+      "matchStatus": "matched",
       "exceptions": [],
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 44,
+      "amountDifferenceAud": 2,
       "duplicateOf": null,
-      "note": "Receipt 42.00, charged 44.00 (tip added on the terminal). Within threshold."
+      "note": "Receipt 42.00, charged 44.00 (tip added on the terminal). Within threshold: a normal match with a +2.00 difference badge (R-AMT-3, confirmed 2026-11-02)."
     },
     {
       "id": "R06",
@@ -153,6 +161,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 36.4,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Blank business purpose."
     },
@@ -180,6 +189,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 27.95,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Placeholder business purpose 'n/a'."
     },
@@ -205,6 +215,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 312,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Original of the duplicate pair R09 (same file) and R10 (re-photographed)."
     },
@@ -232,6 +243,7 @@
       "reimbursement": false,
       "excludedFromTotals": true,
       "ledgerAmountAud": null,
+      "amountDifferenceAud": null,
       "duplicateOf": "R08",
       "note": "Byte-identical re-upload of R08 (same file hash)."
     },
@@ -259,6 +271,7 @@
       "reimbursement": false,
       "excludedFromTotals": true,
       "ledgerAmountAud": null,
+      "amountDifferenceAud": null,
       "duplicateOf": "R08",
       "note": "Phone photo of the printed R08 invoice: different file, same vendor, date, total, and currency."
     },
@@ -284,6 +297,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 65.5,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Portrait phone photo, 900 x 1200, skewed. Must pass the gate (R-QUA-1, E5)."
     },
@@ -309,6 +323,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 389,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Crisp digital PDF with large white areas. Blur check must be skipped (R-QUA-2, E5)."
     },
@@ -334,6 +349,7 @@
       "reimbursement": true,
       "excludedFromTotals": false,
       "ledgerAmountAud": 14.7,
+      "amountDifferenceAud": null,
       "duplicateOf": null,
       "note": "Personal card, no statement line. Offer reimbursement; not an error (R-MAT-3)."
     },
@@ -359,6 +375,7 @@
       "reimbursement": true,
       "excludedFromTotals": false,
       "ledgerAmountAud": 52.1,
+      "amountDifferenceAud": null,
       "duplicateOf": null,
       "note": "Personal card, no statement line. Offer reimbursement; not an error (R-MAT-3)."
     },
@@ -386,6 +403,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 19.99,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Two identical 19.99 lines on adjacent days (see noise line on 2026-10-15). Never auto-pick (R-MAT-2)."
     },
@@ -411,6 +429,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 750,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Ad-platform invoice. Must not land in 'Other' (E3)."
     },
@@ -436,6 +455,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 182.4,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Cloud bill. Must be AI & Cloud, not Software (E3)."
     },
@@ -461,6 +481,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 135,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Coworking pass. Must be Rent & Workspace, not Utilities (E3)."
     },
@@ -486,6 +507,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 429,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Office chair from a hardware store. Must be Equipment, not Office Supplies (E3)."
     },
@@ -511,6 +533,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": null,
+      "amountDifferenceAud": null,
       "duplicateOf": null,
       "note": "Company card charge posts after the statement period ends, so there is no line."
     },
@@ -534,6 +557,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 18.94,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Payment source unknown: allowed, visible, editable (R-REQ-2, E8). Not an exception."
     },
@@ -557,6 +581,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 18.84,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Same vendor and amount as R21 on a different date. Not a duplicate (R-DUP-2)."
     },
@@ -580,6 +605,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 23.73,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -602,8 +628,9 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 89.95,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
-      "note": "Paid from the bank account by direct debit. Intake has no 'bank' payment source, so it is company_card."
+      "note": "Paid from the business bank account by direct debit (R-REQ-3)."
     },
     {
       "id": "R25",
@@ -625,6 +652,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 22,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "A different Sample Café charge of 19.00 posts the next day (distractor)."
     },
@@ -648,6 +676,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 214,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -670,6 +699,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 28.7,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Another Metro Taxi charge of 31.20 posts the same day (distractor within the amount threshold)."
     },
@@ -693,6 +723,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 189,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -715,6 +746,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 64.85,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -737,6 +769,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 420,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -759,6 +792,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 177.36,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -781,6 +815,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 156,
+      "amountDifferenceAud": 0,
       "duplicateOf": null,
       "note": "Same amount as R40 (156.00) but a different vendor and date."
     },
@@ -804,6 +839,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 60,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -826,6 +862,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 88.2,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -848,6 +885,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 41.3,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -870,6 +908,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 220,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -892,6 +931,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 146.55,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -914,6 +954,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 15.5,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -936,6 +977,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 37.67,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     },
     {
@@ -958,6 +1000,7 @@
       "reimbursement": false,
       "excludedFromTotals": false,
       "ledgerAmountAud": 156,
+      "amountDifferenceAud": 0,
       "duplicateOf": null
     }
   ],

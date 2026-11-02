@@ -77,7 +77,14 @@ describe("dataset spec", () => {
     const line = ds.statementLines.find((l) => l.id === r?.statementLineId);
     expect(r?.fields.total).toBe(500);
     expect(line?.amountAud).toBe(560);
-    expect(r?.exceptions).toEqual(["AMOUNT_DIFFERS_OVER_THRESHOLD"]);
+  });
+
+  it("TC04: never auto-paired; the over-threshold flag fires only after the human chooses the line", () => {
+    const r = byId.get("R04");
+    expect(r?.matchStatus).toBe("ambiguous");
+    expect(r?.exceptions).toEqual(["AMBIGUOUS_MATCH"]);
+    expect(r?.exceptionsAfterMatchChoice).toEqual(["AMOUNT_DIFFERS_OVER_THRESHOLD"]);
+    expect(r?.statementLineId).not.toBeNull();
   });
 
   it("TC05: tip difference is under both the 10% and $100 thresholds", () => {
@@ -86,8 +93,28 @@ describe("dataset spec", () => {
     const diff = (line?.amountAud ?? 0) - (r?.fields.total ?? 0);
     expect(diff).toBeCloseTo(2, 2);
     expect(diff / (r?.fields.total ?? 1)).toBeLessThan(0.1);
-    expect(r?.matchStatus).toBe("amount_differs");
+  });
+
+  it("TC05: a small difference is a normal match with a difference badge (R-AMT-3)", () => {
+    const r = byId.get("R05");
+    expect(r?.matchStatus).toBe("matched");
     expect(r?.exceptions).toEqual([]);
+    expect(r?.amountDifferenceAud).toBe(2);
+  });
+
+  it("amount difference is zero for exact and foreign-currency matches, null without a line", () => {
+    expect(byId.get("R01")?.amountDifferenceAud).toBe(0);
+    expect(byId.get("R02")?.amountDifferenceAud).toBe(0); // FX fee is not a difference
+    expect(byId.get("R13")?.amountDifferenceAud).toBeNull();
+  });
+
+  it("R-REQ-3: direct-debit receipts carry the bank payment source and a bank line", () => {
+    for (const id of ["R24", "R37"]) {
+      const r = ds.receipts.find((x) => x.id === id);
+      const line = ds.statementLines.find((l) => l.id === r?.truth.statementLineId);
+      expect(r?.intake.paymentSource, id).toBe("bank");
+      expect(line?.account, id).toBe("bank");
+    }
   });
 
   it("TC06: blank and 'n/a' purposes are both expected to flag MISSING_PURPOSE", () => {

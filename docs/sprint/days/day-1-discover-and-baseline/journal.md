@@ -62,3 +62,29 @@ One entry per block: what happened, what went wrong, and how it was checked. `TR
 **Verified.** 36/36 tests: spec invariants (TC01 to TC12 covered, thresholds for TC04 and TC05, splits, baseline subset, determinism) plus fixture checks (every file hash, real pixel sizes, R09's hash equal to R08's, row counts in both CSVs). R02 (USD invoice PDF), R10 (re-photo), and R11 (TC08 portrait photo) were inspected by eye and are legible.
 
 **Open.** Stress cases from `06` (unreadable photo, non-receipt, bare "$", ambiguous date, refund, FX outage) are planned for Day 4. TC11 has one instance, so it is in only one split.
+
+---
+
+## Block 3: Rules confirmation (2026-11-02, in progress)
+
+**Goal.** Settle the `CONFIRM WITH USER` rules and the gaps found while building the dataset, before any rule code depends on them.
+
+**Context.** The Accounting user is not available today. The candidate already ran the October UAT with them, so the interview answers are **the candidate's second-hand account**, and are labelled that way in `interview-notes.md`.
+
+**Decided by the candidate.**
+
+| Topic | Ruling | Applied to |
+|---|---|---|
+| R-AMT-2 threshold | OR: over 10% **or** over $100 gets flagged | `05`, `.env.example` |
+| TC04 ($500 receipt, $560 charge) | A different payment until a human says otherwise: never auto-paired, shown as a candidate; choosing it fires the flag | `05` R-AMT-2, `06` TC04 and pass/fail, ground truth (`exceptionsAfterMatchChoice`) |
+| R-AMT-3 small differences | A normal match with a visible badge, bulk-approvable | `05` R-AMT-3 and R-QUE, `06` TC05, ground truth (`amountDifferenceAud`) |
+| Duplicates | Mark, never delete | `05` R-DUP-1 |
+| Payment source | Add `bank` | `05` R-REQ-3, `03`, `04`, `src/core/schemas.ts`, R24/R37 |
+
+**Effect on the metrics.** TC05 now counts as a routine item (no human touch), which lowers the expected human-touch rate. TC04 still costs a human touch, by design.
+
+**What went wrong.** Regenerating after a rules-only change rewrote all 23 PDFs, because Chromium stamps each PDF with the time it was made. The timestamps are now pinned, and two reruns give identical hashes.
+
+**Verified.** 40/40 tests pass, including new checks for TC04's after-choice flag, TC05's badge amount, zero difference on a USD match (the FX fee is excluded), and `bank` on R24/R37. The stabilised R24 PDF still opens and reads correctly.
+
+**Open.** R-QUA-1 photo size; the B0 proxy decision; candidate-reported interview answers.

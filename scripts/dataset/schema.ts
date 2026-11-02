@@ -72,9 +72,13 @@ export const GroundTruthReceipt = z.object({
   statementLineId: z.string().nullable(),
   matchStatus: MatchStatus,
   exceptions: z.array(ExceptionCode),
+  // Fires only after a human chooses the correct line (TC04, R-AMT-2).
+  exceptionsAfterMatchChoice: z.array(ExceptionCode).optional(),
   reimbursement: z.boolean(),
   excludedFromTotals: z.boolean(),
   ledgerAmountAud: z.number().nullable(),
+  // Charged minus receipt in AUD when matched; drives the R-AMT-3 badge.
+  amountDifferenceAud: z.number().nullable(),
   duplicateOf: z.string().nullable(),
   note: z.string().optional(),
 });

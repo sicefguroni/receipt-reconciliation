@@ -17,8 +17,8 @@ One synthetic month (`2026-10` or the sprint's previous month) with about **40 r
 | TC01 | Routine happy path | Clean AUD café PDF, exact statement line on the same day | Auto-matched, correct category, in bulk-approve group | R-MAT-1 |
 | TC02 | USD subscription | USD SaaS invoice, statement shows USD original plus AUD charge with FX fee | Converted, matched on the original amount, no amount-difference flag | R-CUR-2, R-CUR-4 |
 | TC03 | AUD must not go to FX | AUD receipt whose vendor is foreign-sounding | Stays AUD, included in totals | R-CUR-1 *(E2 regression)* |
-| TC04 | Difference over threshold | Receipt $500.00, statement $560.00 (12%) | `AMOUNT_DIFFERS_OVER_THRESHOLD`, cannot approve without a reason | R-AMT-2, R-AMT-4 |
-| TC05 | Difference within threshold | Café receipt $42.00, statement $44.00 (tip) | `amount_differs`, approvable without a reason, low priority | R-AMT-3 |
+| TC04 | Difference over threshold | Receipt $500.00, statement $560.00 (12%) | Never auto-paired: `AMBIGUOUS_MATCH` with the $560.00 line as a ranked candidate. When the user chooses it: `amount_differs` plus `AMOUNT_DIFFERS_OVER_THRESHOLD`, and approval needs a reason | R-AMT-2, R-AMT-4, R-MAT-2 |
+| TC05 | Difference within threshold | Café receipt $42.00, statement $44.00 (tip) | `matched` with a "+$2.00" difference badge, bulk-approvable, no reason needed | R-AMT-3 |
 | TC06 | Missing business purpose | Blank purpose, and a variant with "n/a" | `MISSING_PURPOSE`, blocked | R-REQ-1 *(E4)* |
 | TC07 | Duplicate upload | Same file twice, and a re-photographed copy with the same fields | Second copy flagged `DUPLICATE` and excluded from totals | R-DUP-1 |
 | TC08 | Portrait phone photo | 900 × 1200 skewed photo of a receipt | Passes the gate and extracts correctly | R-QUA-1 *(E5)* |
@@ -50,7 +50,7 @@ Use these to find failures, not to pad the pass rate: an unreadable photo (heavy
 ## Pass/fail rubric
 
 - A **test case passes** only if every expected behaviour in its row holds. Partial is a fail, with a note.
-- The **system passes v1** if all of the following hold: TC01–TC12 pass; exception recall is 100% for TC04, TC06, and TC07 codes on the full set; the wrong auto-match rate is 0% on holdout; extraction total and currency accuracy are ≥ 95% on holdout.
+- The **system passes v1** if all of the following hold: TC01–TC12 pass; exception recall is 100% for TC04 (`AMBIGUOUS_MATCH`, then `AMOUNT_DIFFERS_OVER_THRESHOLD` once the line is chosen), TC06, and TC07 codes on the full set; the wrong auto-match rate is 0% on holdout; extraction total and currency accuracy are ≥ 95% on holdout.
 - If the system misses the bar, it still ships. The results doc states the miss, its root cause, and the next step.
 
 ## Baselines (Day 1)

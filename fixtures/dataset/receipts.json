@@ -11,7 +11,7 @@
       "file": {
         "path": "receipts/R01.pdf",
         "mime": "application/pdf",
-        "sha256": "82a362560ac2e46cde9ae26a76aded564ec471edde8cab13bca9e555d73881d1"
+        "sha256": "b3a906ba1b54d858659cca139954a71a6aa1d015274c9894ea4a32c7be3ce991"
       }
     },
     {
@@ -24,7 +24,7 @@
       "file": {
         "path": "receipts/R02.pdf",
         "mime": "application/pdf",
-        "sha256": "3ae13be33c4af320b7f4a7c57a20968c575bb6cb4f3c5b92b9e320c6ede7444e"
+        "sha256": "23c1e4950151b0ec9b327df29de2edb35a39e530cfd9e030ff8f588dd53de101"
       }
     },
     {
@@ -37,7 +37,7 @@
       "file": {
         "path": "receipts/R03.pdf",
         "mime": "application/pdf",
-        "sha256": "baa135a0bc0c1384ff4d81519d67cd55e3b5229c75649911f8611e9a8369bfde"
+        "sha256": "8acf8abca04e73c46799dd40f7f5bdd5b470d1b3503bd06a3ee94ce570ba0d8e"
       }
     },
     {
@@ -50,7 +50,7 @@
       "file": {
         "path": "receipts/R04.pdf",
         "mime": "application/pdf",
-        "sha256": "c22a633543913f190265f57514d84c2c01f27ec6a5a894fbc319287043803881"
+        "sha256": "ff7d1b3fc3e34f851741c442c5cab4b53063b3e460e0eaa164e243ad83affae9"
       }
     },
     {
@@ -108,7 +108,7 @@
       "file": {
         "path": "receipts/R08.pdf",
         "mime": "application/pdf",
-        "sha256": "ac099c160244269adedcfc19e62953bdf04060547bd22aab0a5060941695fc94"
+        "sha256": "368a9ab0a00491ac580f902f2e960871cf12fd569c0d3d7c43de3c43a1c9ee4f"
       }
     },
     {
@@ -121,7 +121,7 @@
       "file": {
         "path": "receipts/R09.pdf",
         "mime": "application/pdf",
-        "sha256": "ac099c160244269adedcfc19e62953bdf04060547bd22aab0a5060941695fc94"
+        "sha256": "368a9ab0a00491ac580f902f2e960871cf12fd569c0d3d7c43de3c43a1c9ee4f"
       }
     },
     {
@@ -164,7 +164,7 @@
       "file": {
         "path": "receipts/R12.pdf",
         "mime": "application/pdf",
-        "sha256": "368dc3fbb56732b622c985adf6fdd6189751cead50904692b7552990e650e045"
+        "sha256": "ef298e2adc643357ec1535c85affda8b62c9e5cda971a29a37c69ef22cdb82e1"
       }
     },
     {
@@ -222,7 +222,7 @@
       "file": {
         "path": "receipts/R16.pdf",
         "mime": "application/pdf",
-        "sha256": "9857c1883fa77d49f7f6bd97b5aa179302c796fa6b115b2cd54b0d2bea3f39bb"
+        "sha256": "acb955c3bd32ea5a0cea4bed2addecccc61bf7c07a70f1f5703afdec1b9e91e5"
       }
     },
     {
@@ -235,7 +235,7 @@
       "file": {
         "path": "receipts/R17.pdf",
         "mime": "application/pdf",
-        "sha256": "199754babb01b12c13f3e0aa117554028c21ba1b9e151b4964bfcc97e5c459aa"
+        "sha256": "7f581924e1ce5e6934d07f47857eb9fb07a8ca2638cf87a4e2245289bb400fa3"
       }
     },
     {
@@ -248,7 +248,7 @@
       "file": {
         "path": "receipts/R18.pdf",
         "mime": "application/pdf",
-        "sha256": "6ff74759de50d52a5c79db1c84c94ba8b12002acf799ab6c24fd6cbf9c042e2d"
+        "sha256": "fe7a9ee247812d8d103b8ea04772e84e49516085d2739301bf59fc40b9e566f0"
       }
     },
     {
@@ -276,7 +276,7 @@
       "file": {
         "path": "receipts/R20.pdf",
         "mime": "application/pdf",
-        "sha256": "771df394ec2de6889eec6b86d79c03c990b3f2e51d0d17d500ec0845ff61ef6f"
+        "sha256": "653621f1b29769da233f5af2e2425912d12ce92dc20d3368ffe517569c510d89"
       }
     },
     {
@@ -319,20 +319,20 @@
       "file": {
         "path": "receipts/R23.pdf",
         "mime": "application/pdf",
-        "sha256": "a206e01fb16ad3082d0c8b8d5d8600ed11f2a0820b52fc178c3fb15215f9bb99"
+        "sha256": "e4e3bdb4a58cfa1a447606621f9e1d880c284c4ea43be5d5cc4ca8645a88dd9a"
       }
     },
     {
       "id": "R24",
       "monthKey": "2026-10",
       "submitterId": "staff-b",
-      "paymentSource": "company_card",
+      "paymentSource": "bank",
       "businessPurpose": "Office internet",
       "uploadOrder": 24,
       "file": {
         "path": "receipts/R24.pdf",
         "mime": "application/pdf",
-        "sha256": "28db956abd49157820505215efdf0d004666953636f6facd81cc09eae146063a"
+        "sha256": "46fcc7abc03c772355877df69df771856407163aaabc768fdc32bde1a17f332a"
       }
     },
     {
@@ -360,7 +360,7 @@
       "file": {
         "path": "receipts/R26.pdf",
         "mime": "application/pdf",
-        "sha256": "2813698346080f9f6f7ecb38b5cf91997a26625dc367b4a21aa0c75cc7bfbef1"
+        "sha256": "5c24fafcb2b15bc35cb1a60721159e469701923956eeef453ba039071006ccca"
       }
     },
     {
@@ -388,7 +388,7 @@
       "file": {
         "path": "receipts/R28.pdf",
         "mime": "application/pdf",
-        "sha256": "9a1fc4e2619f852e51134aea59ab46083ca83beed595509823672add1d7c712f"
+        "sha256": "4a2288fcdf984a279ddc2a2c3b598250800e3bb0ca95667dd9c67e644d1adc58"
       }
     },
     {
@@ -416,7 +416,7 @@
       "file": {
         "path": "receipts/R30.pdf",
         "mime": "application/pdf",
-        "sha256": "2d3fa879e0f92aa216a693ff4e79d73d5aec233529283723064802364bba2d72"
+        "sha256": "8be3e439af3e1589a0c9b544aaf0a5a7dbb98496cc8acd4bb5c7209ae7b27717"
       }
     },
     {
@@ -429,7 +429,7 @@
       "file": {
         "path": "receipts/R31.pdf",
         "mime": "application/pdf",
-        "sha256": "e6de7a140f4755059a2371398d227e45ce4b5212eeb9ae2ba9bbc3b5ce6005aa"
+        "sha256": "2ec1fa4b0a4248cf406e824fd6d69f179766fccd663b8c301db81245aaecc013"
       }
     },
     {
@@ -442,7 +442,7 @@
       "file": {
         "path": "receipts/R32.pdf",
         "mime": "application/pdf",
-        "sha256": "b4922a6271c4abcebaf1d63752cec0e663a02d9c5996742be069517dbe920009"
+        "sha256": "d719d836294b2953a5aca3308ede436999ac8e7eab023f56933cfd14a8148246"
       }
     },
     {
@@ -455,7 +455,7 @@
       "file": {
         "path": "receipts/R33.pdf",
         "mime": "application/pdf",
-        "sha256": "231f4e643bf6d6cfdcb2f47c97e3f920afd71ef2022bc8c5a3c74e3660194842"
+        "sha256": "5cb43cd3e992c34eb3334b29d936a5d071a3e8c585c14dd92aa06910c6059019"
       }
     },
     {
@@ -498,20 +498,20 @@
       "file": {
         "path": "receipts/R36.pdf",
         "mime": "application/pdf",
-        "sha256": "6bb7cc2431f0cf730e55edfff3912ccde1878e5b03a0f071615a298e495fc6bf"
+        "sha256": "b81e3c4cca47960198a775aa000eafa557a86f8d34895c9c034d77e6239a014e"
       }
     },
     {
       "id": "R37",
       "monthKey": "2026-10",
       "submitterId": "staff-b",
-      "paymentSource": "company_card",
+      "paymentSource": "bank",
       "businessPurpose": "Office electricity",
       "uploadOrder": 37,
       "file": {
         "path": "receipts/R37.pdf",
         "mime": "application/pdf",
-        "sha256": "b8825cb7cd96ee8efadb3639357f10cec6438261f0a651b71c4ae46f9ceea0d6"
+        "sha256": "3617e1dfbd7f6b7dfed42d4e0c7f94cc5bf15346e10b2b01113635a4dedd5b44"
       }
     },
     {
@@ -539,7 +539,7 @@
       "file": {
         "path": "receipts/R39.pdf",
         "mime": "application/pdf",
-        "sha256": "fda5b0ea7f8464cb7f3047b41633b2a240db6220f37516461079855e01cc469e"
+        "sha256": "76e95a289deced3fab694770c94d476ec2b4fcc41805c7a347bc10aa23584314"
       }
     },
     {
@@ -552,7 +552,7 @@
       "file": {
         "path": "receipts/R40.pdf",
         "mime": "application/pdf",
-        "sha256": "0e677f0c1baa27ba6f46564b0659436b00b1bdd727d5b74d0d4845e3bb38940a"
+        "sha256": "0c3e7209d8318d80ea0038c978fc4820a965a5e4b04395d2d5eef89273ee6ab2"
       }
     }
   ]

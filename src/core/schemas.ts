@@ -22,7 +22,7 @@ export const DEFAULT_CATEGORIES = [
 export const CategoryName = z.enum(DEFAULT_CATEGORIES);
 export type CategoryName = z.infer<typeof CategoryName>;
 
-export const PaymentSource = z.enum(["company_card", "personal_card", "unknown"]);
+export const PaymentSource = z.enum(["company_card", "personal_card", "bank", "unknown"]);
 export type PaymentSource = z.infer<typeof PaymentSource>;
 
 export const StatementAccount = z.enum(["company_card", "personal_card", "bank"]);

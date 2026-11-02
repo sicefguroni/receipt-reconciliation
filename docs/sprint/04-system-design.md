@@ -58,7 +58,7 @@ const ReceiptInput = z.object({
   id: z.string(),
   monthKey: z.string().regex(/^\d{4}-\d{2}$/),
   submitterId: z.string(),
-  paymentSource: z.enum(["company_card", "personal_card", "unknown"]),
+  paymentSource: z.enum(["company_card", "personal_card", "bank", "unknown"]),
   businessPurpose: z.string().trim().max(500).optional(), // missing is an exception, not a parse error
   file: z.object({ path: z.string(), mime: z.enum(["image/jpeg", "image/png", "application/pdf"]), width: z.number().optional(), height: z.number().optional() }),
 });

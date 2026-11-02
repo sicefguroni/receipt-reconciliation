@@ -53,7 +53,11 @@ interface ScenarioDef {
   paymentSource?: PaymentSource;
   businessPurpose: string;
   line: LineDef | null;
-  expect?: { matchStatus: MatchStatus; exceptions: ExceptionCode[] };
+  expect?: {
+    matchStatus: MatchStatus;
+    exceptions: ExceptionCode[];
+    afterMatchChoice?: ExceptionCode[]; // what fires once a human chooses the correct line
+  };
   note?: string;
 }
 
@@ -277,8 +281,12 @@ const SCENARIOS: ScenarioDef[] = [
     submitterId: "staff-c",
     businessPurpose: "Fix office front door closer",
     line: { lagDays: 2, description: "QUICKFIX REPAIRS SAMPLE CITY", chargedCents: 56000 },
-    expect: { matchStatus: "amount_differs", exceptions: ["AMOUNT_DIFFERS_OVER_THRESHOLD"] },
-    note: "Receipt 500.00, charged 560.00 (12%, over the 10% threshold).",
+    expect: {
+      matchStatus: "ambiguous",
+      exceptions: ["AMBIGUOUS_MATCH"],
+      afterMatchChoice: ["AMOUNT_DIFFERS_OVER_THRESHOLD"],
+    },
+    note: "Receipt 500.00, charged 560.00 (12%, over the 10% threshold). Never auto-paired; the 560.00 line is a candidate. Choosing it fires the over-threshold flag (R-AMT-2, confirmed 2026-11-02).",
   },
   {
     id: "R05",
@@ -295,8 +303,7 @@ const SCENARIOS: ScenarioDef[] = [
     submitterId: "staff-c",
     businessPurpose: "Lunch with contractor during site visit",
     line: { lagDays: 1, description: "HARBOUR LANE CAFE SAMPLE CITY", chargedCents: 4400 },
-    expect: { matchStatus: "amount_differs", exceptions: [] },
-    note: "Receipt 42.00, charged 44.00 (tip added on the terminal). Within threshold.",
+    note: "Receipt 42.00, charged 44.00 (tip added on the terminal). Within threshold: a normal match with a +2.00 difference badge (R-AMT-3, confirmed 2026-11-02).",
   },
   {
     id: "R06",
@@ -571,9 +578,10 @@ const SCENARIOS: ScenarioDef[] = [
     items: [["Business internet 100: October", 8995]],
     category: "Utilities",
     submitterId: "staff-b",
+    paymentSource: "bank",
     businessPurpose: "Office internet",
     line: { lagDays: 0, description: "DIRECT DEBIT EXAMPLE TELCO", account: "bank" },
-    note: "Paid from the bank account by direct debit. Intake has no 'bank' payment source, so it is company_card.",
+    note: "Paid from the business bank account by direct debit (R-REQ-3).",
   },
   {
     id: "R25",
@@ -749,6 +757,7 @@ const SCENARIOS: ScenarioDef[] = [
     items: [["Electricity: September billing period", 14655]],
     category: "Utilities",
     submitterId: "staff-b",
+    paymentSource: "bank",
     businessPurpose: "Office electricity",
     line: { lagDays: 0, description: "DIRECT DEBIT EXAMPLE ENERGY", account: "bank" },
   },
@@ -1057,6 +1066,14 @@ export function buildDataset(): Dataset {
     if (line) ledgerAmountAud = line.amountAud;
     else if (reimbursement && currency === "AUD") ledgerAmountAud = toMajor(totalCents);
 
+    // Charged minus receipt, for the R-AMT-3 badge. Foreign purchases compare on the
+    // original amount (R-CUR-4), so the bank's FX fee is not a difference.
+    let amountDifferenceAud: number | null = null;
+    if (line && s.line) {
+      amountDifferenceAud =
+        currency === "AUD" ? toMajor((s.line.chargedCents ?? totalCents) - totalCents) : 0;
+    }
+
     // A duplicate shows the same printed document as its original.
     const printed = (dup && printedById.get(dup.of)) || {
       docNumber: docNumberFor(s.layout, rng),
@@ -1120,9 +1137,13 @@ export function buildDataset(): Dataset {
         statementLineId,
         matchStatus: expected.matchStatus,
         exceptions: [...expected.exceptions],
+        ...("afterMatchChoice" in expected && expected.afterMatchChoice
+          ? { exceptionsAfterMatchChoice: [...expected.afterMatchChoice] }
+          : {}),
         reimbursement,
         excludedFromTotals: Boolean(dup),
         ledgerAmountAud,
+        amountDifferenceAud,
         duplicateOf: dup ? dup.of : null,
         ...((dup?.note ?? s.note) ? { note: dup?.note ?? s.note } : {}),
       },

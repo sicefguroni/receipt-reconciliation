@@ -13,8 +13,8 @@ Every rule has an ID. Every ID has at least one Vitest case named after it (for 
 ## Amount differences (R-AMT)
 
 - **R-AMT-1** Difference = |ledger amount in AUD − expected AUD amount from the receipt|.
-- **R-AMT-2** **CONFIRM WITH USER.** Flag `AMOUNT_DIFFERS_OVER_THRESHOLD` when the difference is **over 10% of the receipt amount OR over $100 AUD**, whichever triggers first (the stricter reading of the policy "10% or $100"). Both numbers are configurable.
-- **R-AMT-3** A difference at or under the threshold but above $0.01 gives match status `amount_differs` without the over-threshold exception. It is shown in the queue at low priority and can be approved without a reason.
+- **R-AMT-2** *Confirmed 2026-11-02: the OR reading.* Flag `AMOUNT_DIFFERS_OVER_THRESHOLD` when the difference is **over 10% of the receipt amount OR over $100 AUD**, whichever triggers first. Both numbers stay configurable, because the finance lead owns the policy (`01`, "Open policy questions"). A line with an over-threshold difference is **never paired automatically**. It earns no amount points (R-MAT), so the receipt reaches the queue as `AMBIGUOUS_MATCH` with that line among its candidates (R-MAT-2), or as `NO_PAYMENT_FOUND` if no candidate scores 40. If the human chooses that line, the status becomes `amount_differs` and the flag fires.
+- **R-AMT-3** *Confirmed 2026-11-02.* A difference at or under the threshold but above $0.01 is still a normal match: status `matched` and bulk-approvable. It shows a visible difference badge (for example "+$2.00 vs receipt") on the item and in the ledger. No reason is needed. Typical causes are tips and card surcharges.
 - **R-AMT-4** Signing off an over-threshold difference requires a reason of at least 3 characters. *(Keeps a behaviour that worked in UAT.)*
 
 ## Matching (R-MAT)
@@ -40,10 +40,11 @@ Score each (receipt, statement line) pair for unmatched lines in the same month,
 
 - **R-REQ-1** A missing or blank business purpose (after trim, or placeholder text such as "n/a", "-", or "none") flags `MISSING_PURPOSE`. The item cannot be approved until a purpose is added. *(Evidence E4.)*
 - **R-REQ-2** A `paymentSource` of `unknown` is allowed but visible and editable. Its default display is "Unknown — set payment source". *(Evidence E8.)*
+- **R-REQ-3** *Added 2026-11-02.* `paymentSource` is one of `company_card`, `personal_card`, `bank` (for example a direct debit from the business account), or `unknown`. A `bank` receipt earns the account point (R-MAT) against `bank` statement lines.
 
 ## Duplicates (R-DUP)
 
-- **R-DUP-1** Two receipts are duplicates if their file hashes are equal, **or** if vendor (normalised), date, total, and currency are all equal. The later upload is flagged `DUPLICATE` and excluded from totals until a human decides. *(Evidence P4: "the same cost can be entered twice".)*
+- **R-DUP-1** Two receipts are duplicates if their file hashes are equal, **or** if vendor (normalised), date, total, and currency are all equal. The later upload is flagged `DUPLICATE` and excluded from totals until a human decides. *(Evidence P4: "the same cost can be entered twice".)* *Confirmed 2026-11-02:* the system never deletes a duplicate. The item stays in the month, marked, and the human chooses between "confirm duplicate" (kept on record, excluded from totals) and "not a duplicate" (included).
 - **R-DUP-2** The same vendor and amount on different dates is **not** a duplicate (for example monthly subscriptions).
 
 ## Receipt quality gate (R-QUA)
@@ -88,9 +89,9 @@ Default chart (configurable in `config/categories.json`):
 The user's explicit request (evidence E6), extended for the new exception types:
 
 1. Blocking intake problems: `UNREADABLE`, `NOT_A_RECEIPT`, `DUPLICATE`
-2. **Amount differences** over the threshold
+2. **Amount differences** over the threshold (after a human has chosen the line, R-AMT-2)
 3. Missing information: `MISSING_PURPOSE`, `LOW_CONFIDENCE_FIELD`, `UNKNOWN_CATEGORY`, `FX_RATE_UNAVAILABLE`
 4. **Approvals** needing a match decision: `AMBIGUOUS_MATCH`, `NO_PAYMENT_FOUND`, personal-card reimbursements
-5. **Matches** ready to approve: within-threshold `amount_differs`, then clean `matched` items (bulk-approvable)
+5. **Matches** ready to approve: `matched` items, including small differences shown with a badge (R-AMT-3); bulk-approvable
 
 Within a group, sort by AUD amount, largest first. Every list view shows a total for the rows shown. *(Evidence E9.)*

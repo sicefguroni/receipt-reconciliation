@@ -9,7 +9,7 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
-Day 1 in progress. Scaffold and dataset done. Next action: Day 1 interview (human), then block 3 (interview notes into `01`/`02`/`03`/`05`). The B0 kit is ready in `fixtures/dataset/baseline/b0-kit/`. Open issue: TC04 cannot reach `AMOUNT_DIFFERS_OVER_THRESHOLD` under the R-MAT scoring as written (see known risks, 2026-11-02 session). See `days/day-1-discover-and-baseline/README.md`.
+Day 1 in progress. Scaffold and dataset done. The rule decisions for R-AMT-2, R-AMT-3, TC04, duplicates, and the bank source are confirmed and applied. Next: B1 runs (candidate, protocol in `days/day-1-discover-and-baseline/baseline-b1-prompt.md`), the candidate-reported interview, a B0 proxy decision, and R-QUA-1 still to confirm. See `days/day-1-discover-and-baseline/README.md`.
 
 ## Tasks
 
@@ -20,7 +20,7 @@ Block-by-block detail: [`days/day-1-discover-and-baseline/journal.md`](days/day-
 - [x] Scaffold the repository and `.env.example`: `Done` 2026-11-02. Paths: `package.json`, `tsconfig.json`, `biome.json`, `vitest.config.ts`, `next.config.ts`, `drizzle.config.ts`, `.env.example`, `.gitignore`, `src/config/env.ts`, `src/adapters/db/{client,schema}.ts`, `src/core/boundary.test.ts`, `src/app/{layout,page}.tsx`, `drizzle/0000_*.sql`. Validation: `pnpm typecheck` OK; `pnpm lint` 0 errors; `pnpm test` 3 files, 8 tests passed; `pnpm db:generate` created `run_log` migration; `pnpm build` OK; `pnpm start` served `/` showing "Mode: replay" with no `.env`.
 - [x] Synthetic dataset, ground truth, splits, baseline subset: `Done` 2026-11-02. Paths: `scripts/generate-dataset.ts`, `scripts/dataset/*`, `src/core/schemas.ts`, `fixtures/dataset/**`. 40 receipts (23 PDF, 14 phone-photo JPEG, 3 PNG; 6 layouts), 44 statement lines in two CSV formats, splits 24/16 (stratified), 20-item baseline subset plus the B0 kit. Validation: `pnpm dataset` OK (about 12 s); `pnpm test` 5 files, 36 tests passed (spec invariants plus fixture hashes and sizes); `pnpm lint` and `pnpm typecheck` clean; R02, R10, and R11 inspected by eye.
 - [ ] Interview the Accounting user; notes in `days/day-1-discover-and-baseline/interview-notes.md` (human)
-- [ ] Confirm `CONFIRM WITH USER` rules in `05` (human)
+- [ ] Confirm `CONFIRM WITH USER` rules in `05` (human): `In Progress`. R-AMT-2 is confirmed (OR reading), and R-AMT-3, TC04, R-DUP-1, and the new R-REQ-3 (`bank`) are decided and applied on 2026-11-02. R-QUA-1 (photo size) is still open. Resume when the candidate answers it.
 - [ ] B0 manual baseline, timed and scored (human + agent)
 - [ ] B1 single-prompt baseline ×3, scored
 - [ ] Metrics table baseline columns filled; v1 scope approved
@@ -75,6 +75,13 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-02 | Stratified tuning/holdout split (hard vs routine, each 60/40) | Plain seeded shuffle | The plain shuffle put TC04, TC05, TC06, and TC11 all in tuning, so "0% wrong auto-match on holdout" would have passed without being tested | Yes |
 | 2026-11-02 | Both statement formats hold the same transactions | Two different accounts, one per format | Day 3 column mapping can then be checked by confirming both formats give identical lines | Yes |
 | 2026-11-02 | Duplicates expect only `DUPLICATE` (no `NO_PAYMENT_FOUND`), status `unmatched`, excluded from totals | Also expect `NO_PAYMENT_FOUND` | A duplicate is resolved by discarding it; a second flag would double-count one problem in the queue | Yes |
+| 2026-11-02 | R-AMT-2 uses the OR reading (over 10% **or** over $100) | AND reading | Candidate's ruling. Thresholds stay configurable because the finance lead owns the policy. | Yes (config) |
+| 2026-11-02 | TC04: an over-threshold difference is never auto-paired; it goes to the queue as a candidate, and the flag fires when the human chooses that line | Score over-threshold amounts so they auto-pair, then flag; or treat as no payment found | Candidate's ruling ("flag as a different one", option a). Matches the existing scoring and keeps the human on any doubtful pairing. | Yes |
+| 2026-11-02 | R-AMT-3: a small difference is a normal `matched` item with a "+$x.xx" badge, bulk-approvable | Separate low-priority `amount_differs` queue item | Candidate's ruling. Tips and surcharges should not cost a human touch. | Yes |
+| 2026-11-02 | Duplicates are marked, never deleted | Auto-delete the later upload | Candidate's ruling. Keeps the audit trail. | Yes |
+| 2026-11-02 | Add a `bank` payment source (R-REQ-3) | Record direct debits as `company_card` | Candidate's ruling. Direct debits now earn the account point. | Yes |
+| 2026-11-02 | B1 is run by the candidate in ChatGPT, using a fixed prompt that gives the same information as B0 plus the policy | Agent runs B1 through an API; a minimal prompt | The brief says "simple ChatGPT use". A strong, fair prompt makes the comparison credible. | Yes |
+| 2026-11-02 | Pin PDF timestamps in the generator | Accept churn | Every rerun rewrote all 23 PDFs and changed their hashes | Yes |
 | 2026-11-02 | `pnpm` scripts limited to ones that work today (`dev`, `build`, `test`, `typecheck`, `lint`, `db:*`). `seed`, `eval`, `eval:compare` are added when their scripts exist. | Stub scripts that print "not yet" | A command that exists but does nothing would be a claim the code does not back | Yes |
 
 ## AI corrections log
@@ -91,6 +98,7 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | 2026-11-02 | Seeded random tuning/holdout split | Every hard matching case (TC04, TC05, TC06, TC11) landed in tuning | Agent stratified the split and added a test requiring hard cases in holdout | `5bc626d` |
 | 2026-11-02 | R10 re-photographed duplicate of R08 | Showed a different invoice number and time from R08 | Agent made duplicates reuse their original's printed details | `5bc626d` |
 | 2026-11-02 | Fixtures README file counts | Placeholder text ("18 PDF, 8 PNG...") left in | Agent corrected it from `receipts.json` | `5bc626d` |
+| 2026-11-02 | Dataset generator and the claim "a rerun gives the same data" | Chromium stamps each PDF with the current time, so every rerun changed all 23 PDF hashes | Agent noticed 23 changed binaries after a rules-only change, then pinned the timestamps; two reruns now give identical hashes | this commit |
 | 2026-11-02 | Repo-wide `eol=lf` in `.gitattributes` | Normalised fixture CSVs, which should keep CRLF like real bank exports | Agent marked `fixtures/**/*.csv` as `-text` | `7d069ae` |
 
 ## Session history
@@ -110,9 +118,9 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: 36/36 tests passed, including checks that the committed fixtures match the spec (hashes, pixel sizes, exact-duplicate hash).
 - Remaining: Day 1 blocks 3 to 6; most need the interview first.
 - Known risks:
-  - **TC04 cannot reach its expected outcome under R-MAT as written.** A 12% difference earns no amount points (it is outside the threshold), so the best score is 25 (date) + 20 (vendor) + 5 (account) = 50. That gives `ambiguous`, not `amount_differs` with `AMOUNT_DIFFERS_OVER_THRESHOLD`. Decide in block 6 / Day 2: either score over-threshold amounts when date and vendor are strong, or accept TC04 as ambiguous-then-flagged. Ground truth keeps the intent from `06`.
+  - *(Resolved 2026-11-02: candidate chose option (a); `05` and `06` were updated and ground truth expects `AMBIGUOUS_MATCH`, then `AMOUNT_DIFFERS_OVER_THRESHOLD` after the choice.)* **TC04 cannot reach its expected outcome under R-MAT as written.** A 12% difference earns no amount points (it is outside the threshold), so the best score is 25 (date) + 20 (vendor) + 5 (account) = 50. That gives `ambiguous`, not `amount_differs` with `AMOUNT_DIFFERS_OVER_THRESHOLD`. Decide in block 6 / Day 2: either score over-threshold amounts when date and vendor are strong, or accept TC04 as ambiguous-then-flagged. Ground truth keeps the intent from `06`.
   - R27's same-day distractor (31.20 vs 28.70) leaves a margin of exactly 20, the R-MAT-1 boundary. This is deliberate, and sensitive to Day 4 tuning.
-  - The intake `paymentSource` enum has no `bank` value; direct-debit receipts (R24, R37) are recorded as `company_card`, so they never earn the +5 account point.
+  - *(Resolved 2026-11-02: `bank` added, R-REQ-3.)* The intake `paymentSource` enum has no `bank` value; direct-debit receipts (R24, R37) are recorded as `company_card`, so they never earn the +5 account point.
 
 ### YYYY-MM-DD: Session title
 

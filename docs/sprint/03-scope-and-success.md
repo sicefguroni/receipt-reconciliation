@@ -2,7 +2,7 @@
 
 ## v1 scope (must be working on Day 5)
 
-1. **Intake.** In the web UI, upload a batch of receipts (JPG, PNG, PDF) and one statement CSV for a chosen month. Each receipt carries a submitter, a payment source (company card or personal card), and a business purpose.
+1. **Intake.** In the web UI, upload a batch of receipts (JPG, PNG, PDF) and one statement CSV for a chosen month. Each receipt carries a submitter, a payment source (company card, personal card, or bank account), and a business purpose.
 2. **Quality gate.** Deterministic, orientation-aware checks with a plain-language rejection reason.
 3. **Extraction.** Vendor, date, total, currency, tax (GST) if shown, and line-item summary, with per-field confidence, validated against a schema.
 4. **Normalisation.** AUD stays AUD. Non-AUD amounts are converted at the historical rate for the receipt date from a public FX API.
