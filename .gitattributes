@@ -1,0 +1,5 @@
+# Keep LF everywhere so Biome passes on a fresh clone on any OS.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
