@@ -15,6 +15,8 @@ Day 1 in progress. Scaffold and dataset done. Next action: Day 1 interview (huma
 
 ### Day 1: Discover, map, and baseline
 
+Block-by-block detail: [`days/day-1-discover-and-baseline/journal.md`](days/day-1-discover-and-baseline/journal.md)
+
 - [x] Scaffold the repository and `.env.example`: `Done` 2026-11-02. Paths: `package.json`, `tsconfig.json`, `biome.json`, `vitest.config.ts`, `next.config.ts`, `drizzle.config.ts`, `.env.example`, `.gitignore`, `src/config/env.ts`, `src/adapters/db/{client,schema}.ts`, `src/core/boundary.test.ts`, `src/app/{layout,page}.tsx`, `drizzle/0000_*.sql`. Validation: `pnpm typecheck` OK; `pnpm lint` 0 errors; `pnpm test` 3 files, 8 tests passed; `pnpm db:generate` created `run_log` migration; `pnpm build` OK; `pnpm start` served `/` showing "Mode: replay" with no `.env`.
 - [x] Synthetic dataset, ground truth, splits, baseline subset: `Done` 2026-11-02. Paths: `scripts/generate-dataset.ts`, `scripts/dataset/*`, `src/core/schemas.ts`, `fixtures/dataset/**`. 40 receipts (23 PDF, 14 phone-photo JPEG, 3 PNG; 6 layouts), 44 statement lines in two CSV formats, splits 24/16 (stratified), 20-item baseline subset plus the B0 kit. Validation: `pnpm dataset` OK (about 12 s); `pnpm test` 5 files, 36 tests passed (spec invariants plus fixture hashes and sizes); `pnpm lint` and `pnpm typecheck` clean; R02, R10, and R11 inspected by eye.
 - [ ] Interview the Accounting user; notes in `days/day-1-discover-and-baseline/interview-notes.md` (human)
@@ -81,6 +83,15 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 
 | Date | What AI produced | What was wrong | What was done | Commit |
 |---|---|---|---|---|
+| 2026-11-02 | Plan to scaffold in a separate new repository, following `HANDOFF.md` | This folder already is the new repository | **Human correction.** Scaffolded here; `HANDOFF.md` kept out of git through `.git/info/exclude` | `3b159db` |
+| 2026-11-02 | Installed the latest `better-sqlite3` (13.0.3) | No Windows + Node 24 prebuilt binary; install needs Visual Studio, which breaks 3-step setup for a Windows reviewer | Agent checked release assets and pinned 12.11.1 | `3b159db` |
+| 2026-11-02 | Ran `biome format` over the whole repo | It re-padded the tables in `CLAUDE.md` (whitespace only) | Agent excluded `*.md` from Biome | `3b159db` |
+| 2026-11-02 | Secrets check before the first commit | Wrong `git grep` flag order; it printed "none" without running | Agent noticed the error in the output and re-ran it correctly before committing | `3b159db` |
+| 2026-11-02 | First commit's `tsconfig.json` | `next build` had rewritten it; `pnpm lint` failed on the committed tree | Agent formatted it once and confirmed a rebuild leaves it unchanged | `3f1eb24` |
+| 2026-11-02 | Seeded random tuning/holdout split | Every hard matching case (TC04, TC05, TC06, TC11) landed in tuning | Agent stratified the split and added a test requiring hard cases in holdout | `5bc626d` |
+| 2026-11-02 | R10 re-photographed duplicate of R08 | Showed a different invoice number and time from R08 | Agent made duplicates reuse their original's printed details | `5bc626d` |
+| 2026-11-02 | Fixtures README file counts | Placeholder text ("18 PDF, 8 PNG...") left in | Agent corrected it from `receipts.json` | `5bc626d` |
+| 2026-11-02 | Repo-wide `eol=lf` in `.gitattributes` | Normalised fixture CSVs, which should keep CRLF like real bank exports | Agent marked `fixtures/**/*.csv` as `-text` | `7d069ae` |
 
 ## Session history
 

@@ -35,7 +35,7 @@ This is a five-day job-application work sample. It is graded on the rubric in `d
 5. **Confidentiality.** Use synthetic data only. Never write the employer's name, product names, people's names, clients, or real figures into code, data, commits, docs, or the demo. Say "the Accounting user" and "a company I currently work at".
 6. **Reproducible without the candidate.** Setup takes at most three steps. A `replay` mode must run the whole flow and the evaluation without an API key, using recorded model responses committed under `fixtures/recordings/`.
 7. **Secrets and PII.** Secrets live only in `.env`, and `.env.example` is committed. Logs never contain receipt text, card numbers, names, or raw model output. Log IDs, stage names, durations, token counts, and error codes.
-8. **Tracker discipline.** Update `docs/sprint/TRACKER.md` at the end of every working block, using the format defined in that file.
+8. **Tracker discipline.** Update `docs/sprint/TRACKER.md` at the end of every working block, using the format defined in that file. Also append the block's entry to `docs/sprint/days/day-N-*/journal.md` (goal, what was built, what went wrong, how it was verified, what is open), and add every AI mistake to the AI corrections log as it happens, not at the end.
 
 ## Engineering conventions
 
