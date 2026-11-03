@@ -1,55 +1,597 @@
-/* v0: plain and readable. The designed review UI arrives on Day 3. */
+/* A ruled ledger: pale ruled paper, green-black ink, an auditor's green tick for what is done
+   and red ink only for what blocks. Amounts sit in one right-aligned column of tabular figures,
+   so totals line up down the whole queue. */
+:root {
+  --paper: #f5f7f3;
+  --sheet: #fbfcfa;
+  --ink: #1e2a23;
+  --ink-soft: #55635a;
+  --rule: #cbd8ce;
+  --rule-strong: #9fb3a5;
+  --tick: #2e6a4d;
+  --tick-wash: #e3efe7;
+  --query: #a8321f;
+  --query-wash: #fbe9e5;
+  --check: #7a5300;
+  --check-wash: #fff3d1;
+  --focus: #1d5fb8;
+  --radius: 4px;
+  --amt-col: 9.5rem;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #141a16;
+    --sheet: #1a211c;
+    --ink: #e4ebe5;
+    --ink-soft: #a3b2a7;
+    --rule: #2f3b33;
+    --rule-strong: #4b5c50;
+    --tick: #7cc29d;
+    --tick-wash: #1f3328;
+    --query: #f08f7c;
+    --query-wash: #3a211c;
+    --check: #f0c463;
+    --check-wash: #352a12;
+    --focus: #7fb0f5;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
 body {
-  font-family: system-ui, sans-serif;
-  color: #1d1d1f;
-  background: #fff;
   margin: 0;
-  padding: 1.5rem 1rem;
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--paper);
 }
-main {
-  max-width: 44rem;
-  margin: 0 auto;
+a {
+  color: inherit;
+  text-underline-offset: 2px;
 }
-main.wide {
-  max-width: 90rem;
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
-table {
-  border-collapse: collapse;
-  width: 100%;
+.skip {
+  position: absolute;
+  left: -999px;
+}
+.skip:focus {
+  left: 1rem;
+  top: 0.5rem;
+  background: var(--sheet);
+  padding: 0.3rem 0.6rem;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.3rem;
+}
+h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+}
+h4 {
+  font-size: 0.95rem;
+  margin: 0 0 0.4rem;
+}
+.muted,
+.hint {
+  color: var(--ink-soft);
+}
+.hint {
+  font-size: 0.88rem;
+}
+.amt,
+.badge,
+.sub-amt,
+.bar + p,
+td.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Site header ---------------------------------------------------------------------------- */
+header.site {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  padding: 0.7rem 1.25rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--sheet);
+}
+.brand {
+  font-weight: 650;
+  text-decoration: none;
+}
+header.site nav {
+  display: flex;
+  gap: 1rem;
+}
+header.site nav a {
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+header.site nav a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+.actor {
+  margin-left: auto;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
   font-size: 0.9rem;
 }
-th,
-td {
-  border-bottom: 1px solid #ddd;
-  padding: 0.4rem 0.5rem;
-  text-align: left;
-  vertical-align: top;
+
+/* Page frames ---------------------------------------------------------------------------- */
+main {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
 }
-td ul {
-  margin: 0;
-  padding-left: 1rem;
+main.ledger {
+  max-width: 78rem;
 }
-.muted {
-  color: #666;
+main.wide {
+  max-width: 78rem;
 }
-.badge {
+
+/* Controls ------------------------------------------------------------------------------- */
+button,
+.button {
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--sheet);
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
   display: inline-block;
-  margin-left: 0.4rem;
-  padding: 0 0.35rem;
-  border-radius: 0.25rem;
-  background: #fff3cd;
-  font-size: 0.8rem;
 }
-.error {
-  background: #fde8e8;
-  padding: 0.6rem 0.8rem;
-  border-radius: 0.3rem;
+button:hover:not(:disabled),
+.button:hover {
+  border-color: var(--ink-soft);
+}
+button.primary,
+.button.primary {
+  background: var(--tick);
+  border-color: var(--tick);
+  color: var(--sheet);
+  font-weight: 600;
+}
+button:disabled {
+  cursor: not-allowed;
+  color: var(--ink-soft);
+  background: transparent;
+  border-style: dashed;
+}
+input,
+select,
+textarea {
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--sheet);
+  color: var(--ink);
+  min-width: 0;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--tick);
 }
 .stack {
   display: grid;
-  gap: 0.8rem;
+  gap: 0.9rem;
 }
 .stack label {
   display: grid;
   gap: 0.25rem;
+}
+/* Messages sit on the page like a note on the ledger: a thin rule all round, a tinted wash. */
+.notice {
+  border: 1px solid var(--tick);
+  background: var(--tick-wash);
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radius);
+}
+.notice.error,
+.error {
+  border: 1px solid var(--query);
+  background: var(--query-wash);
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radius);
+}
+.query {
+  color: var(--query);
+}
+
+/* Month header and progress ---------------------------------------------------------------- */
+.month-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.progress {
+  margin: 1rem 0 1.25rem;
+}
+.bar {
+  height: 6px;
+  background: var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bar span {
+  display: block;
+  height: 100%;
+  background: var(--tick);
+}
+.progress p {
+  margin: 0.5rem 0 0;
+}
+
+/* The ledger ------------------------------------------------------------------------------ */
+/* One column template for the header, every row, and every group total, so amounts line up. */
+.ledger {
+  --ledger-cols: 1.6rem 3.2rem minmax(9rem, 1.3fr) 4.2rem var(--amt-col) minmax(14rem, 2.2fr);
+}
+.cols,
+.item > summary {
+  display: grid;
+  grid-template-columns: var(--ledger-cols);
+  gap: 0 0.9rem;
+  align-items: baseline;
+}
+.cols {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  padding: 0 0.75rem 0.35rem;
+  border-bottom: 2px solid var(--rule-strong);
+}
+.amt {
+  text-align: right;
+}
+.group {
+  margin-top: 1.6rem;
+}
+.group-head {
+  display: grid;
+  grid-template-columns: 1fr var(--amt-col) minmax(14rem, 2.2fr);
+  gap: 0 0.9rem;
+  align-items: baseline;
+  padding: 0 0.75rem 0.25rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+.ledger .group-head {
+  grid-template-columns: var(--ledger-cols);
+}
+.ledger .group-head > h2 {
+  grid-column: 1 / 5;
+}
+.group-head .amt {
+  font-weight: 600;
+}
+.count {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin-left: 0.3rem;
+}
+.group-hint {
+  margin: 0.35rem 0.75rem 0.5rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+.item {
+  border-bottom: 1px solid var(--rule);
+  background: var(--sheet);
+}
+.item > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.55rem 0.75rem;
+}
+.item > summary::-webkit-details-marker {
+  display: none;
+}
+.item > summary:hover {
+  background: var(--tick-wash);
+}
+.item[open] > summary {
+  background: var(--tick-wash);
+  border-bottom: 1px dashed var(--rule-strong);
+}
+.id {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+.who {
+  overflow-wrap: anywhere;
+}
+.when {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+.todo {
+  font-size: 0.92rem;
+}
+.sub-amt {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.badge {
+  display: inline-block;
+  margin-top: 0.15rem;
+  padding: 0 0.35rem;
+  border-radius: var(--radius);
+  background: var(--check-wash);
+  color: var(--check);
+  font-size: 0.8rem;
+}
+.tag {
+  margin-left: 0.4rem;
+  font-size: 0.78rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+}
+
+/* The tick margin: an open circle to do, an auditor's tick when done. */
+.tick {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 50%;
+  align-self: start;
+  margin-top: 0.15rem;
+  position: relative;
+}
+/* Blocking groups (intake problems, amount differences) get red ink. */
+.g1 .tick:not(.done),
+.g2 .tick:not(.done) {
+  border-color: var(--query);
+}
+.tick.done {
+  border: none;
+}
+.tick.done::after {
+  content: "";
+  position: absolute;
+  left: 0.32rem;
+  top: 0.02rem;
+  width: 0.38rem;
+  height: 0.78rem;
+  border: solid var(--tick);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(40deg);
+}
+.done-group .item > summary {
+  color: var(--ink-soft);
+}
+
+/* Inside a row ---------------------------------------------------------------------------- */
+.panel {
+  padding: 0.8rem 0.75rem 1rem 3.25rem;
+  display: grid;
+  gap: 0.9rem;
+}
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+.facts dt {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+.facts dd {
+  margin: 0;
+}
+.act {
+  display: grid;
+  gap: 0.55rem;
+}
+.act.quiet {
+  border-top: 1px dashed var(--rule);
+  padding-top: 0.7rem;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: flex-end;
+}
+.field {
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+.field input,
+.field select {
+  color: var(--ink);
+}
+.field.grow {
+  flex: 1 1 16rem;
+}
+.field.flagged input,
+.field.flagged select {
+  border-color: var(--check);
+  background: var(--check-wash);
+}
+.flag-note {
+  color: var(--check);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.6rem 0.8rem;
+}
+.grid .wide {
+  grid-column: 1 / -1;
+}
+.check {
+  font-size: 0.88rem;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+details.sub {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.7rem;
+}
+.panel details.sub > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.panel details.sub[open] > summary {
+  margin-bottom: 0.6rem;
+}
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.choice {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  font-size: 0.92rem;
+}
+.approve-button:not(:disabled) {
+  background: var(--tick);
+  border-color: var(--tick);
+  color: var(--sheet);
+  font-weight: 600;
+}
+.why {
+  color: var(--query);
+  font-size: 0.9rem;
+}
+.bulk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 0 0.75rem 0.7rem;
+}
+
+/* Tables (pack, runs) ------------------------------------------------------------------------ */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+  background: var(--sheet);
+}
+th,
+td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  font-weight: 600;
+  border-bottom: 2px solid var(--rule-strong);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+td.num,
+th.num {
+  text-align: right;
+}
+tfoot td {
+  font-weight: 600;
+  border-top: 2px solid var(--rule-strong);
+}
+.table-wrap {
+  overflow-x: auto;
+}
+.status-ok {
+  color: var(--tick);
+}
+.status-error {
+  color: var(--query);
+  font-weight: 600;
+}
+.status-fallback,
+.status-retry {
+  color: var(--check);
+}
+
+/* Narrow screens: each row stacks; the amount stays right-aligned beside the vendor. ------- */
+@media (max-width: 52rem) {
+  .cols {
+    display: none;
+  }
+  .item > summary {
+    grid-template-columns: 1.4rem 1fr auto;
+    gap: 0.15rem 0.6rem;
+  }
+  .item > summary .id {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .item > summary .who {
+    grid-column: 2;
+  }
+  .item > summary .amt {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+  .item > summary .when {
+    grid-column: 2;
+  }
+  .item > summary .todo {
+    grid-column: 2 / -1;
+  }
+  .group-head,
+  .ledger .group-head {
+    grid-template-columns: 1fr auto;
+  }
+  .ledger .group-head > h2 {
+    grid-column: auto;
+  }
+  .group-head > :nth-child(3) {
+    display: none;
+  }
+  .panel {
+    padding-left: 0.75rem;
+  }
+  .actor {
+    margin-left: 0;
+  }
+}
+
+h2.spaced {
+  margin-top: 1.6rem;
 }

@@ -106,27 +106,73 @@ export type Extraction = z.infer<typeof Extraction>;
 export const CategorySource = z.enum(["rule", "model", "human"]);
 export type CategorySource = z.infer<typeof CategorySource>;
 
-export const DecisionAction = z.enum([
-  "approve",
-  "correct_field",
-  "choose_match",
-  "override_status",
-  "request_reupload",
-  "link_receipt", // R-MAT-7: the last three resolve statement lines with no receipt
-  "record_substitute",
-  "mark_not_expense",
+/** Fields a person can correct on a receipt (04, human approval point 4). */
+export const CorrectableField = z.enum([
+  "vendor",
+  "date",
+  "total",
+  "currency",
+  "tax",
+  "summary",
+  "businessPurpose",
+  "paymentSource",
+  "category",
 ]);
-export type DecisionAction = z.infer<typeof DecisionAction>;
+export type CorrectableField = z.infer<typeof CorrectableField>;
+
+/**
+ * What each human action changes. Statuses are never stored: they are derived again from the
+ * pipeline's findings plus these changes (CLAUDE.md non-negotiable 3).
+ */
+export const DecisionChange = z.discriminatedUnion("action", [
+  // The match at the moment of approval; an approved item keeps it (approved items are locked).
+  z.object({
+    action: z.literal("approve"),
+    after: z.object({ statementLineId: z.string().nullable(), reimbursement: z.boolean() }),
+  }),
+  z.object({
+    action: z.literal("correct_field"),
+    after: z.object({
+      field: CorrectableField,
+      value: z.string().nullable(),
+      /** R-CAT-4: "Always use this category for <vendor>". */
+      alwaysForVendor: z.boolean().optional(),
+    }),
+  }),
+  // R-MAT-5: a chosen line, or null for "paid personally, reimburse (no statement line)".
+  z.object({
+    action: z.literal("choose_match"),
+    after: z.object({ statementLineId: z.string().nullable() }),
+  }),
+  // R-AMT-4: signs off the difference against this line only; needs a reason.
+  z.object({
+    action: z.literal("sign_off_difference"),
+    after: z.object({ statementLineId: z.string() }),
+  }),
+  // R-DUP-1: confirm (kept on record, excluded) or "not a duplicate" (included; needs a reason).
+  z.object({ action: z.literal("resolve_duplicate"), after: z.object({ duplicate: z.boolean() }) }),
+  // Take the receipt out of this month (unreadable, not a receipt); the submitter re-uploads.
+  z.object({ action: z.literal("request_reupload"), after: z.object({}) }),
+  // R-MAT-7, on a statement line: link a receipt, record a substitute, or not an expense.
+  z.object({ action: z.literal("link_receipt"), after: z.object({ receiptId: z.string() }) }),
+  z.object({
+    action: z.literal("record_substitute"),
+    after: z.object({ category: z.string().min(1) }),
+  }),
+  z.object({ action: z.literal("mark_not_expense"), after: z.object({}) }),
+]);
+export type DecisionChange = z.infer<typeof DecisionChange>;
+export type DecisionAction = DecisionChange["action"];
 
 // Every human action is one immutable row (04, Decision).
-export const Decision = z.object({
-  id: z.string(),
-  subjectId: z.string(), // a receipt id, or a statement line id for R-MAT-7 actions
-  actorId: z.string(),
-  action: DecisionAction,
-  before: z.unknown(),
-  after: z.unknown(),
-  reason: z.string().trim().min(3).optional(),
-  at: z.string(),
-});
+export const Decision = z
+  .object({
+    id: z.string(),
+    subjectId: z.string(), // a receipt id, or a statement line id for R-MAT-7 actions
+    actorId: z.string(),
+    before: z.unknown(),
+    reason: z.string().trim().min(3).nullish(),
+    at: z.string(),
+  })
+  .and(DecisionChange);
 export type Decision = z.infer<typeof Decision>;

@@ -1,5 +1,6 @@
-import Link from "next/link";
-import { uploadReceipt } from "../actions";
+import { STATEMENT_FORMATS } from "@/adapters/statement/read-statement";
+import { PEOPLE } from "@/config/people";
+import { uploadMonth } from "../actions";
 
 export default async function UploadPage({
   searchParams,
@@ -9,29 +10,33 @@ export default async function UploadPage({
   const { error } = await searchParams;
   return (
     <main>
-      <p>
-        <Link href="/">← Home</Link>
+      <h1>Upload receipts and a statement</h1>
+      <p className="muted">
+        One submitter's receipts at a time. They are read, matched to the statement, and put in the
+        review queue.
       </p>
-      <h1>Upload</h1>
       {error ? (
         <p role="alert" className="error">
           {error}
         </p>
       ) : null}
-      <form action={uploadReceipt} className="stack">
+      <form action={uploadMonth} className="stack">
         <label>
-          Receipt (PDF, JPEG, or PNG)
+          Receipts (PDF, JPEG, or PNG; choose several at once)
           <input
             type="file"
-            name="receipt"
+            name="receipts"
             accept="application/pdf,image/jpeg,image/png"
+            multiple
             required
           />
         </label>
         <label>
-          Statement export (CSV: Date, Account, Description, Amount, Foreign Amount, Foreign
-          Currency)
+          Statement export (CSV)
           <input type="file" name="statement" accept=".csv,text/csv" required />
+          <span className="hint">
+            Accepted layouts: {STATEMENT_FORMATS.map((f) => f.name).join("; ")}.
+          </span>
         </label>
         <label>
           Month
@@ -39,7 +44,13 @@ export default async function UploadPage({
         </label>
         <label>
           Submitted by
-          <input type="text" name="submitterId" defaultValue="staff-a" required />
+          <select name="submitterId" defaultValue="staff-a">
+            {PEOPLE.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.label}
+              </option>
+            ))}
+          </select>
         </label>
         <label>
           Paid with
@@ -47,14 +58,19 @@ export default async function UploadPage({
             <option value="company_card">Company card</option>
             <option value="personal_card">Personal card</option>
             <option value="bank">Bank account</option>
-            <option value="unknown">Not sure</option>
+            <option value="unknown">Not known yet</option>
           </select>
         </label>
         <label>
-          Business purpose
+          Business purpose (applies to every receipt in this upload; you can change it per receipt
+          later)
           <input type="text" name="businessPurpose" maxLength={500} />
         </label>
-        <button type="submit">Process</button>
+        <div>
+          <button type="submit" className="primary">
+            Read and match
+          </button>
+        </div>
       </form>
     </main>
   );

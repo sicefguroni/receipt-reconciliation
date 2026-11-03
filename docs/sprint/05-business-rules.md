@@ -82,7 +82,7 @@ Default chart (configurable in `config/categories.json`):
 ## Approval (R-APR)
 
 - **R-APR-1** The submitter of a receipt cannot approve it. The control is visible but disabled, with the reason. *(Evidence P6; blocked correctly in UAT but looked clickable.)*
-- **R-APR-2** An item with an open blocking exception (`MISSING_PURPOSE`, `AMOUNT_DIFFERS_OVER_THRESHOLD` without a reason, `DUPLICATE`, `UNREADABLE`, `NOT_A_RECEIPT`, `AMBIGUOUS_MATCH`, `NO_PAYMENT_FOUND`) cannot be approved until it is resolved.
+- **R-APR-2** An item with an open blocking exception (`MISSING_PURPOSE`, `AMOUNT_DIFFERS_OVER_THRESHOLD` without a reason, `DUPLICATE`, `UNREADABLE`, `NOT_A_RECEIPT`, `AMBIGUOUS_MATCH`, `NO_PAYMENT_FOUND`) cannot be approved until it is resolved. *Added 2026-11-03:* an item with **no category at all** (not even a flagged suggestion) cannot be approved either, so nothing enters the ledger uncategorised. A flagged suggestion (`UNKNOWN_CATEGORY` with a category) can still be approved one by one.
 - **R-APR-3** Bulk approve applies only to items with no exceptions, no low-confidence fields, and status `matched`.
 
 ## Review queue order (R-QUE)

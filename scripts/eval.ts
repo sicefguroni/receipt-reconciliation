@@ -8,7 +8,7 @@ import { FrankfurterFxClient, ReplayFxClient } from "@/adapters/fx/frankfurter";
 import type { FxClient } from "@/adapters/fx/types";
 import { createModelClient } from "@/adapters/model";
 import type { ModelClient } from "@/adapters/model/types";
-import { parseFormatA } from "@/adapters/statement/format-a";
+import { readStatement } from "@/adapters/statement/read-statement";
 import { parseEnv } from "@/config/env";
 import type { CategoryConfig } from "@/core/categories";
 import { FlatFxClient, OracleModelClient } from "@/pipeline/oracle";
@@ -56,7 +56,7 @@ const read = (p: string) => readFileSync(join(DATASET, p), "utf8");
 const intake = Intake.parse(JSON.parse(read("receipts.json")));
 const truth = GroundTruth.parse(JSON.parse(read("ground-truth.json")));
 const splits = Splits.parse(JSON.parse(read("splits.json")));
-const lines = parseFormatA(read("statement-format-a.csv"));
+const lines = readStatement(read("statement-format-a.csv")).lines;
 const categories = JSON.parse(
   readFileSync(join(ROOT, "config", "categories.json"), "utf8"),
 ) as CategoryConfig;

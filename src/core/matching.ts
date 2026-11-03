@@ -41,7 +41,7 @@ export interface MatchOutcome {
 }
 
 const WINDOW_DAYS = 5; // "same month, plus 5 days either side"
-const MIN_CANDIDATE_SCORE = 40; // R-MAT-2 / R-MAT-3 boundary
+export const MIN_CANDIDATE_SCORE = 40; // R-MAT-2 / R-MAT-3 boundary
 const MAX_CANDIDATES = 3;
 
 function dayNumber(isoDate: string): number {
