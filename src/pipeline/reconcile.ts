@@ -4,6 +4,7 @@ import { findDuplicates } from "@/core/duplicates";
 import {
   applyChosenLine,
   type Candidate,
+  isCredit,
   linesWithoutReceipt,
   type MatchOutcome,
   type MatchReceipt,
@@ -105,7 +106,7 @@ export interface MonthResult {
   noReceipt: NoReceiptLine[];
   /** Back-compatible view for the eval: the no-receipt lines' statement lines. */
   noReceiptLines: StatementLine[];
-  /** Lines a person may still choose for a receipt: not matched, not resolved. */
+  /** Lines a person may still choose for a receipt: not matched, not resolved, not a credit. */
   freeLines: StatementLine[];
   statementLines: StatementLine[];
   queue: QueueSection[];
@@ -707,7 +708,9 @@ export function reconcileMonth(
     receipts: now.receipts,
     noReceipt: now.noReceipt,
     noReceiptLines: now.noReceipt.map((n) => n.line),
-    freeLines: now.noReceipt.filter((n) => n.resolution === null).map((n) => n.line),
+    freeLines: now.noReceipt
+      .filter((n) => n.resolution === null && !isCredit(n.line)) // R-MAT-8
+      .map((n) => n.line),
     statementLines: snapshot.statementLines,
     queue: orderQueue(queueItems),
     done,

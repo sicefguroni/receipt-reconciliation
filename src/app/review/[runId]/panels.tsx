@@ -1,6 +1,6 @@
 import { personLabel } from "@/config/people";
 import { checkApproval } from "@/core/approvals";
-import { inMatchWindow, MIN_CANDIDATE_SCORE } from "@/core/matching";
+import { inMatchWindow, isCredit, MIN_CANDIDATE_SCORE } from "@/core/matching";
 import type { StatementLine } from "@/core/schemas";
 import type { MonthResult, NoReceiptLine, ReceiptResult } from "@/pipeline/reconcile";
 import { review } from "../../actions";
@@ -417,9 +417,15 @@ export function LinePanel({
     );
   }
   // Receipts that could take this line: open, readable, and not yet paid by a statement line.
-  const linkable = month.receipts
-    .filter((r) => r.outcome === "open" && r.match !== null && r.match.statementLineId === null)
-    .sort((a, b) => Number(n.candidateFor.includes(b.id)) - Number(n.candidateFor.includes(a.id)));
+  // A refund or credit pays for nothing, so it offers no link (R-MAT-8).
+  const credit = isCredit(n.line);
+  const linkable = credit
+    ? []
+    : month.receipts
+        .filter((r) => r.outcome === "open" && r.match !== null && r.match.statementLineId === null)
+        .sort(
+          (a, b) => Number(n.candidateFor.includes(b.id)) - Number(n.candidateFor.includes(a.id)),
+        );
   return (
     <div className="panel">
       <p className="hint">
@@ -459,10 +465,10 @@ export function LinePanel({
       ) : null}
       <form action={review} className="act">
         <Hidden runId={runId} subjectId={n.line.id} />
-        <h4>No receipt</h4>
+        <h4>{credit ? "Refund or credit" : "No receipt"}</h4>
         <div className="row">
           <label className="field">
-            Category (for a substitute)
+            {credit ? "Category it reduces" : "Category (for a substitute)"}
             <select name="category" defaultValue="">
               <option value="">Choose</option>
               {categories.map((c) => (
@@ -476,7 +482,7 @@ export function LinePanel({
         </div>
         <div className="row">
           <button type="submit" name="action" value="record_substitute">
-            Record a substitute
+            {credit ? "Record the credit" : "Record a substitute"}
           </button>
           <button type="submit" name="action" value="mark_not_expense">
             Not an expense

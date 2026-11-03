@@ -113,6 +113,34 @@ describe("R-MAT scoring table", () => {
   });
 });
 
+describe("R-MAT-8 credits are never a receipt's payment", () => {
+  it("a refund with the same vendor, date, and account is not a candidate", () => {
+    // Before R-MAT-8 this scored 50 (date 25 + vendor 20 + account 5): an ambiguous match.
+    const refund = line({ id: "L2", amountAud: -18.5 });
+    expect(rankCandidates(receipt(), [refund], policy)).toEqual([]);
+  });
+
+  it("with only the refund on the statement, the receipt has no payment found", () => {
+    const [outcome] = matchReceipts(
+      [receipt()],
+      [line({ id: "L2", amountAud: -18.5 })],
+      "2026-10",
+      policy,
+    );
+    expect(outcome?.status).toBe("unmatched");
+    expect(outcome?.exceptions).toEqual(["NO_PAYMENT_FOUND"]);
+  });
+
+  it("a purchase and its refund: matched to the purchase, the refund stays unmatched", () => {
+    const purchase = line({ id: "L1" });
+    const refund = line({ id: "L2", date: "2026-10-05", amountAud: -18.5 });
+    const [outcome] = matchReceipts([receipt()], [purchase, refund], "2026-10", policy);
+    expect(outcome?.statementLineId).toBe("L1");
+    expect(outcome?.candidates.map((c) => c.statementLineId)).toEqual(["L1"]);
+    expect(linesWithoutReceipt([purchase, refund], ["L1"]).map((l) => l.id)).toEqual(["L2"]);
+  });
+});
+
 describe("R-MAT match decisions", () => {
   it("R-MAT-1: auto-matches when best >= 75 and beats the runner-up by >= 20 (TC01)", () => {
     const [outcome] = matchReceipts([receipt()], [line()], "2026-10", policy);

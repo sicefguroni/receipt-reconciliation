@@ -1,5 +1,6 @@
 import { isValidSignOffReason } from "@/core/amounts";
 import { checkApproval } from "@/core/approvals";
+import { isCredit } from "@/core/matching";
 import {
   type CorrectableField,
   type Decision,
@@ -97,12 +98,18 @@ function currentValue(r: ReceiptResult, field: CorrectableField): unknown {
   }
 }
 
-/** Is `lineId` free for this receipt: not written off, and not held by an approved receipt? */
+/** R-MAT-8, for the person: why a refund cannot be chosen, and what to do instead. */
+const CREDIT_NOT_PAYMENT = (lineId: string) =>
+  `Statement line ${lineId} is a refund or credit, so it cannot be a receipt's payment. ` +
+  "Record it against a category, or mark it not an expense.";
+
+/** Is `lineId` free for this receipt: not written off, not a credit, not held by an approved receipt? */
 function lineAvailable(month: MonthResult, lineId: string, receiptId: string): string | null {
   const listed = month.noReceipt.find((n) => n.line.id === lineId);
   if (listed?.resolution) return `Statement line ${lineId} was already resolved without a receipt.`;
   const holder = month.receipts.find((r) => r.match?.statementLineId === lineId);
   if (!listed && !holder) return `Statement line ${lineId} is not in this month's statement.`;
+  if (listed && isCredit(listed.line)) return CREDIT_NOT_PAYMENT(lineId);
   if (holder && holder.id !== receiptId && holder.outcome !== "open") {
     return `Statement line ${lineId} belongs to receipt ${holder.id}, which is ${OUTCOME_TEXT[holder.outcome]}.`;
   }
@@ -137,6 +144,7 @@ export function checkDecision(
     if (!listed) return fail(`Statement line ${request.subjectId} is not waiting for a receipt.`);
     if (listed.resolution) return fail(`Statement line ${request.subjectId} is already resolved.`);
     if (change.action === "link_receipt") {
+      if (isCredit(listed.line)) return fail(CREDIT_NOT_PAYMENT(listed.line.id));
       const r = month.receipts.find((x) => x.id === change.after.receiptId);
       if (!r) return fail(`There is no receipt ${change.after.receiptId} in this month.`);
       if (r.outcome !== "open") return fail(`Receipt ${r.id} is ${OUTCOME_TEXT[r.outcome]}.`);

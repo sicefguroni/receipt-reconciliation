@@ -1,4 +1,5 @@
 import { personLabel } from "@/config/people";
+import { isCredit } from "@/core/matching";
 import type { ExceptionCode, MatchStatus } from "@/core/schemas";
 import type { NoReceiptLine, ReceiptResult } from "@/pipeline/reconcile";
 
@@ -112,6 +113,9 @@ export function nextStep(r: ReceiptResult): string {
 export function lineNextStep(n: NoReceiptLine): string {
   if (n.resolution?.kind === "substitute") return `Substitute recorded (${n.resolution.category}).`;
   if (n.resolution?.kind === "not_expense") return "Marked not an expense.";
+  if (isCredit(n.line)) {
+    return "A refund or credit, not a payment. Record it against the category it reduces, or mark it not an expense.";
+  }
   if (n.candidateFor.length > 0) {
     return `No receipt yet, but it could be the payment for ${list(n.candidateFor)}. Link it, or resolve it another way.`;
   }

@@ -139,6 +139,14 @@ export function scorePair(
   return { statementLineId: line.id, score, reasons, amount };
 }
 
+/**
+ * R-MAT-8: a credit (refund, reversal) is money coming back, never a receipt's payment. Its
+ * date, vendor, and account can still score 40 or more, which made it a candidate (Day 4, S08).
+ */
+export function isCredit(line: Pick<StatementLine, "amountAud">): boolean {
+  return line.amountAud < 0;
+}
+
 /** Candidates sorted by score (highest first); ties broken by line id so runs are repeatable. */
 export function rankCandidates(
   receipt: MatchReceipt,
@@ -147,6 +155,7 @@ export function rankCandidates(
 ): Candidate[] {
   if (receipt.total === null) return [];
   return lines
+    .filter((line) => !isCredit(line)) // R-MAT-8
     .map((line) => scorePair(receipt, line, policy))
     .filter((c) => c.score > 0)
     .sort((a, b) => b.score - a.score || a.statementLineId.localeCompare(b.statementLineId));

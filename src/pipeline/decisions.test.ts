@@ -16,6 +16,65 @@ const month = (decisions = [] as ReturnType<typeof decision>[]) =>
   reconcileMonth(snapshot, decisions, config);
 const message = (check: DecisionCheck) => (check.ok ? "ok" : check.message);
 
+describe("R-MAT-8: a refund on the statement", () => {
+  // October with a refund of R01's café purchase added (Day 4 stress cases S07, S08).
+  const withRefund = (decisions = [] as ReturnType<typeof decision>[]) =>
+    reconcileMonth(
+      {
+        ...snapshot,
+        statementLines: [
+          ...snapshot.statementLines,
+          {
+            id: "L99",
+            date: "2026-10-04",
+            description: "SQ *SAMPLE CAFE SAMPLE CITY AU",
+            amountAud: -18.5,
+            account: "company_card",
+          },
+        ],
+      },
+      decisions,
+      config,
+    );
+  const refused =
+    "Statement line L99 is a refund or credit, so it cannot be a receipt's payment. Record it against a category, or mark it not an expense.";
+
+  it("is never a candidate or a choosable line, and the purchase still matches", () => {
+    const m = withRefund();
+    expect(m.receipts.find((r) => r.id === "R01")?.match?.statementLineId).toBe("L03");
+    expect(
+      m.receipts.flatMap((r) => r.match?.candidates ?? []).map((c) => c.statementLineId),
+    ).not.toContain("L99");
+    expect(m.freeLines.map((l) => l.id)).not.toContain("L99");
+    expect(m.noReceipt.map((n) => n.line.id)).toContain("L99");
+  });
+
+  it("choosing it for a receipt, or linking a receipt to it, is refused with what to do", () => {
+    const choose = {
+      subjectId: "R15",
+      change: { action: "choose_match" as const, after: { statementLineId: "L99" } },
+    };
+    const link = {
+      subjectId: "L99",
+      change: { action: "link_receipt" as const, after: { receiptId: "R15" } },
+    };
+    expect(message(checkDecision(withRefund(), choose, REVIEWER, config))).toBe(refused);
+    expect(message(checkDecision(withRefund(), link, REVIEWER, config))).toBe(refused);
+  });
+
+  it("recorded against a category, it reduces the ledger by the refund", () => {
+    const before = withRefund().totals.ledgerAud;
+    const after = withRefund([
+      decision(
+        "L99",
+        { action: "record_substitute", after: { category: "Meals & Entertainment" } },
+        "Coffee refunded",
+      ),
+    ]).totals.ledgerAud;
+    expect(Math.round((after - before) * 100)).toBe(-1850);
+  });
+});
+
 describe("decision checks", () => {
   it("R-APR-1: a submitter's own approval is refused with the reason", () => {
     const r = month().receipts.find((x) => x.id === "R01");
