@@ -102,7 +102,7 @@ Against the v1 bar: criteria 1–4 are all met on this set. That is on clean syn
 Model latency p50 3.0 s, p95 4.7 s per receipt (Day 2: 2.1 s and 4.6 s; same model and prompts, so this is API variance). Tokens 91,425 input and 4,235 output; cost at most USD 0.45 (USD 0.0113 per receipt).
 
 - The live run re-recorded the fixtures. Two category-fallback requests are new: the model worded R16's and R30's item lists differently from Day 2, so those requests hash differently. Categories are still 40/40. The two Day 2 recordings they replace are no longer used.
-- The run's `summary.json` names commit `31077eb` because it started just before the Day 3 code was committed; the tree it ran is the one committed as `3b77a92`.
+- The run's `summary.json` names commit `31077eb` because it started just before the Day 3 code was committed; the tree it ran is the one committed as `f2b58e8` (`3b77a92` before the PR was rebase-merged).
 
 What the eval does not cover: the human decisions themselves. Those are covered by tests over the oracle month (`src/pipeline/reconcile.test.ts`, `decisions.test.ts`), including a simulated reviewer who closes the whole month and lands on the ground-truth ledger total, and by a scripted browser run on a production build (22 checks). Neither is a user session.
 
