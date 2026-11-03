@@ -1,0 +1,22 @@
+{
+  "key": "2f66a392caadbbe6f4d9655003ffc4b739a63edaceb177c876c779fe888ea51e",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T13:49:52.353Z",
+  "parts": [
+    {
+      "text": "File: S07.pdf"
+    },
+    {
+      "file": "S07.pdf sha256:6e19d2c39f90285641806f93de4bfbf758ba38a8b89e13fa29aaa389f600799b"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"TOOLHAUS HARDWARE\",\"confidence\":1},\"date\":{\"value\":\"2026-10-12\",\"confidence\":1},\"total\":{\"value\":64,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.98},\"tax\":{\"value\":5.82,\"confidence\":1},\"summary\":{\"value\":\"Cordless drill kit; drill bit set\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 664,
+    "outputTokens": 95,
+    "latencyMs": 3787
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "key": "40087c681abb5737f50a5937d0fabca841968499209a7c040d4f13bf79d83c20",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T13:49:54.787Z",
+  "parts": [
+    {
+      "text": "File: S08.pdf"
+    },
+    {
+      "file": "S08.pdf sha256:4aad9f28219191f9f745ec35a90c847dba22b6820c528178d4b59c39c28665bb"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"PAPERLEAF STATIONERS\",\"confidence\":1},\"date\":{\"value\":\"2026-10-20\",\"confidence\":1},\"total\":{\"value\":38.5,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":3.5,\"confidence\":1},\"summary\":{\"value\":\"5 A4 notebooks; box of gel pens\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 659,
+    "outputTokens": 99,
+    "latencyMs": 4307
+  }
+}

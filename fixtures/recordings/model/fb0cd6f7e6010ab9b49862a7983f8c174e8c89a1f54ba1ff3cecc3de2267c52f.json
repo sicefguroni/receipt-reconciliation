@@ -1,0 +1,19 @@
+{
+  "key": "fb0cd6f7e6010ab9b49862a7983f8c174e8c89a1f54ba1ff3cecc3de2267c52f",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T13:49:52.916Z",
+  "parts": [
+    {
+      "text": "Vendor: KETTLE & CRUMB\nItems: Scone with jam; 2 pots of tea\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Meals & Entertainment\",\"confidence\":0.99,\"reason\":\"Scones and tea are food and beverages, so this is a meals expense.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 215,
+    "outputTokens": 40,
+    "latencyMs": 2802
+  }
+}

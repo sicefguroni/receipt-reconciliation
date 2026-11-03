@@ -1,0 +1,19 @@
+{
+  "key": "3f5f304f0b7af5302a46dbc48ae314551d64f5840f9fe4c78d69f8ee9dc01681",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T13:44:15.408Z",
+  "parts": [
+    {
+      "text": "Vendor: Fernway Analytics Inc.\nItems: Analytics seat, monthly\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Software\",\"confidence\":0.94,\"reason\":\"A monthly analytics seat is a software subscription.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 206,
+    "outputTokens": 31,
+    "latencyMs": 1831
+  }
+}

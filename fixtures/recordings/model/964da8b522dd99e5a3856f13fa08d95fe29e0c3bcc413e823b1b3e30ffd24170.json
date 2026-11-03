@@ -1,0 +1,22 @@
+{
+  "key": "964da8b522dd99e5a3856f13fa08d95fe29e0c3bcc413e823b1b3e30ffd24170",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T13:49:48.981Z",
+  "parts": [
+    {
+      "text": "File: S05.pdf"
+    },
+    {
+      "file": "S05.pdf sha256:199810d30510b61db89ac0480963f9950b075575c85860276c3ea2b3684dae96"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Fernway Analytics Inc.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-09\",\"confidence\":0.75},\"total\":{\"value\":29,\"confidence\":1},\"currency\":{\"value\":\"USD\",\"confidence\":1},\"tax\":{\"value\":null,\"confidence\":0},\"summary\":{\"value\":\"Monthly analytics seat\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 655,
+    "outputTokens": 162,
+    "latencyMs": 3805
+  }
+}

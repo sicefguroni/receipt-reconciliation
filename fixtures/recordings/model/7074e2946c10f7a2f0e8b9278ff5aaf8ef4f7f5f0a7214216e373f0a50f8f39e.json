@@ -1,0 +1,19 @@
+{
+  "key": "7074e2946c10f7a2f0e8b9278ff5aaf8ef4f7f5f0a7214216e373f0a50f8f39e",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T13:49:54.505Z",
+  "parts": [
+    {
+      "text": "Vendor: TOOLHAUS HARDWARE\nItems: Cordless drill kit; drill bit set\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Equipment\",\"confidence\":0.92,\"reason\":\"A cordless drill and drill bit set are durable business tools classified as equipment.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 211,
+    "outputTokens": 37,
+    "latencyMs": 2143
+  }
+}

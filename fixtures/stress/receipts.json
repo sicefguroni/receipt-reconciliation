@@ -1,0 +1,115 @@
+{
+  "monthKey": "2026-10",
+  "receipts": [
+    {
+      "id": "S01",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Breakfast before the client workshop",
+      "uploadOrder": 1,
+      "file": {
+        "path": "receipts/S01.jpg",
+        "mime": "image/jpeg",
+        "width": 300,
+        "height": 400,
+        "sha256": "01dd18cf77b3c3a550b56f7b8afebffcfc600c6f53c119609743b75e0d1924b5"
+      }
+    },
+    {
+      "id": "S02",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Lunch with a supplier",
+      "uploadOrder": 2,
+      "file": {
+        "path": "receipts/S02.jpg",
+        "mime": "image/jpeg",
+        "width": 900,
+        "height": 1200,
+        "sha256": "c04f510509f4d5f79fbc6fc73e9d0feed8644b74914ddeb99fc9473e00bcb732"
+      }
+    },
+    {
+      "id": "S03",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Printer paper",
+      "uploadOrder": 3,
+      "file": {
+        "path": "receipts/S03.png",
+        "mime": "image/png",
+        "width": 840,
+        "height": 700,
+        "sha256": "3d954f2649225ed47821999e3d009e8c81e7104ed3148517cad4dd9dc364040c"
+      }
+    },
+    {
+      "id": "S04",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Afternoon tea with a new hire",
+      "uploadOrder": 4,
+      "file": {
+        "path": "receipts/S04.pdf",
+        "mime": "application/pdf",
+        "sha256": "29232126d2bfc6564f67c74f15719a536d2eaccdf7db8b0061ccc05c7a733bc2"
+      }
+    },
+    {
+      "id": "S05",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Product analytics for the website",
+      "uploadOrder": 5,
+      "file": {
+        "path": "receipts/S05.pdf",
+        "mime": "application/pdf",
+        "sha256": "199810d30510b61db89ac0480963f9950b075575c85860276c3ea2b3684dae96"
+      }
+    },
+    {
+      "id": "S06",
+      "monthKey": "2026-10",
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Accommodation and room hire for the regional sales visit",
+      "uploadOrder": 6,
+      "file": {
+        "path": "receipts/S06.pdf",
+        "mime": "application/pdf",
+        "sha256": "f3286bd8eb5dc645ee3d665f3974549f42d59ab10cb73f920a0824ab5833b3e3"
+      }
+    },
+    {
+      "id": "S07",
+      "monthKey": "2026-10",
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Tools to mount the meeting-room screen",
+      "uploadOrder": 7,
+      "file": {
+        "path": "receipts/S07.pdf",
+        "mime": "application/pdf",
+        "sha256": "6e19d2c39f90285641806f93de4bfbf758ba38a8b89e13fa29aaa389f600799b"
+      }
+    },
+    {
+      "id": "S08",
+      "monthKey": "2026-10",
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Notebooks for the onboarding packs",
+      "uploadOrder": 8,
+      "file": {
+        "path": "receipts/S08.pdf",
+        "mime": "application/pdf",
+        "sha256": "4aad9f28219191f9f745ec35a90c847dba22b6820c528178d4b59c39c28665bb"
+      }
+    }
+  ]
+}

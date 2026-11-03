@@ -1,0 +1,22 @@
+{
+  "key": "8b49551faf1c69587c8eecf7d45bea00f5b363d1dccd49d9253bcee65cde4573",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T13:49:50.111Z",
+  "parts": [
+    {
+      "text": "File: S04.pdf"
+    },
+    {
+      "file": "S04.pdf sha256:29232126d2bfc6564f67c74f15719a536d2eaccdf7db8b0061ccc05c7a733bc2"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"KETTLE & CRUMB\",\"confidence\":1},\"date\":{\"value\":\"2026-10-09\",\"confidence\":0.75},\"total\":{\"value\":24,\"confidence\":1},\"currency\":{\"value\":null,\"confidence\":0},\"tax\":{\"value\":null,\"confidence\":0},\"summary\":{\"value\":\"Scone with jam; 2 pots of tea\",\"confidence\":0.98}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 628,
+    "outputTokens": 251,
+    "latencyMs": 4936
+  }
+}

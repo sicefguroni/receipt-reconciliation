@@ -22,7 +22,9 @@
     "score:baseline": "tsx scripts/score-baseline.ts",
     "seed": "tsx scripts/seed.ts",
     "eval": "tsx scripts/eval.ts",
-    "eval:compare": "tsx scripts/eval-compare.ts"
+    "eval:compare": "tsx scripts/eval-compare.ts",
+    "dataset:stress": "tsx scripts/generate-stress.ts",
+    "eval:stress": "tsx scripts/eval-stress.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

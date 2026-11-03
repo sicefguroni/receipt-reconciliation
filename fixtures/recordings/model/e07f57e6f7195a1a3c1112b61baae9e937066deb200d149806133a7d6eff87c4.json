@@ -1,0 +1,22 @@
+{
+  "key": "e07f57e6f7195a1a3c1112b61baae9e937066deb200d149806133a7d6eff87c4",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T13:49:48.226Z",
+  "parts": [
+    {
+      "text": "File: S06.pdf"
+    },
+    {
+      "file": "S06.pdf sha256:f3286bd8eb5dc645ee3d665f3974549f42d59ab10cb73f920a0824ab5833b3e3"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Example Bay Lodge\",\"confidence\":1},\"date\":{\"value\":\"2026-10-03\",\"confidence\":1},\"total\":{\"value\":620,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":56.36,\"confidence\":1},\"summary\":{\"value\":\"Room for 2 nights and half-day conference room hire\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 707,
+    "outputTokens": 126,
+    "latencyMs": 3047
+  }
+}

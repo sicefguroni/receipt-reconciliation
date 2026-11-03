@@ -1,0 +1,278 @@
+{
+  "monthKey": "2026-10",
+  "generatedBy": "scripts/generate-stress.ts",
+  "receipts": [
+    {
+      "id": "S01",
+      "title": "Unreadable photo, 400 px",
+      "stress": "an unreadable photo (heavy blur, 400 px)",
+      "file": {
+        "kind": "photo",
+        "width": 300,
+        "height": 400,
+        "angle": 6,
+        "blur": 3
+      },
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Breakfast before the client workshop",
+      "truth": {
+        "isReceipt": true,
+        "vendor": "Quayside Espresso",
+        "date": "2026-10-06",
+        "total": 18.2,
+        "currency": "AUD",
+        "lineIds": [
+          "L03"
+        ]
+      },
+      "expect": "Stopped at the quality gate (R-QUA-1) with the measured size and a fix; never sent to the model; not matched; out of totals."
+    },
+    {
+      "id": "S02",
+      "title": "Heavy blur at full size",
+      "stress": "an unreadable photo (heavy blur), at a size that passes the gate",
+      "file": {
+        "kind": "photo",
+        "width": 900,
+        "height": 1200,
+        "angle": -5,
+        "blur": 7
+      },
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Lunch with a supplier",
+      "truth": {
+        "isReceipt": true,
+        "vendor": "Lantern Street Cafe",
+        "date": "2026-10-07",
+        "total": 36.8,
+        "currency": "AUD",
+        "lineIds": [
+          "L04"
+        ]
+      },
+      "expect": "Either read correctly, or every doubtful field is flagged (LOW_CONFIDENCE_FIELD or UNREADABLE). Never a wrong total, date, or currency with high confidence that a person could bulk-approve."
+    },
+    {
+      "id": "S03",
+      "title": "Chat screenshot",
+      "stress": "a non-receipt image (a screenshot of a chat)",
+      "file": {
+        "kind": "png"
+      },
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Printer paper",
+      "truth": {
+        "isReceipt": false,
+        "vendor": "",
+        "date": "2026-10-08",
+        "total": 45,
+        "currency": "AUD",
+        "lineIds": []
+      },
+      "expect": "NOT_A_RECEIPT (R-QUA-4), in the first queue group; it must not take the $45.00 Sample Supplies line, which stays listed as a line with no receipt."
+    },
+    {
+      "id": "S04",
+      "title": "Bare $ with no currency clues",
+      "stress": "\"$\" with no currency clues",
+      "file": {
+        "kind": "pdf"
+      },
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Afternoon tea with a new hire",
+      "truth": {
+        "isReceipt": true,
+        "vendor": "Kettle & Crumb",
+        "date": "2026-10-09",
+        "total": 24,
+        "currency": "AUD",
+        "lineIds": [
+          "L06"
+        ]
+      },
+      "expect": "Currency flagged for a person (R-CUR-5: never assumed to be AUD without evidence), so it is not bulk-approvable. No address, ABN, GST, or currency code is printed."
+    },
+    {
+      "id": "S05",
+      "title": "Ambiguous numeric date from a US vendor",
+      "stress": "a date in ambiguous 03/04/2026 format",
+      "file": {
+        "kind": "pdf"
+      },
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Product analytics for the website",
+      "truth": {
+        "isReceipt": true,
+        "vendor": "Fernway Analytics Inc.",
+        "date": "2026-10-09",
+        "total": 29,
+        "currency": "USD",
+        "lineIds": [
+          "L07"
+        ]
+      },
+      "expect": "The printed 10/09/2026 is month-first (a US invoice: 9 October). Read as 2026-10-09, or the date flagged low-confidence. Never 2026-09-10 with high confidence."
+    },
+    {
+      "id": "S06",
+      "title": "One receipt, two payments",
+      "stress": "a receipt covering two items paid in two transactions",
+      "file": {
+        "kind": "pdf"
+      },
+      "submitterId": "staff-c",
+      "paymentSource": "company_card",
+      "businessPurpose": "Accommodation and room hire for the regional sales visit",
+      "truth": {
+        "isReceipt": true,
+        "vendor": "Example Bay Lodge",
+        "date": "2026-10-03",
+        "total": 620,
+        "currency": "AUD",
+        "lineIds": [
+          "L01",
+          "L02"
+        ]
+      },
+      "expect": "Never auto-paired with either part payment (each is far from $620). It goes to a person, and both lines stay visible, so the $620 is not lost or counted twice."
+    },
+    {
+      "id": "S07",
+      "title": "Purchase later refunded",
+      "stress": "a refund (a negative statement line)",
+      "file": {
+        "kind": "pdf"
+      },
+      "submitterId": "staff-a",
+      "paymentSource": "company_card",
+      "businessPurpose": "Tools to mount the meeting-room screen",
+      "truth": {
+        "isReceipt": true,
+        "vendor": "Toolhaus Hardware",
+        "date": "2026-10-12",
+        "total": 64,
+        "currency": "AUD",
+        "lineIds": [
+          "L08"
+        ]
+      },
+      "expect": "Matched to the $64.00 purchase. The −$64.00 refund three days later is never offered as a payment for any receipt; it is listed as a credit for a person to record."
+    },
+    {
+      "id": "S08",
+      "title": "Only the refund is on the statement",
+      "stress": "a refund (a negative statement line), with no purchase line",
+      "file": {
+        "kind": "pdf"
+      },
+      "submitterId": "staff-b",
+      "paymentSource": "company_card",
+      "businessPurpose": "Notebooks for the onboarding packs",
+      "truth": {
+        "isReceipt": true,
+        "vendor": "Paperleaf Stationers",
+        "date": "2026-10-20",
+        "total": 38.5,
+        "currency": "AUD",
+        "lineIds": []
+      },
+      "expect": "The purchase is not on this statement, only a −$38.50 refund two days later. NO_PAYMENT_FOUND; the refund is never offered as the payment (choosing it would put a negative amount in the ledger as if paid)."
+    }
+  ],
+  "statementLines": [
+    {
+      "id": "L01",
+      "date": "2026-10-01",
+      "description": "EXAMPLE BAY LODGE EXAMPLE BAY AU",
+      "amountAud": 200,
+      "account": "company_card",
+      "receiptId": "S06",
+      "note": "Deposit: part of S06's $620"
+    },
+    {
+      "id": "L02",
+      "date": "2026-10-03",
+      "description": "EXAMPLE BAY LODGE EXAMPLE BAY AU",
+      "amountAud": 420,
+      "account": "company_card",
+      "receiptId": "S06",
+      "note": "Balance: the rest of S06's $620"
+    },
+    {
+      "id": "L03",
+      "date": "2026-10-06",
+      "description": "SQ *QUAYSIDE ESPRESSO SAMPLE CITY AU",
+      "amountAud": 18.2,
+      "account": "company_card",
+      "receiptId": "S01"
+    },
+    {
+      "id": "L04",
+      "date": "2026-10-07",
+      "description": "LANTERN STREET CAFE SAMPLE CITY AU",
+      "amountAud": 36.8,
+      "account": "company_card",
+      "receiptId": "S02"
+    },
+    {
+      "id": "L05",
+      "date": "2026-10-08",
+      "description": "SAMPLE SUPPLIES PTY LTD",
+      "amountAud": 45,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "The payment the chat (S03) talks about; its real receipt was never uploaded"
+    },
+    {
+      "id": "L06",
+      "date": "2026-10-09",
+      "description": "KETTLE AND CRUMB SAMPLE CITY AU",
+      "amountAud": 24,
+      "account": "company_card",
+      "receiptId": "S04"
+    },
+    {
+      "id": "L07",
+      "date": "2026-10-10",
+      "description": "FERNWAY ANALYTICS INC EXAMPLE CITY US",
+      "amountAud": 45.33,
+      "originalAmount": {
+        "amount": 29,
+        "currency": "USD"
+      },
+      "account": "company_card",
+      "receiptId": "S05"
+    },
+    {
+      "id": "L08",
+      "date": "2026-10-12",
+      "description": "TOOLHAUS HARDWARE EXAMPLE BAY AU",
+      "amountAud": 64,
+      "account": "company_card",
+      "receiptId": "S07"
+    },
+    {
+      "id": "L09",
+      "date": "2026-10-15",
+      "description": "TOOLHAUS HARDWARE EXAMPLE BAY AU",
+      "amountAud": -64,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "Refund of S07's purchase (a credit)"
+    },
+    {
+      "id": "L10",
+      "date": "2026-10-22",
+      "description": "PAPERLEAF STATIONERS SAMPLE CITY AU",
+      "amountAud": -38.5,
+      "account": "company_card",
+      "receiptId": null,
+      "note": "Refund of S08's purchase, which was charged elsewhere (a credit)"
+    }
+  ]
+}
