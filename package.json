@@ -19,7 +19,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "dataset": "tsx scripts/generate-dataset.ts",
-    "score:baseline": "tsx scripts/score-baseline.ts"
+    "score:baseline": "tsx scripts/score-baseline.ts",
+    "eval": "tsx scripts/eval.ts",
+    "eval:compare": "tsx scripts/eval-compare.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
