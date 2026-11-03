@@ -150,3 +150,20 @@ scripts/       seed.ts, generate-dataset.ts, eval.ts, eval-compare.ts
 fixtures/      dataset/ (receipts, statement.csv, ground-truth.json), recordings/
 docs/          sprint/ (these files), README sections, case study
 ```
+
+## As built (Day 2, 2026-11-03)
+
+What changed from the defaults above, and why. Each row is also in the `TRACKER.md` decision log. `docs/ARCHITECTURE.md` describes the system as it now is.
+
+| Area | Default above | As built | Why |
+|---|---|---|---|
+| Model provider | Claude | OpenAI Responses API, `gpt-5.6-sol` for both tasks, `store: false` | The candidate's available API. Same model as B1 runs 2–3, so the B1 comparison holds the model constant. |
+| Extraction schema | One `Extraction` schema | Two: a loose model-facing schema (types only) and the strict `Extraction` in `src/core/schemas.ts` | Structured output enforces types, not domain rules (ISO date, currency code). A strict check after the call is what triggers the one validation retry. |
+| Extraction failure | "Enter details manually" queue item | `UNREADABLE` with the note "Enter its details by hand" | Reuses an existing blocking code (group 1) instead of adding a twelfth. |
+| FX | One rate per receipt | One range call per foreign currency per month (`{month start − 7 days}..{month end}`), cached in SQLite (`fx_rate`) | One call per currency instead of one per receipt; the 7-day lead covers the R-CUR-2 lookback. Endpoint verified 2026-11-03. |
+| `Decision.receiptId` | Receipt id only | `subjectId` (a receipt or a statement line) | R-MAT-7 decisions act on statement lines. |
+| Matching window | "Same month, plus 5 days either side" | Lines dated in the month ± 5 days are candidates; assignment is globally greedy (the highest-scoring receipt is decided first, re-scored after each assignment) | Implements R-MAT-4 literally. |
+| Category rules | Vendor keywords | Vendor name first, then the extracted item summary; whole-word-start matching | One vendor can sell items in different categories (hardware store). Known risk: one summary word can decide a mixed basket. |
+| Eval modes | live, replay | live, replay, and **oracle** (ground-truth fields) | Oracle isolates the rules from perception; expected outcomes stay hand-written. |
+| Layout | `exceptions.ts`, `status.ts` | `receipt-state.ts` (both), plus `quality.ts`, `approvals.ts`, `privacy.ts` | Exceptions and status are derived together from the same stage results. |
+| `/runs` page | Day 2 suggested layout | Not yet: `run_log` rows are written; the page is Day 3 | Day 3 block "Run log and Runs page". |
