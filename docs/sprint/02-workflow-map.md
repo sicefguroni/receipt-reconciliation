@@ -35,6 +35,8 @@ flowchart LR
 
 Hypothesis to confirm on Day 1: most receipts are routine (one obvious payment, same amount, same currency), so most of the user's time goes to items that need no judgment. The system should clear those automatically and put human attention on the few that do need judgment.
 
+*Day 1 result (second-hand, see `days/day-1-discover-and-baseline/interview-notes.md`):* the candidate reports that comparing receipts against payments is the slowest step (estimate). That supports the bottleneck but does not quantify it. The routine-share part of the hypothesis is not yet measured. The map above is unchanged; the only addition is that a missing receipt is handled by creating a substitute invoice when the payment is certain.
+
 ## Target workflow (v1)
 
 ```mermaid

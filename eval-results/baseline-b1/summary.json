@@ -1,0 +1,285 @@
+[
+  {
+    "run": 1,
+    "file": "docs/sprint/days/day-1-discover-and-baseline/b1-raw/run-1.md",
+    "receipts": 20,
+    "extraction": {
+      "total": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "currency": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "date": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "vendor": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      }
+    },
+    "category": {
+      "hit": 20,
+      "of": 20,
+      "rate": 1
+    },
+    "matchRecall": {
+      "hit": 16,
+      "of": 16,
+      "rate": 1
+    },
+    "wrongMatchRate": {
+      "hit": 3,
+      "of": 19,
+      "rate": 0.15789473684210525
+    },
+    "headlineExceptionRecall": {
+      "hit": 5,
+      "of": 5,
+      "rate": 1
+    },
+    "exceptionRecall": {
+      "AMBIGUOUS_MATCH": {
+        "hit": 1,
+        "of": 1,
+        "rate": 1
+      },
+      "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+        "hit": 1,
+        "of": 1,
+        "rate": 1
+      },
+      "DUPLICATE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "MISSING_PURPOSE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "NO_PAYMENT_FOUND": {
+        "hit": 0,
+        "of": 1,
+        "rate": 0
+      }
+    },
+    "exceptionPrecision": {
+      "AMBIGUOUS_MATCH": {
+        "hit": 1,
+        "of": 1,
+        "rate": 1
+      },
+      "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+        "hit": 1,
+        "of": 2,
+        "rate": 0.5
+      },
+      "DUPLICATE": {
+        "hit": 2,
+        "of": 3,
+        "rate": 0.6666666666666666
+      },
+      "MISSING_PURPOSE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      }
+    }
+  },
+  {
+    "run": 2,
+    "file": "docs/sprint/days/day-1-discover-and-baseline/b1-raw/run-2.md",
+    "receipts": 20,
+    "extraction": {
+      "total": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "currency": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "date": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "vendor": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      }
+    },
+    "category": {
+      "hit": 20,
+      "of": 20,
+      "rate": 1
+    },
+    "matchRecall": {
+      "hit": 16,
+      "of": 16,
+      "rate": 1
+    },
+    "wrongMatchRate": {
+      "hit": 3,
+      "of": 19,
+      "rate": 0.15789473684210525
+    },
+    "headlineExceptionRecall": {
+      "hit": 5,
+      "of": 5,
+      "rate": 1
+    },
+    "exceptionRecall": {
+      "AMBIGUOUS_MATCH": {
+        "hit": 0,
+        "of": 1,
+        "rate": 0
+      },
+      "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+        "hit": 1,
+        "of": 1,
+        "rate": 1
+      },
+      "DUPLICATE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "MISSING_PURPOSE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "NO_PAYMENT_FOUND": {
+        "hit": 0,
+        "of": 1,
+        "rate": 0
+      }
+    },
+    "exceptionPrecision": {
+      "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+        "hit": 1,
+        "of": 2,
+        "rate": 0.5
+      },
+      "DUPLICATE": {
+        "hit": 2,
+        "of": 3,
+        "rate": 0.6666666666666666
+      },
+      "MISSING_PURPOSE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      }
+    }
+  },
+  {
+    "run": 3,
+    "file": "docs/sprint/days/day-1-discover-and-baseline/b1-raw/run-3.md",
+    "receipts": 20,
+    "extraction": {
+      "total": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "currency": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "date": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "vendor": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      }
+    },
+    "category": {
+      "hit": 20,
+      "of": 20,
+      "rate": 1
+    },
+    "matchRecall": {
+      "hit": 16,
+      "of": 16,
+      "rate": 1
+    },
+    "wrongMatchRate": {
+      "hit": 3,
+      "of": 19,
+      "rate": 0.15789473684210525
+    },
+    "headlineExceptionRecall": {
+      "hit": 5,
+      "of": 5,
+      "rate": 1
+    },
+    "exceptionRecall": {
+      "AMBIGUOUS_MATCH": {
+        "hit": 1,
+        "of": 1,
+        "rate": 1
+      },
+      "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+        "hit": 1,
+        "of": 1,
+        "rate": 1
+      },
+      "DUPLICATE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "MISSING_PURPOSE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "NO_PAYMENT_FOUND": {
+        "hit": 0,
+        "of": 1,
+        "rate": 0
+      }
+    },
+    "exceptionPrecision": {
+      "AMBIGUOUS_MATCH": {
+        "hit": 1,
+        "of": 1,
+        "rate": 1
+      },
+      "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+        "hit": 1,
+        "of": 2,
+        "rate": 0.5
+      },
+      "DUPLICATE": {
+        "hit": 2,
+        "of": 3,
+        "rate": 0.6666666666666666
+      },
+      "MISSING_PURPOSE": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      }
+    }
+  }
+]

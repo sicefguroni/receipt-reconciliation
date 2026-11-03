@@ -65,7 +65,7 @@ One entry per block: what happened, what went wrong, and how it was checked. `TR
 
 ---
 
-## Block 3: Rules confirmation (2026-11-02, in progress)
+## Block 3: Rules confirmation and interview (2026-11-02 and 2026-11-03)
 
 **Goal.** Settle the `CONFIRM WITH USER` rules and the gaps found while building the dataset, before any rule code depends on them.
 
@@ -87,4 +87,37 @@ One entry per block: what happened, what went wrong, and how it was checked. `TR
 
 **Verified.** 40/40 tests pass, including new checks for TC04's after-choice flag, TC05's badge amount, zero difference on a USD match (the FX fee is excluded), and `bank` on R24/R37. The stabilised R24 PDF still opens and reads correctly.
 
-**Open.** R-QUA-1 photo size; the B0 proxy decision; candidate-reported interview answers.
+**Interview (2026-11-03).** The Accounting user was unavailable, so the candidate answered the `01` script from the October UAT, with each answer marked seen or estimate ([`interview-notes.md`](interview-notes.md)). What it added:
+
+- 30 to 60 receipts a month (estimate), so the 40-receipt synthetic month is in range.
+- Comparing receipts against payments is the slowest part (estimate). This supports the bottleneck in `02` but does not quantify it.
+- When a payment exists without a usable receipt, a substitute invoice is created. That suggests listing statement lines with no receipt; raised as a scope question, not added.
+- R-QUA-1 default kept: receipts are roughly letter-size, and no pixel sizes are known.
+
+Time to close and how often each exception occurs remain **not measured**. The answers are thin and mostly estimates, and the case study must say so.
+
+---
+
+## Block 4: Baselines (2026-11-03, in progress)
+
+**Goal.** Measure the previous way of working: B0 (manual) and B1 (single ChatGPT prompt), scored with the same definitions the system will use.
+
+**Built.** A reusable scorer (`scripts/eval/score.ts`) and answer-table parser (`scripts/eval/answer-sheet.ts`) with 9 tests, plus `pnpm score:baseline -- <label> <files>`, which writes `eval-results/<label>/{summary.json, cases.csv, report.md}`. `eval.ts` will reuse the same scoring functions on Day 2.
+
+**B1 result.** Three ChatGPT runs by the candidate, scored on the 20-item subset ([`baseline-b1-runs.md`](baseline-b1-runs.md)):
+
+- 100% on extraction, category, match recall, and headline exception recall, in every run.
+- **16% wrong-match rate in every run** (3/19):
+  - One $312 payment was assigned to the original and both duplicates.
+  - The hotel receipt with no payment in the period was paired with a *different* hotel stay's charge (29% off) all three times. The real problem, no payment found, was never named.
+- The only variance between runs: R15's twin-charge ambiguity was flagged in 2 of 3 runs.
+
+**What surprised us.** B1 is a much stronger baseline than expected. It already meets four of the `03` targets on this clean synthetic set. The targets were kept (changing them after seeing B1 would be moving the goalposts), and the system's measurable edge is narrowed to the wrong-match rate, ledger integrity, and the Day 4 stress cases. This is probably the most important framing fact for the case study so far.
+
+**What went wrong.** The recorded B1 times (~25–29 s) look like ChatGPT's response time, not the protocol's full session time, so B1 time to close is recorded as not measured until confirmed. Run 1's model name differs from runs 2 and 3; that is also pending confirmation.
+
+**B0.** Blocked. The Accounting user is unavailable, and the candidate has seen the answer key in this session (TC04's amounts, the duplicates, the twin lines, R20). A B0 run by the candidate would overstate manual accuracy and speed. Options were put to the candidate: an unexposed proxy (recommended), or the candidate as a labelled proxy.
+
+**Verified.** 49/49 tests pass. The table cleanup was checked by script to leave every cell unchanged. The flag-to-code mapping for every flagged row is printed in `eval-results/baseline-b1/report.md` for audit.
+
+**Open.** B1 time; run 1 model name; B0 proxy; the scope question on statement lines with no receipt; whether to run B1 on the full 40-receipt month and on the Day 4 stress cases.

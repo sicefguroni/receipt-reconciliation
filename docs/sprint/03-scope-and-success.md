@@ -33,14 +33,16 @@ Fill in the Baseline columns on Day 1 and the Final column on Day 4 and Day 5. T
 
 | Metric | Definition | Baseline B0 (manual) | Baseline B1 (single chat prompt) | Target | Final |
 |---|---|---|---|---|---|
-| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | measure | measure | at least 50% less than B0 | |
+| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | not measured (B0 needs a proxy; Accounting user unavailable) | not measured (recorded ~25–29 s may be response time only; being confirmed) | at least 50% less than B0 | |
 | **Human touches** | Items needing a human action / total items | 100% by definition | n/a | 35% or fewer | |
-| **Exception recall** | Exceptions caught / exceptions planted (ground truth) | measure | measure | 100% for amount difference, missing purpose, duplicate | |
-| **Wrong auto-match rate** | Auto-matches that are incorrect / total auto-matches | n/a | measure | 0% on the test set | |
-| **Match recall** | Correct matches found (auto plus suggested top-1) / matchable receipts | measure | measure | at least 95% | |
-| **Extraction accuracy** | Correct total, currency, and date / receipts | n/a | measure | at least 95% on total and currency | |
-| **Category accuracy** | Correct category / receipts | measure | measure | at least 90% before human review | |
-| **Cost per month closed** | Model spend for the test month | $0 | measure | report it; no target | |
+| **Exception recall** | Exceptions caught / exceptions planted (ground truth) | not measured | 5/5 (100%) in all 3 runs | 100% for amount difference, missing purpose, duplicate | |
+| **Wrong auto-match rate** | Auto-matches that are incorrect / total auto-matches | n/a | **3/19 (16%) in all 3 runs** | 0% on the test set | |
+| **Match recall** | Correct matches found (auto plus suggested top-1) / matchable receipts | not measured | 16/16 (100%) in all 3 runs | at least 95% | |
+| **Extraction accuracy** | Correct total, currency, and date / receipts | n/a | 20/20 (100%) in all 3 runs | at least 95% on total and currency | |
+| **Category accuracy** | Correct category / receipts | not measured | 20/20 (100%) in all 3 runs | at least 90% before human review | |
+| **Cost per month closed** | Model spend for the test month | $0 | not measured (consumer subscription, no per-run cost shown) | report it; no target | |
+
+B1 figures are from the 20-item baseline subset, scored on 2026-11-03 (`eval-results/baseline-b1/report.md`; detail in `days/day-1-discover-and-baseline/baseline-b1-runs.md`). **B1 already meets the extraction, category, match-recall, and headline exception-recall targets on this clean synthetic set.** Improvement over B1 can only be shown on the wrong-match rate, ledger integrity (one line, one receipt), and the Day 4 stress cases. Targets are kept as set; the final report must say this plainly.
 | **Latency** | p50/p95 seconds per receipt, end to end | n/a | n/a | report it; p95 under 20 s | |
 
 ### Business value link (for the case study)

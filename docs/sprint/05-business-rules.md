@@ -49,7 +49,7 @@ Score each (receipt, statement line) pair for unmatched lines in the same month,
 
 ## Receipt quality gate (R-QUA)
 
-- **R-QUA-1** Dimension check is orientation-aware: **long side ≥ 1000 px and short side ≥ 700 px**. *(Evidence E5: a fixed width × height rejected portrait scans.)* **CONFIRM WITH USER** if real receipts are smaller.
+- **R-QUA-1** Dimension check is orientation-aware: **long side ≥ 1000 px and short side ≥ 700 px**. *(Evidence E5: a fixed width × height rejected portrait scans.)* *Checked 2026-11-03 (second-hand):* receipts vary and are roughly letter-size documents, and no pixel sizes are known. A phone photo of a letter-size page is normally well above this minimum, so the default is kept. It stays configurable (`QUALITY_MIN_LONG_SIDE`, `QUALITY_MIN_SHORT_SIDE`).
 - **R-QUA-2** Blur checks apply **only to raster photos**. PDFs and screenshots with embedded text skip the blur check. *(Evidence E5.)*
 - **R-QUA-3** A failed gate gives a plain reason and a fix: "Photo is 600 × 820. Retake it closer, or upload the original PDF."
 - **R-QUA-4** The model may report `isReceipt: false`, which flags `NOT_A_RECEIPT`.

@@ -18,7 +18,8 @@
     "format": "biome check --write .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "dataset": "tsx scripts/generate-dataset.ts"
+    "dataset": "tsx scripts/generate-dataset.ts",
+    "score:baseline": "tsx scripts/score-baseline.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

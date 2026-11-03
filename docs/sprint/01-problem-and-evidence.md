@@ -74,6 +74,8 @@ Confidentiality note: percentages and counts may be quoted. Dollar amounts, name
 
 The two sources show **error types** and the **shape of the manual work**. They do not show **frequency or time cost**. The redesign proposal was also written from screenshots ("we haven't used the live system"), so confirm P1–P9 in the interview. Do not guess these numbers. Collect them in the Day 1 interview and baseline (`06-evaluation-plan.md`).
 
+**Day 1 status (2026-11-03).** The Accounting user was unavailable, so the interview was answered **second-hand** by the candidate from the October UAT ([`interview-notes.md`](days/day-1-discover-and-baseline/interview-notes.md)). Added evidence: about 30 to 60 receipts a month (estimate); comparing receipts against payments is the slowest step (estimate); missing receipts are handled by creating a substitute invoice when the payment is certain (estimate). P1–P9 stand as amended by the UAT feedback (E-series). **Still not measured:** time to close, and how often each exception occurs.
+
 ### Interview script (20 to 30 minutes, with the Accounting user)
 
 1. Walk me through last month's close, from the first receipt to the final report. Which tools did you have open?

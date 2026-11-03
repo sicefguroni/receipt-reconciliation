@@ -9,7 +9,7 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
-Day 1 in progress. Scaffold and dataset done. The rule decisions for R-AMT-2, R-AMT-3, TC04, duplicates, and the bank source are confirmed and applied. Next: B1 runs (candidate, protocol in `days/day-1-discover-and-baseline/baseline-b1-prompt.md`), the candidate-reported interview, a B0 proxy decision, and R-QUA-1 still to confirm. See `days/day-1-discover-and-baseline/README.md`.
+Day 1 in progress. Done: scaffold, dataset, rules confirmation, interview (second-hand), and B1 scoring. **B1 already meets four `03` targets; its weakness is a 16% wrong-match rate.** Blocked or open: B0 (needs a proxy), B1 time (being confirmed), the scope question on statement lines with no receipt, block 5 (scope approval), and block 6 (core rule tests). See `days/day-1-discover-and-baseline/README.md`.
 
 ## Tasks
 
@@ -19,10 +19,10 @@ Block-by-block detail: [`days/day-1-discover-and-baseline/journal.md`](days/day-
 
 - [x] Scaffold the repository and `.env.example`: `Done` 2026-11-02. Paths: `package.json`, `tsconfig.json`, `biome.json`, `vitest.config.ts`, `next.config.ts`, `drizzle.config.ts`, `.env.example`, `.gitignore`, `src/config/env.ts`, `src/adapters/db/{client,schema}.ts`, `src/core/boundary.test.ts`, `src/app/{layout,page}.tsx`, `drizzle/0000_*.sql`. Validation: `pnpm typecheck` OK; `pnpm lint` 0 errors; `pnpm test` 3 files, 8 tests passed; `pnpm db:generate` created `run_log` migration; `pnpm build` OK; `pnpm start` served `/` showing "Mode: replay" with no `.env`.
 - [x] Synthetic dataset, ground truth, splits, baseline subset: `Done` 2026-11-02. Paths: `scripts/generate-dataset.ts`, `scripts/dataset/*`, `src/core/schemas.ts`, `fixtures/dataset/**`. 40 receipts (23 PDF, 14 phone-photo JPEG, 3 PNG; 6 layouts), 44 statement lines in two CSV formats, splits 24/16 (stratified), 20-item baseline subset plus the B0 kit. Validation: `pnpm dataset` OK (about 12 s); `pnpm test` 5 files, 36 tests passed (spec invariants plus fixture hashes and sizes); `pnpm lint` and `pnpm typecheck` clean; R02, R10, and R11 inspected by eye.
-- [ ] Interview the Accounting user; notes in `days/day-1-discover-and-baseline/interview-notes.md` (human)
-- [ ] Confirm `CONFIRM WITH USER` rules in `05` (human): `In Progress`. R-AMT-2 is confirmed (OR reading), and R-AMT-3, TC04, R-DUP-1, and the new R-REQ-3 (`bank`) are decided and applied on 2026-11-02. R-QUA-1 (photo size) is still open. Resume when the candidate answers it.
-- [ ] B0 manual baseline, timed and scored (human + agent)
-- [ ] B1 single-prompt baseline ×3, scored
+- [x] Interview the Accounting user; notes in `days/day-1-discover-and-baseline/interview-notes.md` (human): `Done` 2026-11-03, **second-hand**. The Accounting user was unavailable, so the candidate answered from the October UAT; each answer is marked seen or estimate. Paths: `interview-notes.md`, `01` (Day 1 status), `02` (hypothesis result). Validation: n/a (evidence record).
+- [x] Confirm `CONFIRM WITH USER` rules in `05` (human): `Done` 2026-11-03. R-AMT-2 (OR), R-AMT-3, TC04, R-DUP-1, and R-REQ-3 (`bank`) were applied on 2026-11-02. R-QUA-1 default kept (receipts are roughly letter-size; no pixel sizes known).
+- [ ] B0 manual baseline, timed and scored (human + agent): `Blocked`. The Accounting user is unavailable, and the candidate has seen the answer key. Resume when a proxy is chosen (an unexposed proxy is recommended; see the open question in `days/day-1-discover-and-baseline/journal.md`, block 4).
+- [ ] B1 single-prompt baseline ×3, scored: `In Progress`. All 3 runs scored on 2026-11-03 (`eval-results/baseline-b1/`, `baseline-b1-runs.md`); 49/49 tests pass. Time to close is not measured: the recorded ~25–29 s may be response time only. Resume when the candidate confirms the time.
 - [ ] Metrics table baseline columns filled; v1 scope approved
 - [ ] Core rule tests: R-CUR, R-AMT, R-DUP, R-REQ
 
@@ -82,6 +82,10 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-02 | Add a `bank` payment source (R-REQ-3) | Record direct debits as `company_card` | Candidate's ruling. Direct debits now earn the account point. | Yes |
 | 2026-11-02 | B1 is run by the candidate in ChatGPT, using a fixed prompt that gives the same information as B0 plus the policy | Agent runs B1 through an API; a minimal prompt | The brief says "simple ChatGPT use". A strong, fair prompt makes the comparison credible. | Yes |
 | 2026-11-02 | Pin PDF timestamps in the generator | Accept churn | Every rerun rewrote all 23 PDFs and changed their hashes | Yes |
+| 2026-11-03 | Interview answered second-hand by the candidate and labelled that way | Wait for the Accounting user; present it as a direct interview | The user is unavailable; presenting it as a direct interview would be invented evidence (non-negotiable 1) | Yes |
+| 2026-11-03 | B1 free-text flags coded by fixed keyword rules on the Flags column only, with the coding printed in the report | Agent codes each flag by judgment; also read Notes | Repeatable and auditable; Flags is what a reviewer acts on | Yes |
+| 2026-11-03 | For baselines, a receipt's "planted" exception is `exceptionsAfterMatchChoice` when present (TC04: the amount difference, not `AMBIGUOUS_MATCH`) | Require `AMBIGUOUS_MATCH` on TC04 | `AMBIGUOUS_MATCH` is how the system routes TC04, not the problem itself; a baseline that pairs and flags the difference has caught it | Yes |
+| 2026-11-03 | Keep the `03` targets even though B1 already meets four of them on this set; state that plainly | Raise the targets to beat B1 | Changing targets after seeing the baseline would be moving the goalposts. The honest finding is that the system's edge must come from wrong matches, ledger integrity, and stress cases. | Yes |
 | 2026-11-02 | `pnpm` scripts limited to ones that work today (`dev`, `build`, `test`, `typecheck`, `lint`, `db:*`). `seed`, `eval`, `eval:compare` are added when their scripts exist. | Stub scripts that print "not yet" | A command that exists but does nothing would be a claim the code does not back | Yes |
 
 ## AI corrections log
@@ -98,7 +102,8 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | 2026-11-02 | Seeded random tuning/holdout split | Every hard matching case (TC04, TC05, TC06, TC11) landed in tuning | Agent stratified the split and added a test requiring hard cases in holdout | `5bc626d` |
 | 2026-11-02 | R10 re-photographed duplicate of R08 | Showed a different invoice number and time from R08 | Agent made duplicates reuse their original's printed details | `5bc626d` |
 | 2026-11-02 | Fixtures README file counts | Placeholder text ("18 PDF, 8 PNG...") left in | Agent corrected it from `receipts.json` | `5bc626d` |
-| 2026-11-02 | Dataset generator and the claim "a rerun gives the same data" | Chromium stamps each PDF with the current time, so every rerun changed all 23 PDF hashes | Agent noticed 23 changed binaries after a rules-only change, then pinned the timestamps; two reruns now give identical hashes | this commit |
+| 2026-11-02 | Dataset generator and the claim "a rerun gives the same data" | Chromium stamps each PDF with the current time, so every rerun changed all 23 PDF hashes | Agent noticed 23 changed binaries after a rules-only change, then pinned the timestamps; two reruns now give identical hashes | `b14526d` |
+| 2026-11-03 | Test count in the TRACKER and journal entries for B1 | Written as "46/46" from memory; the real run showed 49 | Agent re-ran the tests and replaced it with the count from the output. Lesson: copy numbers from command output, never retype them. | this commit |
 | 2026-11-02 | Repo-wide `eol=lf` in `.gitattributes` | Normalised fixture CSVs, which should keep CRLF like real bank exports | Agent marked `fixtures/**/*.csv` as `-text` | `7d069ae` |
 
 ## Session history
