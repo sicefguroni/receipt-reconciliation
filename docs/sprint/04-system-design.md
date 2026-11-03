@@ -98,7 +98,8 @@ const ExceptionCode = z.enum([
 
 const Decision = z.object({ // every human action is one immutable row
   id: z.string(), receiptId: z.string(), actorId: z.string(),
-  action: z.enum(["approve", "correct_field", "choose_match", "override_status", "request_reupload"]),
+  action: z.enum(["approve", "correct_field", "choose_match", "override_status", "request_reupload",
+    "link_receipt", "record_substitute", "mark_not_expense"]), // last three: statement lines with no receipt (R-MAT-7)
   before: z.unknown(), after: z.unknown(), reason: z.string().min(3).optional(), at: z.string(),
 });
 ```
@@ -123,7 +124,8 @@ Every pipeline run writes a `run_log` row per receipt per stage: stage, status, 
 2. **Choose a match** for ambiguous or unmatched items, from ranked candidates or "paid personally / no statement line".
 3. **Sign off an amount difference** over the threshold. A reason is required.
 4. **Correct any extracted field or category.** The correction is stored as a `Decision` and also used for evaluation reporting.
-5. **Self-approval is impossible.** The approve control is disabled with a tooltip, not hidden. In UAT the block worked, but the button still looked clickable (see "What worked" in `01`).
+5. **Resolve statement lines with no receipt** (R-MAT-7): link a receipt, record a substitute with a reason, or mark the line not an expense with a reason.
+6. **Self-approval is impossible.** The approve control is disabled with a tooltip, not hidden. In UAT the block worked, but the button still looked clickable (see "What worked" in `01`).
 
 ## Privacy and permission boundaries
 

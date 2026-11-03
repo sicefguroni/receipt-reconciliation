@@ -98,7 +98,7 @@ Time to close and how often each exception occurs remain **not measured**. The a
 
 ---
 
-## Block 4: Baselines (2026-11-03, in progress)
+## Block 4: Baselines (2026-11-03)
 
 **Goal.** Measure the previous way of working: B0 (manual) and B1 (single ChatGPT prompt), scored with the same definitions the system will use.
 
@@ -114,10 +114,15 @@ Time to close and how often each exception occurs remain **not measured**. The a
 
 **What surprised us.** B1 is a much stronger baseline than expected. It already meets four of the `03` targets on this clean synthetic set. The targets were kept (changing them after seeing B1 would be moving the goalposts), and the system's measurable edge is narrowed to the wrong-match rate, ledger integrity, and the Day 4 stress cases. This is probably the most important framing fact for the case study so far.
 
-**What went wrong.** The recorded B1 times (~25–29 s) look like ChatGPT's response time, not the protocol's full session time, so B1 time to close is recorded as not measured until confirmed. Run 1's model name differs from runs 2 and 3; that is also pending confirmation.
+**What went wrong.**
 
-**B0.** Blocked. The Accounting user is unavailable, and the candidate has seen the answer key in this session (TC04's amounts, the duplicates, the twin lines, R20). A B0 run by the candidate would overstate manual accuracy and speed. Options were put to the candidate: an unexposed proxy (recommended), or the candidate as a labelled proxy.
+- The B1 times (25–29 s) are ChatGPT's response time only (confirmed by the candidate). Upload, copy, and check were not timed, so **B1 time to close is not measured.**
+- Run 1 used a different model (GPT 6-Sol); runs 2 and 3 used GPT 5.6-Sol. Only runs 2 and 3 show same-model variance. They still differed on R15's ambiguity flag.
 
-**Verified.** 49/49 tests pass. The table cleanup was checked by script to leave every cell unchanged. The flag-to-code mapping for every flagged row is printed in `eval-results/baseline-b1/report.md` for audit.
+**B0: not measured; time estimated.** The Accounting user was unavailable, and the candidate had seen the answer key. The candidate suggested using an agent for "a fair estimate". The agent advised against it: B0 measures a person, so an agent run would be a third AI baseline presented as manual work, which would be an invented measurement. The candidate chose a **labelled estimate** instead: 1–4 min per receipt, giving 40–160 min for the 40-receipt month ([`baseline-b0.md`](baseline-b0.md)). Manual accuracy is not measured; the kit is kept in case a person becomes available. Consequence: the time target can only be called met convincingly if the system closes the month in **20 minutes or less** (half the low end of the band).
 
-**Open.** B1 time; run 1 model name; B0 proxy; the scope question on statement lines with no receipt; whether to run B1 on the full 40-receipt month and on the Day 4 stress cases.
+**Scope change.** "Statement lines with no receipt" was added to v1 (R-MAT-7) with three actions: link a receipt, record a substitute (the interview's "create own invoice"), or mark not an expense. `03`, `04`, `05`, and `06` were updated, plus a spec test pinning the 9 such lines in the October set.
+
+**Verified.** 50/50 tests pass. The table cleanup was checked by script to leave every cell unchanged. The flag-to-code mapping for every flagged row is printed in `eval-results/baseline-b1/report.md` for audit.
+
+**Open.** Whether to also run B1 on the full 40-receipt month and on the Day 4 stress cases.

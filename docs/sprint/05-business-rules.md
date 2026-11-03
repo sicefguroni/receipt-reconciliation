@@ -35,6 +35,7 @@ Score each (receipt, statement line) pair for unmatched lines in the same month,
 - **R-MAT-4** A statement line can be matched to at most one receipt unless a human splits it. Assign greedily by highest score, so a line taken by a higher-scoring receipt is unavailable to others.
 - **R-MAT-5** Match status is derived **only** from these rules or from a human `choose_match` / `override_status` decision. Payment status = `paid` if and only if status ∈ {matched, amount_differs} with a statement line. *(Evidence E1, P5.)*
 - **R-MAT-6** Every auto-match and candidate shows its reasons in plain language ("same amount, 1 day apart, vendor name matches"). The user asked for "same amount & date, one click" (P1), so the reasons must make that one click trustworthy.
+- **R-MAT-7** *Added 2026-11-03.* After matching and the human's match decisions, every statement line not matched to a receipt is listed as **"No receipt"**. The user resolves each one with one of three actions, each audited and the last two needing a reason: link an uploaded receipt; record a substitute (the payment is real but the receipt is missing or unreadable, matching the "create own invoice" step from the interview); or mark it not an expense (for example a bank fee). Until resolved, the line stays out of the ledger and is shown in the month-end pack.
 
 ## Required information (R-REQ)
 
@@ -91,7 +92,7 @@ The user's explicit request (evidence E6), extended for the new exception types:
 1. Blocking intake problems: `UNREADABLE`, `NOT_A_RECEIPT`, `DUPLICATE`
 2. **Amount differences** over the threshold (after a human has chosen the line, R-AMT-2)
 3. Missing information: `MISSING_PURPOSE`, `LOW_CONFIDENCE_FIELD`, `UNKNOWN_CATEGORY`, `FX_RATE_UNAVAILABLE`
-4. **Approvals** needing a match decision: `AMBIGUOUS_MATCH`, `NO_PAYMENT_FOUND`, personal-card reimbursements
+4. **Approvals** needing a match decision: `AMBIGUOUS_MATCH`, `NO_PAYMENT_FOUND`, personal-card reimbursements, and statement lines with no receipt (R-MAT-7)
 5. **Matches** ready to approve: `matched` items, including small differences shown with a badge (R-AMT-3); bulk-approvable
 
 Within a group, sort by AUD amount, largest first. Every list view shows a total for the rows shown. *(Evidence E9.)*

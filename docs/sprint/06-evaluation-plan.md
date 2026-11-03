@@ -41,6 +41,7 @@ Use these to find failures, not to pad the pass rate: an unreadable photo (heavy
 | Wrong auto-match rate | Incorrect auto-matches / all auto-matches | `eval.ts` |
 | Exception recall / precision | Per exception code: fired vs expected | `eval.ts` |
 | Human touches | Items not in the bulk-approve group / all items | `eval.ts` |
+| No-receipt line recall | Statement lines listed as "No receipt" / lines with `receiptId: null` in ground truth (9 in the October set), after the expected match decisions | `eval.ts` |
 | Latency | p50/p95 per receipt end to end, plus per stage from `run_log` | `eval.ts` (live mode only) |
 | Cost | Sum of input and output tokens × current per-token price (put the price in config with its source and date) | `eval.ts` (live mode only) |
 | Time to close | Stopwatch: the user's minutes from opening the month to a signed-off ledger | Human session notes |

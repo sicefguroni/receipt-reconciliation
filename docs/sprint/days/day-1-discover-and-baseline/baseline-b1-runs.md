@@ -4,16 +4,16 @@ Prompt and protocol: [`baseline-b1-prompt.md`](baseline-b1-prompt.md). Raw repli
 
 ## Runs (from the candidate's notes in `b1-raw/`)
 
-| Run | Date | Tool and model (as recorded) | Time (as recorded) | Files batched? | "continue" count |
+| Run | Date | Tool and model | ChatGPT response time | Files batched? | "continue" count |
 |---|---|---|---|---|---|
-| 1 | 2026-11-02 | ChatGPT, "GPT 6-Sol" | ~29 s | not recorded | not recorded |
-| 2 | 2026-11-02 | ChatGPT, "GPT 5.6-Sol" | ~25 s | not recorded | not recorded |
-| 3 | 2026-11-02 | ChatGPT, "GPT 5.6-Sol" | ~26 s | not recorded | not recorded |
+| 1 | 2026-11-02 | ChatGPT, GPT 6-Sol | ~29 s | not recorded | not recorded |
+| 2 | 2026-11-02 | ChatGPT, GPT 5.6-Sol | ~25 s | not recorded | not recorded |
+| 3 | 2026-11-02 | ChatGPT, GPT 5.6-Sol | ~26 s | not recorded | not recorded |
 
-**Open questions on these records:**
+Notes confirmed by the candidate on 2026-11-03:
 
-- **Time.** Was ~25–29 s the full protocol time (upload, wait, copy, check), or only ChatGPT's response time? Until confirmed, **B1 time to close is not measured.** Measure it with a stopwatch from opening a new Temporary Chat to finishing the read-through (protocol steps 3 to 8).
-- **Model.** Run 1 is recorded as "GPT 6-Sol" and runs 2 and 3 as "GPT 5.6-Sol". This may be a typo. If not, run 1 used a different model.
+- **Time.** The recorded seconds are ChatGPT's response time only. Uploading 22 files, copying the reply, and reading it through were not timed. **B1 time to close is not measured.** The response time (~0.5 min) is a lower bound, not the session time.
+- **Model.** Run 1 used a different model (GPT 6-Sol); the model could not be set to GPT 5.6-Sol for that run. Only runs 2 and 3 used the same model, so only they show pure run-to-run variance.
 
 ## Scores against ground truth (20-item baseline subset)
 
@@ -44,7 +44,10 @@ Every receipt was read correctly (totals, currencies, dates, vendors), every cat
 
 ## Variance between runs
 
-Low. The only difference is the R15 ambiguity flag (2 of 3 runs) and whether R20's wrong match was marked "tentative" (2 of 3). The three wrong matches occurred in every run.
+Low. The three wrong matches occurred in every run.
+
+- **Same model (runs 2 and 3).** Two differences: run 2 did not flag R15's twin charge and run 3 did; run 2 marked R20's wrong match "tentative" and run 3 did not. Even with the same prompt and model, whether an ambiguity is raised changes from run to run.
+- **Different model (run 1).** Same results as run 3 on every scored metric.
 
 ## What this means for the comparison (agent's reading)
 

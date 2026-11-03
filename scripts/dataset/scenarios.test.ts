@@ -179,6 +179,14 @@ describe("dataset spec", () => {
     expect(byId.get("R22")?.exceptions).toEqual([]);
   });
 
+  it("R-MAT-7: 9 statement lines have no receipt, including the TC11 twin and the card fee", () => {
+    const noReceipt = ds.statementLines.filter((l) => l.receiptId === null);
+    expect(noReceipt).toHaveLength(9);
+    const descriptions = noReceipt.map((l) => l.description);
+    expect(descriptions).toContain("MONTHLY CARD FEE");
+    expect(noReceipt.some((l) => l.date === "2026-10-15" && l.amountAud === 19.99)).toBe(true);
+  });
+
   it("never expects the 'Other' category (R-CAT-3)", () => {
     expect(truth.filter((t) => t.category === "Other")).toEqual([]);
   });

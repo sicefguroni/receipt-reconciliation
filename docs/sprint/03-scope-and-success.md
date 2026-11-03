@@ -8,9 +8,9 @@
 4. **Normalisation.** AUD stays AUD. Non-AUD amounts are converted at the historical rate for the receipt date from a public FX API.
 5. **Categorisation.** A vendor rule table first, then a model fallback with a reason and confidence. Every category is editable.
 6. **Matching.** Deterministic scoring against statement lines, with auto-match only for a single clear winner.
-7. **Exceptions.** Amount difference, missing purpose, duplicate, no payment found, ambiguous match, low confidence, unreadable, and self-approval.
+7. **Exceptions.** Amount difference, missing purpose, duplicate, no payment found, ambiguous match, low confidence, unreadable, and self-approval. *Added 2026-11-03:* **statement lines with no receipt**, listed so the user can link a receipt or record a substitute with a reason. This is the "create own invoice" step from the interview (R-MAT-7).
 8. **One review queue** in the user's requested order, with approve, correct, and override-with-reason actions, all audited.
-9. **Month-end pack.** Ledger CSV, exceptions log CSV, and a readable HTML/Markdown summary with totals by category and by payment source.
+9. **Month-end pack.** Ledger CSV, exceptions log CSV, and a readable HTML/Markdown summary with totals by category and by payment source, plus the list of statement lines with no receipt and how each was resolved.
 10. **Evaluation harness.** `pnpm eval` in replay and live modes, plus comparison between runs.
 11. **Handoff documentation.** README, runbook, architecture, evaluation results, case study, AI collaboration note, and demo.
 
@@ -33,16 +33,16 @@ Fill in the Baseline columns on Day 1 and the Final column on Day 4 and Day 5. T
 
 | Metric | Definition | Baseline B0 (manual) | Baseline B1 (single chat prompt) | Target | Final |
 |---|---|---|---|---|---|
-| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | not measured (B0 needs a proxy; Accounting user unavailable) | not measured (recorded ~25–29 s may be response time only; being confirmed) | at least 50% less than B0 | |
+| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | **estimate, not measured:** 40–160 min for the 40-receipt month (1–4 min per receipt, candidate's estimate) | not measured (only ChatGPT response time recorded: 25–29 s per run) | at least 50% less than B0: convincing only at **≤ 20 min** (half the low end of the estimate) | |
 | **Human touches** | Items needing a human action / total items | 100% by definition | n/a | 35% or fewer | |
-| **Exception recall** | Exceptions caught / exceptions planted (ground truth) | not measured | 5/5 (100%) in all 3 runs | 100% for amount difference, missing purpose, duplicate | |
+| **Exception recall** | Exceptions caught / exceptions planted (ground truth) | not measured (no human answer sheet) | 5/5 (100%) in all 3 runs | 100% for amount difference, missing purpose, duplicate | |
 | **Wrong auto-match rate** | Auto-matches that are incorrect / total auto-matches | n/a | **3/19 (16%) in all 3 runs** | 0% on the test set | |
 | **Match recall** | Correct matches found (auto plus suggested top-1) / matchable receipts | not measured | 16/16 (100%) in all 3 runs | at least 95% | |
 | **Extraction accuracy** | Correct total, currency, and date / receipts | n/a | 20/20 (100%) in all 3 runs | at least 95% on total and currency | |
 | **Category accuracy** | Correct category / receipts | not measured | 20/20 (100%) in all 3 runs | at least 90% before human review | |
 | **Cost per month closed** | Model spend for the test month | $0 | not measured (consumer subscription, no per-run cost shown) | report it; no target | |
 
-B1 figures are from the 20-item baseline subset, scored on 2026-11-03 (`eval-results/baseline-b1/report.md`; detail in `days/day-1-discover-and-baseline/baseline-b1-runs.md`). **B1 already meets the extraction, category, match-recall, and headline exception-recall targets on this clean synthetic set.** Improvement over B1 can only be shown on the wrong-match rate, ledger integrity (one line, one receipt), and the Day 4 stress cases. Targets are kept as set; the final report must say this plainly.
+B1 figures are from the 20-item baseline subset, scored on 2026-11-03 (`eval-results/baseline-b1/report.md`; detail in `days/day-1-discover-and-baseline/baseline-b1-runs.md`). **B1 already meets the extraction, category, match-recall, and headline exception-recall targets on this clean synthetic set.** Improvement over B1 can only be shown on the wrong-match rate, ledger integrity (one line, one receipt), and the Day 4 stress cases. Targets are kept as set; the final report must say this plainly. B0 was not measured, because the Accounting user was unavailable and no unbiased proxy was available; its time is a labelled estimate (`days/day-1-discover-and-baseline/baseline-b0.md`).
 | **Latency** | p50/p95 seconds per receipt, end to end | n/a | n/a | report it; p95 under 20 s | |
 
 ### Business value link (for the case study)
