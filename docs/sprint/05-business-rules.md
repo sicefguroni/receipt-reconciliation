@@ -26,7 +26,7 @@ Score each (receipt, statement line) pair for unmatched lines in the same month,
 | Amount equal (after R-CUR-4) | +50 |
 | Amount within R-AMT-2 threshold | +30 (instead of +50) |
 | Date diff 0–1 days | +25; 2–3 days +15; 4–5 days +5 |
-| Vendor similarity (normalised token overlap with the statement description) ≥ 0.6 | +20; ≥ 0.3 +10 |
+| Vendor similarity (normalised token overlap with the statement description) ≥ 0.6 | +20; ≥ 0.3 +10. *Day 4 (F5):* a vendor whose words run together equal consecutive whole words of the description counts as a full match ("brightreachads" = "BRIGHTREACH ADS"), and the reverse |
 | Account matches the receipt's payment source | +5 |
 
 - **R-MAT-1** Auto-match only if the best score is **≥ 75** and beats the runner-up by **≥ 20**. Both numbers are configurable and tuned on Day 4 using only the tuning split (see `06`).
@@ -36,6 +36,7 @@ Score each (receipt, statement line) pair for unmatched lines in the same month,
 - **R-MAT-5** Match status is derived **only** from these rules or from a human `choose_match` / `override_status` decision. Payment status = `paid` if and only if status ∈ {matched, amount_differs} with a statement line. *(Evidence E1, P5.)*
 - **R-MAT-6** Every auto-match and candidate shows its reasons in plain language ("same amount, 1 day apart, vendor name matches"). The user asked for "same amount & date, one click" (P1), so the reasons must make that one click trustworthy.
 - **R-MAT-7** *Added 2026-11-03.* After matching and the human's match decisions, every statement line not matched to a receipt is listed as **"No receipt"**. The user resolves each one with one of three actions, each audited and the last two needing a reason: link an uploaded receipt; record a substitute (the payment is real but the receipt is missing or unreadable, matching the "create own invoice" step from the interview); or mark it not an expense (for example a bank fee). Until resolved, the line stays out of the ledger and is shown in the month-end pack.
+- **R-MAT-9** *Added 2026-11-03 (Day 4, failure F6).* A statement line more than **7 days** (configurable, `MATCH_MAX_DAYS_APART`) from the receipt date is not a candidate. A receipt with no date is not gated. *Tuned on the tuning split only:* posting lag there is 0–2 days (20 receipts), and 7 covers a weekend plus a public holiday. *Why:* the date table gives 0 points beyond 5 days, but amount-within-policy (+30) plus a shared word like "cafe" (+10) still reached the 40-point candidate floor, so a personal-card coffee with no payment was shown a line 15 days earlier as its possible payment.
 - **R-MAT-8** *Added 2026-11-03 (Day 4, failure F1).* A **credit** (a statement line with a negative amount: a refund or reversal) is never a receipt's payment. It is not scored, not offered as a candidate, and cannot be chosen for or linked to a receipt. It is listed under R-MAT-7 as a "refund or credit", resolved by recording it against the category it reduces (a negative ledger row) or marking it not an expense, each with a reason. *Why:* a refund shares the purchase's vendor, account, and a nearby date, so it scored 40–50 and was offered as the payment; choosing it would have put a negative amount in the ledger as if the receipt were paid.
 
 ## Required information (R-REQ)

@@ -9,6 +9,8 @@ import type { ExceptionCode, MatchStatus, PaymentSource, StatementLine } from ".
 export interface MatchPolicy extends AmountPolicy {
   minScore: number; // e.g. 75
   minMargin: number; // e.g. 20
+  /** R-MAT-9: a line further than this from the receipt date is not a candidate. e.g. 7 */
+  maxDaysApart: number;
 }
 
 export interface MatchReceipt {
@@ -66,19 +68,44 @@ export function inMatchWindow(lineDate: string, monthKey: string): boolean {
 export function vendorSimilarity(vendor: string, description: string): number {
   const vendorWords = new Set(normaliseVendor(vendor).split(" ").filter(Boolean));
   if (vendorWords.size === 0) return 0;
-  const descriptionWords = new Set(normaliseVendor(description).split(" ").filter(Boolean));
+  const description_ = normaliseVendor(description).split(" ").filter(Boolean);
+  const descriptionWords = new Set(description_);
   let found = 0;
   for (const word of vendorWords) if (descriptionWords.has(word)) found += 1;
-  return found / vendorWords.size;
+  const overlap = found / vendorWords.size;
+  if (overlap < 1 && runTogether([...vendorWords].join(""), description_)) return 1;
+  return overlap;
+}
+
+/**
+ * R-MAT vendor signal, Day 4 (failure F5): a logo prints the name as one word
+ * ("brightreachads") where the bank writes "BRIGHTREACH ADS", or the reverse. They are the
+ * same name if the run-together vendor equals consecutive whole words of the description.
+ * Whole words only, so a short name never matches inside an unrelated word.
+ */
+function runTogether(compactVendor: string, descriptionWords: readonly string[]): boolean {
+  for (let start = 0; start < descriptionWords.length; start++) {
+    let joined = "";
+    for (let end = start; end < descriptionWords.length; end++) {
+      joined += descriptionWords[end];
+      if (joined === compactVendor) return true;
+      if (joined.length >= compactVendor.length) break;
+    }
+  }
+  return false;
 }
 
 function formatAud(amount: number): string {
   return `$${Math.abs(amount).toFixed(2)}`;
 }
 
+function daysApart(a: string, b: string): number {
+  return Math.abs(dayNumber(a) - dayNumber(b));
+}
+
 function datePoints(receiptDate: string | null, lineDate: string): [number, string | null] {
   if (!receiptDate) return [0, null];
-  const days = Math.abs(dayNumber(lineDate) - dayNumber(receiptDate));
+  const days = daysApart(lineDate, receiptDate);
   const label = days === 0 ? "same day" : days === 1 ? "1 day apart" : `${days} days apart`;
   if (days <= 1) return [25, label];
   if (days <= 3) return [15, label];
@@ -151,11 +178,13 @@ export function isCredit(line: Pick<StatementLine, "amountAud">): boolean {
 export function rankCandidates(
   receipt: MatchReceipt,
   lines: readonly StatementLine[],
-  policy: AmountPolicy,
+  policy: MatchPolicy,
 ): Candidate[] {
   if (receipt.total === null) return [];
+  const { date } = receipt;
   return lines
     .filter((line) => !isCredit(line)) // R-MAT-8
+    .filter((line) => !date || daysApart(date, line.date) <= policy.maxDaysApart) // R-MAT-9
     .map((line) => scorePair(receipt, line, policy))
     .filter((c) => c.score > 0)
     .sort((a, b) => b.score - a.score || a.statementLineId.localeCompare(b.statementLineId));

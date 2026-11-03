@@ -13,7 +13,13 @@ import {
 } from "./matching";
 import type { StatementLine } from "./schemas";
 
-const policy: MatchPolicy = { pctThreshold: 10, audThreshold: 100, minScore: 75, minMargin: 20 };
+const policy: MatchPolicy = {
+  pctThreshold: 10,
+  audThreshold: 100,
+  minScore: 75,
+  minMargin: 20,
+  maxDaysApart: 7,
+};
 
 const receipt = (overrides: Partial<MatchReceipt> = {}): MatchReceipt => ({
   id: "R1",
@@ -138,6 +144,51 @@ describe("R-MAT-8 credits are never a receipt's payment", () => {
     expect(outcome?.statementLineId).toBe("L1");
     expect(outcome?.candidates.map((c) => c.statementLineId)).toEqual(["L1"]);
     expect(linesWithoutReceipt([purchase, refund], ["L1"]).map((l) => l.id)).toEqual(["L2"]);
+  });
+});
+
+describe("R-MAT-9 date gate", () => {
+  // R13 on the 20-receipt subset (Day 2 finding): a $14.70 coffee with no line was pushed to
+  // `ambiguous` by a $15.50 cafe line 15 days earlier (amount within policy 30 + vendor 10).
+  const coffee = receipt({ total: 14.7, date: "2026-10-17", vendor: "Harbour Lane Cafe" });
+  const far = line({ date: "2026-10-02", amountAud: 15.5, description: "SQ *SAMPLE CAFE" });
+
+  it("a line more than maxDaysApart from the receipt date is not a candidate", () => {
+    expect(scorePair(coffee, far, policy).score).toBe(45); // what it scored before the gate
+    expect(rankCandidates(coffee, [far], policy)).toEqual([]);
+  });
+
+  it("the boundary is inclusive: exactly maxDaysApart is still a candidate", () => {
+    const sevenDays = line({
+      date: "2026-10-10",
+      amountAud: 14.7,
+      description: "HARBOUR LANE CAFE",
+    });
+    const eightDays = line({
+      id: "L2",
+      date: "2026-10-09",
+      amountAud: 14.7,
+      description: "HARBOUR LANE CAFE",
+    });
+    expect(
+      rankCandidates(coffee, [sevenDays, eightDays], policy).map((c) => c.statementLineId),
+    ).toEqual(["L1"]);
+  });
+
+  it("a receipt with no date is not gated (its date is for a person to fix)", () => {
+    expect(rankCandidates({ ...coffee, date: null }, [far], policy)).not.toEqual([]);
+  });
+});
+
+describe("vendor similarity: wordmarks (Day 4, F5)", () => {
+  it("a logo read as one word matches the bank's spaced name, and the reverse", () => {
+    expect(vendorSimilarity("brightreachads", "BRIGHTREACH ADS SAMPLE CITY AU")).toBe(1);
+    expect(vendorSimilarity("Bright Reach Ads", "BRIGHTREACHADS SAMPLE CITY")).toBe(1);
+  });
+
+  it("whole words only: a short name inside another word does not match", () => {
+    expect(vendorSimilarity("Ace", "PLACEMENT AGENCY")).toBe(0);
+    expect(vendorSimilarity("samplec", "SAMPLE CAFE")).toBe(0);
   });
 });
 

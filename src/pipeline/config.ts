@@ -25,6 +25,7 @@ export function configFromEnv(env: Env, categories: CategoryConfig): PipelineCon
       audThreshold: env.AMOUNT_DIFF_AUD_THRESHOLD,
       minScore: env.AUTO_MATCH_MIN_SCORE,
       minMargin: env.AUTO_MATCH_MIN_MARGIN,
+      maxDaysApart: env.MATCH_MAX_DAYS_APART,
     },
     qualityPolicy: {
       minLongSide: env.QUALITY_MIN_LONG_SIDE,

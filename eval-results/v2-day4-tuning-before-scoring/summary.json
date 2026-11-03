@@ -1,0 +1,171 @@
+{
+  "label": "v2-day4-tuning-before-scoring",
+  "mode": "replay",
+  "ranAt": "2026-11-03T14:01:54.930Z",
+  "commit": "3a2469d",
+  "model": "gpt-5.6-sol",
+  "reasoningEffort": "low",
+  "policy": {
+    "pctThreshold": 10,
+    "audThreshold": 100,
+    "minScore": 75,
+    "minMargin": 20
+  },
+  "receipts": 24,
+  "fullSet": false,
+  "testCasesRun": [
+    "TC03",
+    "TC05",
+    "TC07",
+    "TC09",
+    "TC10",
+    "TC11",
+    "TC12"
+  ],
+  "metrics": {
+    "all": {
+      "extractionTotal": {
+        "hit": 24,
+        "of": 24,
+        "rate": 1
+      },
+      "extractionCurrency": {
+        "hit": 24,
+        "of": 24,
+        "rate": 1
+      },
+      "extractionDate": {
+        "hit": 24,
+        "of": 24,
+        "rate": 1
+      },
+      "extractionVendor": {
+        "hit": 22,
+        "of": 24,
+        "rate": 0.9166666666666666
+      },
+      "categoryAccuracy": {
+        "hit": 24,
+        "of": 24,
+        "rate": 1
+      },
+      "matchRecallTop1": {
+        "hit": 20,
+        "of": 20,
+        "rate": 1
+      },
+      "wrongAutoMatchRate": {
+        "hit": 0,
+        "of": 19,
+        "rate": 0
+      },
+      "headlineExceptionRecall": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "exceptionRecall": {
+        "AMBIGUOUS_MATCH": {
+          "hit": 0,
+          "of": 1,
+          "rate": 0
+        },
+        "DUPLICATE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        }
+      },
+      "exceptionPrecision": {
+        "DUPLICATE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        }
+      },
+      "humanTouches": {
+        "hit": 5,
+        "of": 24,
+        "rate": 0.20833333333333334
+      },
+      "noReceiptLineRecall": null
+    },
+    "holdout": null
+  },
+  "testCases": [
+    {
+      "testCase": "TC03",
+      "receipts": [
+        "R03"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC05",
+      "receipts": [
+        "R05"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC07",
+      "receipts": [
+        "R08",
+        "R09",
+        "R10"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC09",
+      "receipts": [
+        "R12"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC10",
+      "receipts": [
+        "R13",
+        "R14"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC11",
+      "receipts": [
+        "R15"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC12",
+      "receipts": [
+        "R16"
+      ],
+      "pass": true,
+      "failures": []
+    }
+  ],
+  "measuredFrom": "the recorded live run",
+  "latencyMsPerReceipt": {
+    "p50": 2526,
+    "p95": 4747
+  },
+  "tokens": {
+    "input": 54125,
+    "output": 2549
+  },
+  "cost": {
+    "upperBound": 0.2675,
+    "perReceipt": 0.0111,
+    "currency": "USD",
+    "basis": "4/M input, 20/M output; OpenAI API Pricing page, as reported by the candidate, 2026-11-03"
+  }
+}

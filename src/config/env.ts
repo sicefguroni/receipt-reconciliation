@@ -21,6 +21,7 @@ const EnvSchema = z
     AMOUNT_DIFF_AUD_THRESHOLD: z.coerce.number().positive().default(100),
     AUTO_MATCH_MIN_SCORE: z.coerce.number().int().min(0).max(100).default(75),
     AUTO_MATCH_MIN_MARGIN: z.coerce.number().int().min(0).max(100).default(20),
+    MATCH_MAX_DAYS_APART: z.coerce.number().int().min(0).max(60).default(7),
     EXTRACT_CONFIDENCE_MIN: z.coerce.number().min(0).max(1).default(0.8),
     CATEGORY_CONFIDENCE_MIN: z.coerce.number().min(0).max(1).default(0.7),
     QUALITY_MIN_LONG_SIDE: z.coerce.number().int().positive().default(1000),
