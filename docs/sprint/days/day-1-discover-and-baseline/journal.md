@@ -175,3 +175,8 @@ All six blocks are done, and the v1 scope and targets are approved. The two fact
 
 1. **B1 is strong.** On clean synthetic data, ChatGPT already reads, categorises, and finds payments at 100%. The system's measurable edge is the 16% → 0% wrong-match rate and ledger integrity (one payment per receipt), plus whatever the Day 4 stress cases reveal.
 2. **The human evidence is thin.** The interview is second-hand, B0 is an estimate (30 s to 1 min per receipt), and B1 time to close is not measured yet. The case study must say so plainly.
+
+**Update (2026-11-03, after Day 1 close): B1 time to close.** The per-run times first recorded (25–29 s) did not include reading the reply. The candidate then reported full-session times per run: 5:26, 5:31, 5:47 (mean **5 min 35 s** for 20 receipts; about 11 min 10 s extrapolated to 40). About 95% of B1's time is the person's work (uploading, copying, reading), not ChatGPT's. For the comparison this means:
+
+- The system's ≤ 10 min target for 40 receipts is faster than B1's extrapolated ~11 min and well under B0's estimated 20–40 min, but only just under B1.
+- B1's ~11 minutes produce a ledger with a 16% wrong-match rate and no indication of which matches are wrong. The system's case is a *correct* ledger in a similar time, not a faster one.

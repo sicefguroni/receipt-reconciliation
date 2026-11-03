@@ -4,15 +4,18 @@ Prompt and protocol: [`baseline-b1-prompt.md`](baseline-b1-prompt.md). Raw repli
 
 ## Runs (from the candidate's notes in `b1-raw/`)
 
-| Run | Date | Tool and model | ChatGPT response time | Files batched? | "continue" count |
-|---|---|---|---|---|---|
-| 1 | 2026-11-02 | ChatGPT, GPT 6-Sol | ~29 s | not recorded | not recorded |
-| 2 | 2026-11-02 | ChatGPT, GPT 5.6-Sol | ~25 s | not recorded | not recorded |
-| 3 | 2026-11-02 | ChatGPT, GPT 5.6-Sol | ~26 s | not recorded | not recorded |
+| Run | Date | Tool and model | ChatGPT response time | **Full session time** (upload to finished read-through) | Files batched? | "continue" count |
+|---|---|---|---|---|---|---|
+| 1 | 2026-11-02 | ChatGPT, GPT 6-Sol | ~29 s | **5 min 26 s** | not recorded | not recorded |
+| 2 | 2026-11-02 | ChatGPT, GPT 5.6-Sol | ~25 s | **5 min 31 s** | not recorded | not recorded |
+| 3 | 2026-11-02 | ChatGPT, GPT 5.6-Sol | ~26 s | **5 min 47 s** | not recorded | not recorded |
+| **Mean** | | | ~27 s | **5 min 35 s** (spread 21 s) | | |
 
 Notes confirmed by the candidate on 2026-11-03:
 
-- **Time.** The recorded seconds are ChatGPT's response time only. Uploading 22 files, copying the reply, and reading it through were not timed. **B1 time to close is not measured.** The response time (~0.5 min) is a lower bound, not the session time.
+- **Two kinds of time.** "ChatGPT response time" is the stopwatch from sending the prompt to the reply finishing; it was recorded first. "Full session time" is the protocol's time to close, from before uploading the files to finishing the read-through, reported by the candidate on 2026-11-03.
+- **B1 time to close: 5 min 35 s mean for 20 receipts** (5:26, 5:31, 5:47). About 95% of it is the person's work (uploading, copying, reading), not ChatGPT's. Extrapolated to the 40-receipt month (×2, assuming time scales with receipts): **about 11 min 10 s** (extrapolation, not measured).
+- **What the B1 time leaves out.** B1's table contains 3 wrong matches in every run (16%), and nothing in it shows which ones. A reviewer who wants a trustworthy ledger from B1 must re-check every pairing by hand, which is close to the B0 per-receipt work. The B1 time is fast, but it is not the time to a *correct* ledger. This is an argument for the case study, not a measurement.
 - **Model.** Run 1 used a different model (GPT 6-Sol); the model could not be set to GPT 5.6-Sol for that run. Only runs 2 and 3 used the same model, so only they show pure run-to-run variance.
 
 ## Scores against ground truth (20-item baseline subset)
