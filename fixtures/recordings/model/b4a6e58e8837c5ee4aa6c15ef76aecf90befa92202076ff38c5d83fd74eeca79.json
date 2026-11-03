@@ -3,17 +3,17 @@
   "task": "categorise",
   "model": "gpt-5.6-sol",
   "promptVersion": "categorise-v1",
-  "recordedAt": "2026-11-03T06:09:52.051Z",
+  "recordedAt": "2026-11-03T07:17:38.191Z",
   "parts": [
     {
       "text": "Vendor: Teamline Inc.\nItems: Team plan: 1 seat (monthly)\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
     }
   ],
   "response": {
-    "text": "{\"category\":\"Software\",\"confidence\":0.94,\"reason\":\"A monthly Teamline team-plan seat is a software subscription.\"}",
+    "text": "{\"category\":\"Software\",\"confidence\":0.86,\"reason\":\"A monthly per-seat team plan is most likely a software subscription.\"}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 209,
-    "outputTokens": 52,
-    "latencyMs": 2365
+    "outputTokens": 72,
+    "latencyMs": 1616
   }
 }

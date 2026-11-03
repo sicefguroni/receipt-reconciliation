@@ -3,17 +3,17 @@
   "task": "categorise",
   "model": "gpt-5.6-sol",
   "promptVersion": "categorise-v1",
-  "recordedAt": "2026-11-03T06:10:03.320Z",
+  "recordedAt": "2026-11-03T07:17:50.075Z",
   "parts": [
     {
       "text": "Vendor: Vectorly Inc.\nItems: Vector editor: Individual (monthly)\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
     }
   ],
   "response": {
-    "text": "{\"category\":\"Software\",\"confidence\":0.99,\"reason\":\"A monthly subscription to a vector editing application is a software expense.\"}",
+    "text": "{\"category\":\"Software\",\"confidence\":0.99,\"reason\":\"A monthly subscription to a vector graphics editor is a software expense.\"}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 207,
     "outputTokens": 35,
-    "latencyMs": 1266
+    "latencyMs": 1515
   }
 }

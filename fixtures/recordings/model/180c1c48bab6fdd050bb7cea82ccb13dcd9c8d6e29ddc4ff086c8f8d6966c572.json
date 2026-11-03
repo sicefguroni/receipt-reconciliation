@@ -3,7 +3,7 @@
   "task": "extract",
   "model": "gpt-5.6-sol",
   "promptVersion": "extract-v1",
-  "recordedAt": "2026-11-03T06:09:45.509Z",
+  "recordedAt": "2026-11-03T07:17:32.514Z",
   "parts": [
     {
       "text": "File: R16.pdf"
@@ -13,10 +13,10 @@
     }
   ],
   "response": {
-    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"brightreachads\",\"confidence\":0.99},\"date\":{\"value\":\"2026-10-07\",\"confidence\":1},\"total\":{\"value\":750,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":68.18,\"confidence\":1},\"summary\":{\"value\":\"Spring promo clicks and brand awareness impressions\",\"confidence\":0.99}}",
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"brightreachads\",\"confidence\":1},\"date\":{\"value\":\"2026-10-07\",\"confidence\":1},\"total\":{\"value\":750,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":68.18,\"confidence\":1},\"summary\":{\"value\":\"Spring promo clicks; brand awareness impressions\",\"confidence\":1}}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 708,
-    "outputTokens": 93,
-    "latencyMs": 1841
+    "outputTokens": 89,
+    "latencyMs": 1993
   }
 }

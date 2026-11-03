@@ -3,7 +3,7 @@
   "task": "extract",
   "model": "gpt-5.6-sol",
   "promptVersion": "extract-v1",
-  "recordedAt": "2026-11-03T06:09:54.255Z",
+  "recordedAt": "2026-11-03T07:17:41.310Z",
   "parts": [
     {
       "text": "File: R29.jpg"
@@ -13,10 +13,10 @@
     }
   ],
   "response": {
-    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Ironbark Hardware\",\"confidence\":1},\"date\":{\"value\":\"2026-10-11\",\"confidence\":1},\"total\":{\"value\":64.85,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":5.9,\"confidence\":1},\"summary\":{\"value\":\"Black printer ink cartridge, 2 reams of A4 copy paper, and 12-pack of sticky notes\",\"confidence\":0.99}}",
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Ironbark Hardware\",\"confidence\":1},\"date\":{\"value\":\"2026-10-11\",\"confidence\":1},\"total\":{\"value\":64.85,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":5.9,\"confidence\":1},\"summary\":{\"value\":\"Black printer ink cartridge; 2 reams of A4 copy paper; 12-pack of sticky notes\",\"confidence\":0.99}}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 1604,
-    "outputTokens": 109,
-    "latencyMs": 1636
+    "outputTokens": 108,
+    "latencyMs": 1694
   }
 }

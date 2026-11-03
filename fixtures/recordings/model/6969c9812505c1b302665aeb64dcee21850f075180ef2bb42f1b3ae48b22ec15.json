@@ -3,7 +3,7 @@
   "task": "categorise",
   "model": "gpt-5.6-sol",
   "promptVersion": "categorise-v1",
-  "recordedAt": "2026-11-03T06:09:51.559Z",
+  "recordedAt": "2026-11-03T07:17:39.594Z",
   "parts": [
     {
       "text": "Vendor: Pixelboard Inc.\nItems: Design workspace: Pro (monthly)\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
@@ -13,7 +13,7 @@
     "text": "{\"category\":\"Software\",\"confidence\":0.94,\"reason\":\"A monthly Pro design workspace subscription is a software expense.\"}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 207,
-    "outputTokens": 55,
-    "latencyMs": 1954
+    "outputTokens": 63,
+    "latencyMs": 1433
   }
 }
