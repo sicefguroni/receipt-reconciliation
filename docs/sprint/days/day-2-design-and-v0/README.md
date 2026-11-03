@@ -39,11 +39,15 @@ None scheduled. The agent works from Day 1's confirmed rules and scope.
 
 ## Exit criteria
 
-- [ ] One real receipt (TC01) goes from upload to the month-end CSV through the real model and the real FX API
-- [ ] Recordings are committed
-- [ ] `pnpm eval -- --mode replay --label v0-day2` runs
-- [ ] The pass/fail rubric is written in `docs/EVALUATION.md`
+- [x] One real receipt (TC01) goes from upload to the month-end CSV through the real model and the real FX API. TC01 is AUD and never calls FX (R-CUR-1), so TC02 (USD) ran with it: `eval-results/v0-day2-tc01-live/`, and through the upload page on a live server (R02 at the real ECB rate 1.4367).
+- [x] Recordings are committed: all 40 October receipts (50 model calls) and the USD FX range, `fixtures/recordings/`.
+- [x] `pnpm eval -- --mode replay --label v0-day2` runs: full set, no key, 12/12 TCs, identical to the live run.
+- [x] The pass/fail rubric is written in `docs/EVALUATION.md`.
 
-Track task status in [`TRACKER.md`](../../TRACKER.md) under "Day 2".
+Track task status in [`TRACKER.md`](../../TRACKER.md) under "Day 2". Block-by-block record: [`journal.md`](journal.md).
 
 ## Notes
+
+- The runtime model changed from Claude to OpenAI `gpt-5.6-sol` at the start of the day (candidate's ruling; see the TRACKER decision log).
+- Blocks ran in the order 3 → 2 → 5 → 4 → 1: the pure rules first (no key needed), the docs last (so they describe what exists).
+- Two scoring weaknesses were found and deliberately left for Day 4: see `docs/EVALUATION.md`, "Findings queued for Day 4 failure analysis".

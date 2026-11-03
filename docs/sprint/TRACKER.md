@@ -9,7 +9,9 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
-**Day 1 complete** (2026-11-03). All six blocks are done, and the v1 scope and targets are approved. **B1 already meets four `03` targets; its weakness is a 16% wrong-match rate.** B1 time to close is 5 min 35 s mean for 20 receipts (about 11 min 10 s extrapolated to 40). Next: Day 2 (`days/day-2-design-and-v0/README.md`). See `days/day-1-discover-and-baseline/README.md`.
+**Day 2 complete** (2026-11-03). All four exit criteria are met. The runtime model is now **OpenAI `gpt-5.6-sol`** (candidate's ruling). The whole October month was run live and recorded: **`v0-day2` passes 12/12 TCs with 0/33 wrong auto-matches** (0/14 on holdout), live and in replay with no key. On B1's 20 receipts the wrong-match rate is 0/14 vs B1's 3/19. Cost is at most USD 0.45 for the month. Two scoring weaknesses are queued for Day 4 (wordmark vendor names; no date gate). Next: Day 3 (`days/day-3-working-core/README.md`): review actions, column mapping, the full pack, the Runs page, and the first user session. See `days/day-2-design-and-v0/journal.md`.
+
+**Day 1 complete** (2026-11-03). B1 already meets four `03` targets; its weakness is a 16% wrong-match rate. B1 time to close is 5 min 35 s mean for 20 receipts.
 
 ## Tasks
 
@@ -28,11 +30,13 @@ Block-by-block detail: [`days/day-1-discover-and-baseline/journal.md`](days/day-
 
 ### Day 2: Design and v0
 
-- [ ] `ARCHITECTURE.md`
-- [ ] ModelClient (live/record/replay) and FxClient (live/cached)
-- [ ] Remaining `src/core` rules with tests
-- [ ] End-to-end pipeline, TC01 through the real model
-- [ ] Eval skeleton; run `v0-day2`
+Block-by-block detail: [`days/day-2-design-and-v0/journal.md`](days/day-2-design-and-v0/journal.md)
+
+- [x] `ARCHITECTURE.md`: `Done` 2026-11-03. Paths: `docs/ARCHITECTURE.md`; `04-system-design.md` "As built (Day 2)" section. Validation: every number in it is copied from `eval-results/v0-day2/summary.json` or a recordings count (one estimate corrected, see the AI corrections log).
+- [x] ModelClient (live/record/replay) and FxClient (live/cached): `Done` 2026-11-03. Paths: `src/adapters/model/*`, `src/adapters/fx/*`, `src/adapters/statement/*`, `src/adapters/db/*`, `drizzle/0001_*.sql`, `.env.example`, `src/config/env.ts`. OpenAI Responses API with structured output and `store: false`; replay by request hash; Frankfurter range endpoint verified; SQLite FX cache. Validation: 17 adapter tests, including an FX outage served from the cache and a missing recording failing loudly; the format-A reader reproduces all 44 ground-truth lines from the real CRLF bytes.
+- [x] Remaining `src/core` rules with tests: `Done` 2026-11-03. Paths: `src/core/{matching,categories,quality,approvals,queue,receipt-state,privacy}.ts` and tests, `config/categories.json`. Validation: 115 tests in `src/core`; every rule ID in `05` has at least one named test (checked by script); 23 single-rule mutations, all caught; boundary test passes.
+- [x] End-to-end pipeline, TC01 through the real model: `Done` 2026-11-03. Paths: `src/pipeline/*`, `src/server/months.ts`, `src/app/**`, `scripts/seed.ts`. Validation: TC01 + TC02 live through `pnpm eval` (`eval-results/v0-day2-tc01-live`), and through the upload page on a live production server (R01 matched to L03; R02 converted at the real ECB rate 1.4367, ledger $77.12 = AUD charged); replay upload and the unrecorded-file message checked in a browser; `pnpm build` 0 warnings; `pnpm seed` loads the month with no key.
+- [x] Eval skeleton; run `v0-day2`: `Done` 2026-11-03. Paths: `scripts/eval.ts`, `scripts/eval/system.ts`, `scripts/eval-compare.ts`, `config/pricing.json`, `docs/EVALUATION.md`, `eval-results/{v0-day2,v0-day2-live,v0-day2-tc01-live,v0-day2-subset20,oracle-day2}/`, `fixtures/recordings/**`. Validation: `pnpm eval -- --mode replay --label v0-day2` with the key blanked: 12/12 TCs, identical to the live run (`pnpm eval:compare` shows no change); `pnpm test` 22 files, 226 tests passed; `pnpm typecheck` and `pnpm lint` clean.
 
 ### Day 3: Working core
 
@@ -100,6 +104,20 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-03 | R-REQ-1 placeholders also include "na", "n.a.", "--", ".", "nil", "null" | Only the three examples in `05` | Same intent as `05` ("placeholder text such as"); tested | Yes |
 | 2026-11-03 | Runtime model provider is OpenAI (Responses API), `gpt-5.6-sol` for extraction and the category fallback | Claude (`04` default); a cheaper model for categorisation | **Candidate's ruling:** OpenAI is the API the candidate has access to. `gpt-5.6-sol` is the model of B1 runs 2–3, so the system-vs-B1 comparison holds the model constant and isolates the design (rules, one line per receipt, ambiguity to a person). Same model for both tasks: one access check, and the fallback rarely runs. Only the adapter and config change; `src/core` has no model dependency. | Yes (adapter + `.env`) |
 | 2026-11-03 | `MODEL_REASONING_EFFORT=low` default | `medium` / `high` | Reading a receipt is perception, and the ≤ 10 min time target needs low latency. Revisit on Day 4 if extraction accuracy misses ≥ 95% on holdout. | Yes (config) |
+| 2026-11-03 | Two extraction schemas: a loose model-facing one (types only) and the strict `Extraction` in `src/core` | One strict schema sent to the model | Structured output enforces types, not domain rules; a strict check after the call is what makes the `04` "retry once with the validation error" path real | Yes |
+| 2026-11-03 | An extraction failure becomes `UNREADABLE` with "enter its details by hand" | A new exception code | `04` names the behaviour but no code; reusing a blocking group-1 code keeps the code list at 11 | Yes |
+| 2026-11-03 | Replay key = SHA-256 of task, model, effort, prompt text and version, output JSON schema, and each file's SHA-256 (not its bytes) | Key on file and model only | Any prompt or schema change makes old recordings miss loudly instead of answering for a different request | Yes |
+| 2026-11-03 | One FX range call per foreign currency per month (`month start − 7 days` to month end), cached in SQLite; when the API fails, cached rates are served, and with none, R-CUR-3 | One call per receipt | Fewer calls; the 7-day lead covers the R-CUR-2 lookback; an outage degrades to the cache, never to a rate of 1 | Yes |
+| 2026-11-03 | R-CAT-1 checks the vendor name, then the item summary; seed keyword `stationery` → `stationer` | Vendor only; keep `stationery` | A hardware store sells both chairs and printer supplies; `stationer` matches stationers and stationery. Found by the oracle test (R35). Risk logged: one summary word can decide a mixed basket. | Yes |
+| 2026-11-03 | Matching is globally greedy: the receipt with the highest available score is decided first, then all are re-scored | Process receipts in upload order | R-MAT-4 says "assign greedily by highest score"; upload order would let a weak early receipt take a line from a strong later one | Yes |
+| 2026-11-03 | Add an `oracle` eval mode (ground-truth fields in place of the model) | Live and replay only | Separates rules errors from perception errors. Expected outcomes stay hand-written, so it does not grade the rules against themselves. | Yes |
+| 2026-11-03 | Run TC01 together with TC02 for the live end-to-end check | TC01 alone | TC01 is AUD, so by R-CUR-1 it never calls the FX API; TC02 (USD) exercises it | n/a |
+| 2026-11-03 | Record the full 40-receipt month live on Day 2, so `v0-day2` is a full-set run | TC01 + TC02 only; full live run on Day 3 | **Candidate approved** (measured cost about USD 0.011 per receipt). The full replay eval, `pnpm seed`, and the UI then work with no key from Day 2. | n/a |
+| 2026-11-03 | Report cost as an upper bound (all input tokens at the full rate) | Assume a cache-hit share | The run log does not split cached from uncached input; an assumed share would be an invented number | Yes (log cached tokens) |
+| 2026-11-03 | Price for `gpt-5.6-sol` in `config/pricing.json`: USD 4.00 / 1M input, 0.40 cached, 20.00 output, "OpenAI API Pricing page, as reported by the candidate", 2026-11-03 | Leave cost unmeasured | `06` needs the price in config with its source and date; the source is labelled as reported, not fetched by the agent | Yes |
+| 2026-11-03 | The ledger CSV prefixes cells that start with `= + - @` with `'` (plain numbers excepted); uploads drop leading dots from filenames | Write cells as-is | Vendor names come from a model reading uploaded files (untrusted); a formula cell could run when the Accounting user opens the CSV | Yes |
+| 2026-11-03 | Do not fix the two Day 2 scoring findings (wordmark vendor names; no date gate) until Day 4 | Fix now | `06` tunes scoring on the tuning split with a before/after comparison; fixing after seeing the full set would contaminate the holdout claim. Both fail safe today. | n/a |
+| 2026-11-03 | The B1 comparison uses the system on the same 20 receipts (`v0-day2-subset20`), not the 40-receipt run | Compare against the full-set run | Like for like. The subset run is slightly harder (more free statement lines), and it surfaced the date-gate finding. | n/a |
 | 2026-11-02 | `pnpm` scripts limited to ones that work today (`dev`, `build`, `test`, `typecheck`, `lint`, `db:*`). `seed`, `eval`, `eval:compare` are added when their scripts exist. | Stub scripts that print "not yet" | A command that exists but does nothing would be a claim the code does not back | Yes |
 
 ## AI corrections log
@@ -156,6 +174,17 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
   - The time target (≤ 10 min for 40 receipts) is tight.
   - B1 already meets four targets on clean synthetic data, so improvement can only be shown on wrong matches, ledger integrity, and stress cases.
   - The interview and B0 rest on the candidate's estimates.
+
+### 2026-11-03: Day 2, design and v0
+
+- Work done: switched the model provider to OpenAI; core rules R-MAT, R-CAT, R-QUA, R-APR, R-QUE plus state derivation and masking; model, FX, statement, and DB adapters; the month pipeline; `pnpm eval` (live, replay, oracle) and `eval:compare`; v0 pages and `pnpm seed`; the full month recorded live; `ARCHITECTURE.md`, `EVALUATION.md`, `04` "as built".
+- Decisions: 16 decision-log rows added on Day 2, from "Runtime model provider is OpenAI" to "The B1 comparison uses the system on the same 20 receipts".
+- Validation: `pnpm test` 226/226; typecheck, lint, and build clean (0 warnings); `v0-day2` 12/12 TCs live and in replay with no key; browser checks of upload → queue → CSV in replay and live.
+- Remaining: Day 3 blocks. Statement lines with no receipt, review actions, and decisions exist as rules only; the Runs page is not built; format B is not read yet.
+- Known risks:
+  - The two scoring findings (see `EVALUATION.md`, "Findings queued for Day 4").
+  - `.env` had been created in the parent folder (`must/`); the agent moved it into the repo root (gitignored), so the secret is in one place.
+  - The live numbers are on clean synthetic data. The Day 4 stress cases are what will test the system.
 
 ### YYYY-MM-DD: Session title
 
