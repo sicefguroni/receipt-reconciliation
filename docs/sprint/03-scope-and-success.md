@@ -52,3 +52,5 @@ B1 figures are from the 20-item baseline subset, scored on 2026-11-03 (`eval-res
 - **Time to close** is the Accounting user's hours each month.
 - **Exception recall** and the **wrong auto-match rate** are the trustworthiness of the month-end report. One silent miss costs more than the time saved, which is why wrong auto-matches have a 0% target and the system prefers asking over guessing.
 - **Human touches** shows where attention goes: on judgment, not on routine pairing.
+
+**Headline framing (decided 2026-11-03, after the baselines).** Speed is the supporting claim: about as fast as a single ChatGPT prompt (B1 about 11 min for 40 receipts, target ≤ 10 min) and faster than manual work (B0 estimate 20–40 min). **Correctness is the headline:** 0% wrong matches against B1's 16%, one payment per receipt, and every exception surfaced. B1's time is not the time to a *correct* ledger, because its wrong matches are not marked. That point is an argument, not a measurement, and must be presented as one.
