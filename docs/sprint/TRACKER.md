@@ -9,6 +9,8 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
+**Day 3 built; user session pending** (2026-11-03). Blocks 1–5 are done on branch `day-3-working-core`: every review action (including R-MAT-7) works through a pure reconcile step that re-derives the month from what was read plus each human decision; both statement formats read; the full pack and the Runs page exist; README drafted. `v1-day3` live: 12/12, 0/33 wrong auto-match, every metric unchanged from Day 2; a simulated reviewer closes the month to the ground-truth ledger total; 22/22 browser checks on a production build. **There is no Accounting user:** block 6 is a naive proxy session plus a builder cold run (candidate's ruling), protocol in `days/day-3-working-core/first-run-observations.md`. Next: run those two sessions, then Day 4. See `days/day-3-working-core/journal.md`.
+
 **Day 2 complete** (2026-11-03). All four exit criteria are met. The runtime model is now **OpenAI `gpt-5.6-sol`** (candidate's ruling). The whole October month was run live and recorded: **`v0-day2` passes 12/12 TCs with 0/33 wrong auto-matches** (0/14 on holdout), live and in replay with no key. On B1's 20 receipts the wrong-match rate is 0/14 vs B1's 3/19. Cost is at most USD 0.45 for the month. Two scoring weaknesses are queued for Day 4 (wordmark vendor names; no date gate). Next: Day 3 (`days/day-3-working-core/README.md`): review actions, column mapping, the full pack, the Runs page, and the first user session. See `days/day-2-design-and-v0/journal.md`.
 
 **Day 1 complete** (2026-11-03). B1 already meets four `03` targets; its weakness is a 16% wrong-match rate. B1 time to close is 5 min 35 s mean for 20 receipts.
@@ -40,12 +42,14 @@ Block-by-block detail: [`days/day-2-design-and-v0/journal.md`](days/day-2-design
 
 ### Day 3: Working core
 
-- [ ] Review queue UI
-- [ ] Statement CSV mapping (two formats)
-- [ ] Month-end pack
-- [ ] Run log and Runs page
-- [ ] README draft; run `v1-day3` live
-- [ ] First execution by the target user (human)
+Block-by-block detail: [`days/day-3-working-core/journal.md`](days/day-3-working-core/journal.md)
+
+- [x] Review queue UI: `Done` 2026-11-03. Paths: `src/pipeline/{read-month,reconcile,decisions,config,test-month}.ts`, `src/server/months.ts`, `src/app/{actions.ts,labels.ts,layout.tsx,globals.css,page.tsx}`, `src/app/review/[runId]/*`, `src/app/files/**`, `src/config/people.ts`, `src/core/{schemas,approvals,queue,matching}.ts`, `drizzle/0002_*.sql`, `05` (R-APR-2 addition). Validation: `pnpm test` 24 files, 261 tests passed (oracle month unchanged with no decisions; simulated reviewer closes the month to the ground-truth ledger total); 6 single-rule mutations all caught after adding 2 tests; scripted browser run on `pnpm build && pnpm start`, 22/22 checks; typecheck, lint, build clean.
+- [x] Statement CSV mapping (two formats): `Done` 2026-11-03. Paths: `src/adapters/statement/read-statement{,.test}.ts` (format-A reader removed). Validation: 12 tests; format B gives lines identical to the ground truth; bad files give named problems; browser start from format B.
+- [x] Month-end pack: `Done` 2026-11-03. Paths: `src/pipeline/pack.ts`, `src/app/pack/[runId]/{page.tsx,ledger.csv,exceptions.csv}`. Validation: closed-month test (category and payment-source totals equal the ledger; no open exception rows); browser download of both CSVs with the substitute row and the sign-off reason.
+- [x] Run log and Runs page: `Done` 2026-11-03. Paths: `src/pipeline/run-log.ts` (`statement`, `run` stages; fixed error codes), `src/app/runs/**`. Validation: browser run shows a failed statement upload as `STATEMENT_FORMAT` and no receipt or statement text.
+- [x] README draft; run `v1-day3` live: `Done` 2026-11-03. Paths: `README.md`, `eval-results/v1-day3{,-replay}/`, `fixtures/recordings/**`, `docs/EVALUATION.md`. Validation: `pnpm eval -- --mode live --label v1-day3` 12/12, 0/33; `eval:compare -- v0-day2-live v1-day3` all same; replay with the key blanked identical.
+- [ ] First execution by the target user (human): `Blocked` 2026-11-03. No Accounting user exists for this sprint. Candidate's ruling: a naive proxy (admin or bookkeeping background, never seen the repo) plus a builder cold run, each labelled. Resume condition: run both sessions with `days/day-3-working-core/first-run-observations.md` and fill in its record.
 
 ### Day 4: Evaluate, break, and harden
 
@@ -118,6 +122,18 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-03 | The ledger CSV prefixes cells that start with `= + - @` with `'` (plain numbers excepted); uploads drop leading dots from filenames | Write cells as-is | Vendor names come from a model reading uploaded files (untrusted); a formula cell could run when the Accounting user opens the CSV | Yes |
 | 2026-11-03 | Do not fix the two Day 2 scoring findings (wordmark vendor names; no date gate) until Day 4 | Fix now | `06` tunes scoring on the tuning split with a before/after comparison; fixing after seeing the full set would contaminate the holdout claim. Both fail safe today. | n/a |
 | 2026-11-03 | The B1 comparison uses the system on the same 20 receipts (`v0-day2-subset20`), not the 40-receipt run | Compare against the full-set run | Like for like. The subset run is slightly harder (more free statement lines), and it surfaced the date-gate finding. | n/a |
+| 2026-11-03 | Split the pipeline: `readMonth` (I/O: gate, model, categories, FX fetch) stores a snapshot; `reconcileMonth` (pure) derives exceptions, matches, statuses, queue, and totals from the snapshot **plus every human decision**, on every view | Store derived statuses and patch them per decision; re-run the whole pipeline per decision | Statuses stay derived, never hand-picked (non-negotiable 3); a correction flows through FX, duplicates, and matching the same way the pipeline would; no model call per decision. With no decisions it reproduces Day 2 exactly (oracle month test unchanged). | Yes |
+| 2026-11-03 | Decisions are append-only rows; the latest of each kind wins; approved items are locked; approval keeps the match the item had (`after` records it) | Editable decision rows; un-approve | Audit trail without updates or deletes; locking stops a later correction from silently changing an approved amount. Undo is a Day 4 candidate if the user session asks for it. | Yes |
+| 2026-11-03 | A person's chosen line is assigned before automatic matching; when two choices claim one line, the later wins and the other receipt is re-matched (R-MAT-4) | Refuse the second choice | The later choice is the person's latest judgement; refusing would force an extra step. Tested. | Yes |
+| 2026-11-03 | Lines resolved as substitute or "not an expense" leave the matching pool | Keep them matchable | "The payment is real but the receipt is missing" means no receipt should take it; keeps a later correction from re-matching it silently | Yes |
+| 2026-11-03 | R-APR-2 extended: an item with no category at all cannot be approved (a flagged suggestion still can) | Keep R-APR-2 as written; block every `UNKNOWN_CATEGORY` | Without it an approved item enters the ledger uncategorised. The Day 2 test that allows approving a flagged suggestion is kept. `05` and a named test updated in the same commit. | Yes |
+| 2026-11-03 | "No receipt" lines that are an open receipt's real candidate (score ≥ 40) say "could be the payment for R04" and offer Link first | List them like any other line | Found by the automated month close: L16 ($560, TC04's line) sorts above R04 ($500) in group 4, so a reviewer working top-down wrote it off as "not an expense" and R04 could no longer be matched | Yes |
+| 2026-11-03 | Statement formats are column-name mappings (`STATEMENT_FORMATS`), detected from the header; every bad row is reported at once with its spreadsheet row number | One parser per format; stop at the first error | Columns found by name survive reordered exports; one pass to fix a file. Format B gives lines identical to the ground truth (tested). | Yes |
+| 2026-11-03 | The sample month starts from the 40 submitted receipts plus a statement the user uploads (or the sample one); own receipts upload as a batch per submitter | Upload 40 files with per-file metadata | Matches the real flow: staff submit during the month, Accounting brings the statement. Per-receipt purpose is editable in the queue. | Yes |
+| 2026-11-03 | Simulated people in a header switcher (`src/config/people.ts`), cookie only | Real sign-in | `03` non-goal; enough to show R-APR-1 (disabled, with the reason beside it) | Yes |
+| 2026-11-03 | Failed runs and statement reads are logged (`statement`, `run` stages) with fixed error codes only, never messages | Log the message | A message can quote file contents (a CSV row); codes keep the log PII-free and still show on the Runs page | Yes |
+| 2026-11-03 | **No Accounting user; first execution by a naive proxy (admin or bookkeeping background, never seen the repo) plus a builder cold run, each labelled** | Builder run only; an AI-driven "user" run | **Candidate's ruling.** Only someone else can answer "can someone else run it?"; the builder run is like-for-like with B1 (also the candidate's). Automated runs are completeness evidence, never a user session. | n/a |
+| 2026-11-03 | Run `v1-day3` live (about USD 0.45) | Replay only | **Candidate approved.** Exit criterion: model API, FX API, and CSV import working today | n/a |
 | 2026-11-02 | `pnpm` scripts limited to ones that work today (`dev`, `build`, `test`, `typecheck`, `lint`, `db:*`). `seed`, `eval`, `eval:compare` are added when their scripts exist. | Stub scripts that print "not yet" | A command that exists but does nothing would be a claim the code does not back | Yes |
 
 ## AI corrections log
@@ -141,6 +157,16 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | 2026-11-03 | `ARCHITECTURE.md` draft: "the category model runs for 15 of 40 receipts" | Written from an estimate; the recordings show 10 categorise calls | Agent counted the recordings by task and corrected it before committing. Same lesson as the 2026-11-03 test-count entry: copy numbers from output. | Day 2 docs commit |
 | 2026-11-03 | `ui-check` browser script (scratch) waited for `/upload` after submitting the upload form | It matched the page it was already on, so it read the page before the redirect and reported an empty error | Agent waited for `/review/…` or `/upload?error=…` specifically and re-ran; also found Next's hidden route announcer shares `role="alert"` | n/a (scratch) |
 | 2026-11-03 | TC07 assertions in `scripts/eval/system.ts` required every TC07 receipt to be a duplicate | R08 is the original in the TC07 group and is correctly not flagged; the checker failed a correct system | Agent split the assertions: copies must be flagged and excluded, the original must not be flagged and must stay in totals | `e94beef` |
+| 2026-11-03 | A shell command that started with an empty `python -` heredoc | Opened Python's interactive prompt and hung (the same trap as Day 2's heredoc); the edit after it never ran | Agent stopped it, confirmed nothing was half-applied, and made the edits with the editor tool | Day 3 commit |
+| 2026-11-03 | Review queue listed TC04's candidate line (L16, $560) as a plain "No receipt" line | Group 4 sorts by amount, so L16 came before R04 ($500); the automated month close wrote it off as "not an expense" and R04 could never be matched. All 12 single-action tests had passed. | Agent added "could be the payment for R04" with Link offered first, plus a test; the simulated reviewer now links lines that have an owner | Day 3 commit |
+| 2026-11-03 | Two decision tests passed a receipt object to `checkApproval` without `status` | They passed only because an exception blocked approval first; typecheck caught it | Agent added a `subject()` helper building the full approval subject | Day 3 commit |
+| 2026-11-03 | Day 3 decision tests (first version) | Mutation check: removing "a substitute needs a reason" and "the later choice wins a line" went unnoticed (2 of 6 survived) | Agent added a named test for each and re-ran the two mutations | Day 3 commit |
+| 2026-11-03 | `.group:first-of-type` to colour group 1's ticks red | It would have matched the progress `<section>`, not group 1 | Agent noticed while reviewing the CSS and used `.g1`/`.g2` classes | Day 3 commit |
+| 2026-11-03 | Review page: group totals in their own grid | Screenshot showed group totals left of the row amount column | Agent gave the heading the rows' column template (`--ledger-cols`) | Day 3 commit |
+| 2026-11-03 | Notices with a thick left accent border | Flagged by the design hook as a generic "side-tab" tell | Agent replaced it with a thin full border and the wash colour | Day 3 commit |
+| 2026-11-03 | Browser check script waited for `networkidle` after a server action | Read the previous page's notice (stale) and then clicked a closed row. Also showed a real UX gap: the item closed after "Use this payment", so the next step (sign off) had to be found again | Agent waits for each action's own confirmation; the app now keeps the item open after a step that leads to another | n/a (scratch) / Day 3 commit |
+| 2026-11-03 | Day 3 journal draft: "13 decision tests … 10 boundary tests" | Written from memory; counting the files gave 14 and 9 | Agent counted with `grep` and corrected before committing. Third time this lesson appears: copy numbers from output. | Day 3 docs commit |
+| 2026-11-03 | Stopping `pnpm start` with the task tool | On Windows the `next` child kept running and held `data/app.db`, so `pnpm seed` failed with EPERM | Agent found the processes by port and stopped them; noted for the RUNBOOK | n/a |
 | 2026-11-02 | Repo-wide `eol=lf` in `.gitattributes` | Normalised fixture CSVs, which should keep CRLF like real bank exports | Agent marked `fixtures/**/*.csv` as `-text` | `7d069ae` |
 
 ## Session history
@@ -185,6 +211,17 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
   - The two scoring findings (see `EVALUATION.md`, "Findings queued for Day 4").
   - `.env` had been created in the parent folder (`must/`); the agent moved it into the repo root (gitignored), so the secret is in one place.
   - The live numbers are on clean synthetic data. The Day 4 stress cases are what will test the system.
+
+### 2026-11-03: Day 3, working core (blocks 1–5)
+
+- Work done: statement column mapping (A and B); pipeline split into read (I/O) and reconcile (pure, with decisions); every review action with one decision boundary; review UI; month-end pack and summary; Runs page with failed runs; README draft; `v1-day3` live and replay; session protocol for the proxy and builder runs.
+- Decisions: 12 rows added on Day 3, from "Split the pipeline" to "Run `v1-day3` live".
+- Validation: `pnpm test` 261/261; typecheck, lint, and build clean; 6/6 mutations caught; 22/22 browser checks on a production build; `v1-day3` 12/12 live and in replay, unchanged from `v0-day2-live`.
+- Remaining: block 6 (proxy session and builder cold run). Commits are on branch `day-3-working-core`, not merged or pushed.
+- Known risks:
+  - No real user has touched the review UI yet; the automated close shows each item *has* an action, not that a person finds it.
+  - Approvals cannot be undone (approved items are locked); the session may ask for undo.
+  - The two Day 2 scoring findings are still queued for Day 4.
 
 ### YYYY-MM-DD: Session title
 
