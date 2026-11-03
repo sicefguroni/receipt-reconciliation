@@ -306,6 +306,50 @@ function closeMonth(): { m: MonthResult; decisions: Decision[] } {
   throw new Error("the month did not close in 300 decisions");
 }
 
+describe("R-CUR-3 during an FX outage (stress S10)", () => {
+  // No rates at all, as when the FX API is down and nothing is cached.
+  const outage = (lines = snapshot.statementLines, decisions: Decision[] = []) =>
+    reconcileMonth({ ...snapshot, rates: [], statementLines: lines }, decisions, config);
+  const r02Line = () => receipt(month(), "R02").match?.statementLineId ?? "";
+  /** R02's line as a bank that shows only the AUD charge would export it. */
+  const audOnly = () =>
+    snapshot.statementLines.map((l) => {
+      if (l.id !== r02Line()) return l;
+      const { originalAmount: _dropped, ...rest } = l;
+      return rest;
+    });
+
+  it("a USD receipt paid at the bank's AUD charge needs no rate: not flagged, not 'excluded'", () => {
+    const m = outage();
+    const r02 = receipt(m, "R02");
+    expect(r02.state.status).toBe("matched");
+    expect(r02.state.exceptions).not.toContain("FX_RATE_UNAVAILABLE");
+    expect(r02.state.ledgerAmountAud).toBe(
+      month().receipts.find((r) => r.id === "R02")?.state.ledgerAmountAud,
+    );
+    expect(m.totals.excludedFx).toEqual([]);
+    expect(m.totals.ledgerAud).toBe(month().totals.ledgerAud);
+  });
+
+  it("when the line shows no original amount, the rate is needed: flagged and listed as excluded", () => {
+    const m = outage(audOnly());
+    const r02 = receipt(m, "R02");
+    expect(r02.state.exceptions).toContain("FX_RATE_UNAVAILABLE");
+    expect(r02.state.excludedFromTotals).toBe(true);
+    expect(m.totals.excludedFx).toContainEqual({ currency: "USD", amount: 49, count: 1 });
+  });
+
+  it("a person choosing that AUD-only line does not clear the flag: the amount was never compared", () => {
+    const chosen = decision("R02", {
+      action: "choose_match",
+      after: { statementLineId: r02Line() },
+    });
+    const r02 = receipt(outage(audOnly(), [chosen]), "R02");
+    expect(r02.match?.statementLineId).toBe(r02Line());
+    expect(r02.state.exceptions).toContain("FX_RATE_UNAVAILABLE");
+  });
+});
+
 describe("closing the October month", () => {
   it("every item can be resolved; the closed ledger equals the ground truth", () => {
     const { m, decisions } = closeMonth();

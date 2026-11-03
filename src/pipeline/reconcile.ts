@@ -17,6 +17,7 @@ import { orderQueue, type QueueItem, type QueueSection } from "@/core/queue";
 import { deriveReceiptState, type ReceiptState } from "@/core/receipt-state";
 import { checkBusinessPurpose, paymentSourceLabel } from "@/core/required";
 import {
+  BASE_CURRENCY,
   type CorrectableField,
   type Decision,
   type ExceptionCode,
@@ -455,9 +456,14 @@ function derive(snapshot: MonthSnapshot, decisions: readonly Decision[], config:
     );
     const duplicate = isDuplicate(d);
     const removed = e?.removed ?? null;
+    // R-CUR-3 applies only when a rate is needed. A receipt paid from a line whose amount was
+    // compared in its own currency takes the bank's AUD charge (R-CUR-4), so a missing rate
+    // changes nothing (Day 4, F4). If the amount could not be compared, the flag stays.
+    const rateNotNeeded =
+      line !== undefined && chosen?.amount != null && chosen.amount.comparedIn !== BASE_CURRENCY;
     const state = deriveReceiptState({
       exceptions: [
-        ...d.exceptions,
+        ...(rateNotNeeded ? d.exceptions.filter((c) => c !== "FX_RATE_UNAVAILABLE") : d.exceptions),
         ...(match?.exceptions ?? []),
         ...(duplicate ? ["DUPLICATE" as const] : []),
       ],
@@ -724,9 +730,15 @@ export function reconcileMonth(
           .map((r) => r.state.ledgerAmountAud ?? 0),
         ...substitutes,
       ]),
+      // Only amounts actually left out: a foreign receipt paid at the bank's AUD charge is in
+      // the ledger even with no rate, so listing it here contradicted the total (Day 4, F4).
       excludedFx: summariseExcluded(
         now.receipts.flatMap((r) =>
-          r.conversion && r.outcome !== "removed" ? [r.conversion] : [],
+          r.conversion &&
+          r.outcome !== "removed" &&
+          r.state.exceptions.includes("FX_RATE_UNAVAILABLE")
+            ? [r.conversion]
+            : [],
         ),
       ),
     },
