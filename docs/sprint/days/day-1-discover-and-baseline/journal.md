@@ -126,3 +126,19 @@ Time to close and how often each exception occurs remain **not measured**. The a
 **Verified.** 50/50 tests pass. The table cleanup was checked by script to leave every cell unchanged. The flag-to-code mapping for every flagged row is printed in `eval-results/baseline-b1/report.md` for audit.
 
 **Open.** Whether to also run B1 on the full 40-receipt month and on the Day 4 stress cases.
+
+---
+
+## Block 5: Targets and scope approval (2026-11-03)
+
+**Goal.** Finalise the targets with baseline numbers, and get the v1 scope approved.
+
+**What changed before approval.**
+
+- The B0 estimate was tied to the **current, post-redesign process** and revised from 1–4 min to 30 s–1 min per receipt: 20–40 min for the 40-receipt month. The revision makes B0 faster, so it cannot flatter the system. Both values are kept in `baseline-b0.md`.
+- Time-to-close target: "at least 50% less than B0" holds convincingly only at **≤ 10 min** for the 40-receipt month (half the low end of the estimate).
+- Human touches are counted over receipts only, with no-receipt lines reported separately. Counting the lines as items would have made the 35% target impossible by design (best possible 36.7%). Over receipts, the best possible is 22.5% (9/40 need a person by design).
+
+**Approved.** The candidate approved the 11-item scope (with the Day 1 changes: bank source, no-receipt lines, small-difference badge, TC04 never auto-paired), the 8 unchanged non-goals, and the targets.
+
+**Risk carried forward.** The ≤ 10 min time target needs about 20 human actions in 10 minutes. If it is missed, report the real time against both 10 min (half the low end) and 15 min (half the midpoint). The strongest measurable claim remains a 0% wrong-match rate against B1's 16%.

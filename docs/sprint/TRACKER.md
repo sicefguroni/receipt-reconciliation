@@ -23,7 +23,7 @@ Block-by-block detail: [`days/day-1-discover-and-baseline/journal.md`](days/day-
 - [x] Confirm `CONFIRM WITH USER` rules in `05` (human): `Done` 2026-11-03. R-AMT-2 (OR), R-AMT-3, TC04, R-DUP-1, and R-REQ-3 (`bank`) were applied on 2026-11-02. R-QUA-1 default kept (receipts are roughly letter-size; no pixel sizes known).
 - [ ] B0 manual baseline, timed and scored (human + agent): `Skipped` 2026-11-03. The Accounting user is unavailable; the candidate has seen the answer key; an agent cannot stand in for a person. Recorded instead: a **labelled time estimate** for the current, post-redesign process: 30 s–1 min per receipt (revised from 1–4 min), giving 20–40 min for the 40-receipt month, in `days/day-1-discover-and-baseline/baseline-b0.md`. Accuracy not measured. Resume condition: a person who has not seen the repo runs `fixtures/dataset/baseline/b0-kit/`.
 - [x] B1 single-prompt baseline ×3, scored: `Done` 2026-11-03. Paths: `eval-results/baseline-b1/`, `days/day-1-discover-and-baseline/baseline-b1-runs.md`, `scripts/eval/*`, `scripts/score-baseline.ts`. Validation: `pnpm score:baseline` over the 3 runs; 50/50 tests pass. Time to close is **not measured**: only ChatGPT's response time (25–29 s) was recorded. Run 1 used a different model (GPT 6-Sol) from runs 2 and 3 (GPT 5.6-Sol).
-- [ ] Metrics table baseline columns filled; v1 scope approved
+- [x] Metrics table baseline columns filled; v1 scope approved: `Done` 2026-11-03. Paths: `03-scope-and-success.md` (approval note, B0 and B1 columns, targets). The candidate approved the scope and targets. Open risk: the time target (≤ 10 min for 40 receipts) is tight.
 - [ ] Core rule tests: R-CUR, R-AMT, R-DUP, R-REQ
 
 ### Day 2: Design and v0

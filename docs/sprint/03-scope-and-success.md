@@ -2,6 +2,8 @@
 
 ## v1 scope (must be working on Day 5)
 
+**Approved by the candidate on 2026-11-03** (Day 1, block 5), including the Day 1 changes marked below and the targets in "Success metrics". Any later change to a v1 item needs a new approval and a decision-log entry.
+
 1. **Intake.** In the web UI, upload a batch of receipts (JPG, PNG, PDF) and one statement CSV for a chosen month. Each receipt carries a submitter, a payment source (company card, personal card, or bank account), and a business purpose.
 2. **Quality gate.** Deterministic, orientation-aware checks with a plain-language rejection reason.
 3. **Extraction.** Vendor, date, total, currency, tax (GST) if shown, and line-item summary, with per-field confidence, validated against a schema.
