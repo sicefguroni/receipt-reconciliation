@@ -1,6 +1,6 @@
 # Eval run `v2-day4-post`
 
-Mode **replay**, model `gpt-5.6-sol` (effort low), commit `81dc5ba`, 2026-11-03T14:02:48.026Z.
+Mode **replay**, model `gpt-5.6-sol` (effort low), commit `2651a19`, 2026-11-03T14:40:35.319Z.
 Receipts evaluated: 40 of 40 (full set).
 
 ## Test cases (pass only if every expected behaviour holds)
