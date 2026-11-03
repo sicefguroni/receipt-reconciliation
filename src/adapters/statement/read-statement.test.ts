@@ -90,13 +90,13 @@ describe("statement upload validation (friendly errors)", () => {
   it("collects every bad row with its spreadsheet row number, not just the first", () => {
     const csv = [
       HEADER_B,
-      "2026-10-02,A,CREDIT CARD,1.00,,,", // ISO date in a format B file
+      "02/10/2026,A,CREDIT CARD,1.00,,,", // format A's date style in a format B file
       "02 Oct 2026,B,CREDIT CARD,1.00,2.00,,", // both debit and credit
       "02 Oct 2026,C,CREDIT CARD,,,,", // neither
       "31 Sep 2026,D,CREDIT CARD,abc,,15.00,", // impossible date, bad amount, currency missing
     ].join("\n");
     expect(problemsOf(csv)).toEqual([
-      'Row 2: the date "2026-10-02" is not a date like 02 Oct 2026.',
+      'Row 2: the date "02/10/2026" is not a date like 02 Oct 2026.',
       "Row 3: both Debit and Credit are filled in; only one should be.",
       "Row 4: Debit and Credit are both empty.",
       'Row 5: the date "31 Sep 2026" is not a date like 02 Oct 2026; the Debit or Credit value is not a number; a foreign amount needs both the amount and its currency.',
@@ -109,6 +109,35 @@ describe("statement upload validation (friendly errors)", () => {
     expect(parseStatementDate("31/02/2026", "dd/mm/yyyy")).toBeNull();
     expect(parseStatementDate("2 oct 2026", "dd Mon yyyy")).toBe("2026-10-02");
     expect(parseStatementDate("02/10/2026", "dd Mon yyyy")).toBeNull();
+  });
+
+  it("an ISO date reads in either format, and is still checked as a real date", () => {
+    expect(parseStatementDate("2026-10-02", "dd/mm/yyyy")).toBe("2026-10-02");
+    expect(parseStatementDate("2026-10-02", "dd Mon yyyy")).toBe("2026-10-02");
+    expect(parseStatementDate("2026-02-31", "dd/mm/yyyy")).toBeNull();
+  });
+
+  it("a title row and a blank row above the header (stress S09) still read, with true row numbers", () => {
+    const csv = [
+      "Business Visa ...4821 - Transactions 01/10/2026 to 31/10/2026",
+      "",
+      HEADER_A,
+      "2026-10-02,Business Visa ...4821,SAMPLE PHARMACY,-12.40,,",
+      "2026-10-32,Business Visa ...4821,SAMPLE CAFE,-3.00,,",
+    ].join("\r\n");
+    expect(problemsOf(csv)).toEqual([
+      'Row 5: the date "2026-10-32" is not a date like 02/10/2026.',
+      "Fix these rows, then upload again.",
+    ]);
+    expect(readStatement(csv.split("\r\n").slice(0, 4).join("\r\n")).lines).toEqual([
+      {
+        id: "L01",
+        date: "2026-10-02",
+        description: "SAMPLE PHARMACY",
+        amountAud: 12.4,
+        account: "company_card",
+      },
+    ]);
   });
 
   it("CSV reader handles quoted commas, doubled quotes, and a byte-order mark", () => {

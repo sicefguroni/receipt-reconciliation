@@ -1,6 +1,19 @@
+const isBlank = (cells: string[]) => cells.every((cell) => cell.trim() === "");
+
 // Minimal RFC 4180 reader: quoted fields, doubled quotes, CRLF or LF. Bank exports quote
 // descriptions that contain commas, so a plain split(",") is not enough.
 export function parseCsv(text: string): string[][] {
+  return allRows(text).filter((r) => !isBlank(r));
+}
+
+/** Non-blank rows with the row number a spreadsheet shows (blank rows still count). */
+export function parseCsvNumbered(text: string): { cells: string[]; row: number }[] {
+  return allRows(text)
+    .map((cells, i) => ({ cells, row: i + 1 }))
+    .filter((r) => !isBlank(r.cells));
+}
+
+function allRows(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
   let field = "";
@@ -37,5 +50,5 @@ export function parseCsv(text: string): string[][] {
     row.push(field);
     rows.push(row);
   }
-  return rows.filter((r) => r.some((cell) => cell.trim() !== ""));
+  return rows;
 }

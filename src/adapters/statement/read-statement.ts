@@ -1,6 +1,6 @@
 import { maskCardNumbers } from "@/core/privacy";
 import { type StatementAccount, StatementLine } from "@/core/schemas";
-import { parseCsv } from "./csv";
+import { parseCsvNumbered } from "./csv";
 
 // Statement reading with column mapping. Each bank format is a mapping from its column names
 // to the StatementLine fields. Columns are found by name (any order, case ignored), so a bank
@@ -70,8 +70,14 @@ function isRealDate(y: number, m: number, d: number): boolean {
   return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d;
 }
 
-/** ISO date, or null when the text is not a real date in the format's style. */
+/**
+ * ISO date, or null when the text is not a real date in the format's style. An ISO date
+ * (2026-10-02) is accepted in every format: it cannot be misread, and some banks export it
+ * (Day 4, failure F3). The day-first and "02 Oct" styles stay specific to their format.
+ */
 export function parseStatementDate(text: string, style: DateStyle): string | null {
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+  if (iso) return isRealDate(Number(iso[1]), Number(iso[2]), Number(iso[3])) ? text : null;
   const match =
     style === "dd/mm/yyyy"
       ? /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text)
@@ -99,6 +105,13 @@ const EXAMPLE: Record<DateStyle, string> = {
   "dd/mm/yyyy": "02/10/2026",
   "dd Mon yyyy": "02 Oct 2026",
 };
+
+const HEADER_SEARCH_ROWS = 5;
+
+function recognised(header: string[]): boolean {
+  const found = new Set(header.map((h) => h.trim().toLowerCase()));
+  return STATEMENT_FORMATS.some((f) => columnsOf(f).every((c) => found.has(c.toLowerCase())));
+}
 
 function detect(header: string[]): StatementFormat {
   const found = new Set(header.map((h) => h.trim().toLowerCase()));
@@ -134,8 +147,17 @@ export function readStatement(text: string): { format: string; lines: StatementL
       "This file is not a CSV. In the bank's export screen, choose CSV (not Excel or PDF).",
     ]);
   }
-  const [header, ...rows] = parseCsv(text);
-  if (!header) throw new StatementFormatError(["The statement file is empty."]);
+  const all = parseCsvNumbered(text);
+  if (all.length === 0) throw new StatementFormatError(["The statement file is empty."]);
+  // Some banks put a title or account row above the column names (Day 4, failure F3), so the
+  // header is the first of the opening rows that a format recognises; otherwise row 1 is
+  // reported as before.
+  const headerAt = Math.max(
+    0,
+    all.slice(0, HEADER_SEARCH_ROWS).findIndex(({ cells }) => recognised(cells)),
+  );
+  const header = all[headerAt]?.cells ?? [];
+  const rows = all.slice(headerAt + 1);
   const format = detect(header);
   if (rows.length === 0) {
     throw new StatementFormatError(["The statement has column names but no transactions."]);
@@ -145,8 +167,7 @@ export function readStatement(text: string): { format: string; lines: StatementL
   const problems: string[] = [];
   const lines: StatementLine[] = [];
 
-  rows.forEach((cells, i) => {
-    const rowNumber = i + 2; // the header is row 1, as a spreadsheet shows it
+  rows.forEach(({ cells, row: rowNumber }, i) => {
     const get = (column: string) => cells[index.get(column.toLowerCase()) ?? -1]?.trim() ?? "";
     const rowProblems: string[] = [];
 
