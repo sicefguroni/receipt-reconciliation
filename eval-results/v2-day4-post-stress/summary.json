@@ -1,20 +1,20 @@
 {
   "label": "v2-day4-post-stress",
   "mode": "replay",
-  "ranAt": "2026-11-03T14:02:54.267Z",
-  "commit": "81dc5ba",
+  "ranAt": "2026-11-03T14:40:16.592Z",
+  "commit": "03a990d",
   "model": "gpt-5.6-sol",
   "reasoningEffort": "low",
-  "passed": 9,
+  "passed": 10,
   "of": 10,
   "outcomes": {
-    "correct": 6,
+    "correct": 7,
     "safe": 3,
-    "failure": 1
+    "failure": 0
   },
   "tokens": {
-    "input": 6022,
-    "output": 1054,
+    "input": 7278,
+    "output": 1128,
     "measuredFrom": "the recorded live run"
   },
   "cases": [
@@ -54,17 +54,15 @@
       "title": "Chat screenshot",
       "stress": "a non-receipt image (a screenshot of a chat)",
       "expect": "NOT_A_RECEIPT (R-QUA-4), in the first queue group; it must not take the $45.00 Sample Supplies line, which stays listed as a line with no receipt.",
-      "pass": false,
-      "outcome": "failure",
+      "pass": true,
+      "outcome": "correct",
       "observed": [
-        "read: nothing read",
-        "status unmatched; exceptions [UNREADABLE]; queue group 1",
+        "read: total null (0), date null (0), currency null (0); isReceipt false",
+        "status unmatched; exceptions [LOW_CONFIDENCE_FIELD, NOT_A_RECEIPT]; queue group 1",
         "candidates: none",
-        "run log errors: quality QUALITY_GATE"
+        "run log errors: none"
       ],
-      "failures": [
-        "not flagged NOT_A_RECEIPT"
-      ]
+      "failures": []
     },
     {
       "id": "S04",

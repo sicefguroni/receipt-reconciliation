@@ -1,0 +1,22 @@
+{
+  "key": "7ae54d83a1b4b5518c785829d9e7c5c843aa9d3f51171cd7769091a933e0673d",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T14:40:10.567Z",
+  "parts": [
+    {
+      "text": "File: S03.png"
+    },
+    {
+      "file": "S03.png sha256:3d954f2649225ed47821999e3d009e8c81e7104ed3148517cad4dd9dc364040c"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":false,\"vendor\":{\"value\":null,\"confidence\":0},\"date\":{\"value\":null,\"confidence\":0},\"total\":{\"value\":null,\"confidence\":0},\"currency\":{\"value\":null,\"confidence\":0},\"tax\":{\"value\":null,\"confidence\":0},\"summary\":{\"value\":null,\"confidence\":0}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1256,
+    "outputTokens": 74,
+    "latencyMs": 4355
+  }
+}

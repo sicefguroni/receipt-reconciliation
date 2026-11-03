@@ -24,6 +24,7 @@ import { GroundTruth, Intake } from "./dataset/schema";
 // Usage:
 //   pnpm eval:stress -- --mode replay --label <name>   (no API key)
 //   pnpm eval:stress -- --mode live   --label <name>   (records the stress receipts' model calls)
+//   add --ids S03 to run only those stress receipts (to record one without re-rolling the rest)
 // Runs the Day 4 stress set (06, "Stress cases for Day 4") and checks each case for *safe
 // failure*. Writes eval-results/<label>/{summary.json, report.md}. S09 and S10 reuse the
 // October data and never call the model live.
@@ -34,7 +35,11 @@ const DATASET = join(ROOT, "fixtures", "dataset");
 
 const { values } = parseArgs({
   args: process.argv.slice(2).filter((arg) => arg !== "--"),
-  options: { mode: { type: "string", default: "replay" }, label: { type: "string" } },
+  options: {
+    mode: { type: "string", default: "replay" },
+    label: { type: "string" },
+    ids: { type: "string" },
+  },
 });
 const mode = values.mode;
 if (mode !== "replay" && mode !== "live")
@@ -153,8 +158,17 @@ function verdict(failures: string[], correct: boolean): Pick<CaseResult, "pass" 
 
 // ---------- the stress month (S01 to S08) ----------
 
-const stressIntake = Intake.parse(JSON.parse(readFileSync(join(STRESS, "receipts.json"), "utf8")));
-const stressTruth = StressTruth.parse(JSON.parse(readFileSync(join(STRESS, "truth.json"), "utf8")));
+const only = values.ids ? new Set(values.ids.split(",").map((s) => s.trim())) : null;
+const allIntake = Intake.parse(JSON.parse(readFileSync(join(STRESS, "receipts.json"), "utf8")));
+const allTruth = StressTruth.parse(JSON.parse(readFileSync(join(STRESS, "truth.json"), "utf8")));
+const stressIntake = {
+  ...allIntake,
+  receipts: allIntake.receipts.filter((r) => !only || only.has(r.id)),
+};
+const stressTruth = {
+  ...allTruth,
+  receipts: allTruth.receipts.filter((r) => !only || only.has(r.id)),
+};
 const stressLines = readStatement(
   readFileSync(join(STRESS, "statement-format-a.csv"), "utf8"),
 ).lines;

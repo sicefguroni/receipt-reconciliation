@@ -1,16 +1,16 @@
 # Stress run `v2-day4-post-stress`
 
-Mode **replay**, model `gpt-5.6-sol` (effort low), commit `81dc5ba`, 2026-11-03T14:02:54.267Z.
+Mode **replay**, model `gpt-5.6-sol` (effort low), commit `03a990d`, 2026-11-03T14:40:16.592Z.
 
 A case passes when the system fails *safely*: the right answer, or a person is asked. **correct** = right answer; **safe** = wrong or unsure, but routed to a person; **failure** = a silent wrong value, a wrong pairing, or a rejected valid input.
 
-**9/10 pass** (6 correct, 3 safe, 1 failure).
+**10/10 pass** (7 correct, 3 safe, 0 failure).
 
 | ID | Stress case | Result | Outcome |
 |---|---|---|---|
 | S01 | Unreadable photo, 400 px | PASS | correct |
 | S02 | Heavy blur at full size | PASS | safe |
-| S03 | Chat screenshot | FAIL | failure |
+| S03 | Chat screenshot | PASS | correct |
 | S04 | Bare $ with no currency clues | PASS | safe |
 | S05 | Ambiguous numeric date from a US vendor | PASS | correct |
 | S06 | One receipt, two payments | PASS | safe |
@@ -44,11 +44,11 @@ A case passes when the system fails *safely*: the right answer, or a person is a
 
 - 06 stress case: a non-receipt image (a screenshot of a chat)
 - Expected: NOT_A_RECEIPT (R-QUA-4), in the first queue group; it must not take the $45.00 Sample Supplies line, which stays listed as a line with no receipt.
-- Observed: read: nothing read
-- Observed: status unmatched; exceptions [UNREADABLE]; queue group 1
+- Observed: read: total null (0), date null (0), currency null (0); isReceipt false
+- Observed: status unmatched; exceptions [LOW_CONFIDENCE_FIELD, NOT_A_RECEIPT]; queue group 1
 - Observed: candidates: none
-- Observed: run log errors: quality QUALITY_GATE
-- **Failed:** not flagged NOT_A_RECEIPT
+- Observed: run log errors: none
+- Failed assertions: none
 
 ## S04: Bare $ with no currency clues
 
@@ -116,4 +116,4 @@ A case passes when the system fails *safely*: the right answer, or a person is a
 - Observed: human touches over 40 receipts: normal 9, cold 9, warm 9
 - Failed assertions: none
 
-Tokens (stress receipts, the recorded live run): 6022 input, 1054 output.
+Tokens (stress receipts, the recorded live run): 7278 input, 1128 output.

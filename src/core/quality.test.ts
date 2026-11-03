@@ -21,7 +21,11 @@ describe("R-QUA receipt quality gate", () => {
   });
 
   it("R-QUA-1: a long side under 1000 fails", () => {
-    expect(checkQuality({ mime: "image/png", width: 800, height: 999 }, policy).ok).toBe(false);
+    expect(checkQuality({ mime: "image/jpeg", width: 800, height: 999 }, policy).ok).toBe(false);
+  });
+
+  it("R-QUA-1: a small PNG screenshot skips the size floor (stress S03: 840 × 700)", () => {
+    expect(checkQuality({ mime: "image/png", width: 840, height: 700 }, policy).ok).toBe(true);
   });
 
   it("R-QUA-1: a PDF has no pixel size and skips the size check", () => {

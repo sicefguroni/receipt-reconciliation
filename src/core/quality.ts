@@ -30,12 +30,21 @@ export function blurCheckApplies(mime: FileMime): boolean {
 }
 
 /**
+ * R-QUA-1 (Day 4, candidate's ruling): the size floor applies to camera photos only, like the
+ * blur check. A small PNG screenshot is still crisp, and "retake it closer" is wrong advice for
+ * one; the model reads it and flags anything it cannot read (stress S03).
+ */
+export function sizeCheckApplies(mime: FileMime): boolean {
+  return mime === "image/jpeg";
+}
+
+/**
  * R-QUA-1: orientation-aware size check (long side and short side), so a portrait scan is
- * judged the same as a landscape one. PDFs have no pixel size and skip it.
+ * judged the same as a landscape one. PDFs and screenshots skip it.
  * R-QUA-3: a failure gives the measured size and a fix in plain language.
  */
 export function checkQuality(file: FileFacts, policy: QualityPolicy): QualityResult {
-  if (file.mime !== "application/pdf" && file.width && file.height) {
+  if (sizeCheckApplies(file.mime) && file.width && file.height) {
     const long = Math.max(file.width, file.height);
     const short = Math.min(file.width, file.height);
     if (long < policy.minLongSide || short < policy.minShortSide) {
