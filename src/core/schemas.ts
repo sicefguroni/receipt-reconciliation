@@ -64,3 +64,69 @@ export const StatementLine = z.object({
   account: StatementAccount,
 });
 export type StatementLine = z.infer<typeof StatementLine>;
+
+export const FileMime = z.enum(["image/jpeg", "image/png", "application/pdf"]);
+export type FileMime = z.infer<typeof FileMime>;
+
+// What the system receives at intake (04, ReceiptInput). Missing purpose is an
+// exception (R-REQ-1), not a parse error.
+export const ReceiptIntake = z.object({
+  id: z.string(),
+  monthKey: MonthKey,
+  submitterId: z.string(),
+  paymentSource: PaymentSource,
+  businessPurpose: z.string().trim().max(500).optional(),
+  uploadOrder: z.number().int().positive(),
+  file: z.object({
+    path: z.string(),
+    mime: FileMime,
+    width: z.number().int().positive().optional(),
+    height: z.number().int().positive().optional(),
+    sha256: z.string().length(64),
+  }),
+});
+export type ReceiptIntake = z.infer<typeof ReceiptIntake>;
+
+const field = <T extends z.ZodType>(value: T) =>
+  z.object({ value: value.nullable(), confidence: z.number().min(0).max(1) });
+
+// Validated model output (04, Extraction). The model is asked for a looser shape;
+// anything that fails this schema triggers one validation retry (04, "Pipeline behaviour").
+export const Extraction = z.object({
+  isReceipt: z.boolean(),
+  vendor: field(z.string().trim().min(1).max(200)),
+  date: field(IsoDate),
+  total: field(z.number().finite()),
+  currency: field(z.string().regex(/^[A-Z]{3}$/)),
+  tax: field(z.number().finite()),
+  summary: field(z.string().max(200)),
+});
+export type Extraction = z.infer<typeof Extraction>;
+
+export const CategorySource = z.enum(["rule", "model", "human"]);
+export type CategorySource = z.infer<typeof CategorySource>;
+
+export const DecisionAction = z.enum([
+  "approve",
+  "correct_field",
+  "choose_match",
+  "override_status",
+  "request_reupload",
+  "link_receipt", // R-MAT-7: the last three resolve statement lines with no receipt
+  "record_substitute",
+  "mark_not_expense",
+]);
+export type DecisionAction = z.infer<typeof DecisionAction>;
+
+// Every human action is one immutable row (04, Decision).
+export const Decision = z.object({
+  id: z.string(),
+  subjectId: z.string(), // a receipt id, or a statement line id for R-MAT-7 actions
+  actorId: z.string(),
+  action: DecisionAction,
+  before: z.unknown(),
+  after: z.unknown(),
+  reason: z.string().trim().min(3).optional(),
+  at: z.string(),
+});
+export type Decision = z.infer<typeof Decision>;
