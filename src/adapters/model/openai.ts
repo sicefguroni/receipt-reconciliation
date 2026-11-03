@@ -36,6 +36,21 @@ export class OpenAIModelClient implements ModelClient {
   }
 
   async call(request: ModelCall): Promise<ModelResponse> {
+    try {
+      const result = await this.send(request);
+      if (this.record) writeRecording(this.recordingsDir, request, result);
+      return result;
+    } catch (error) {
+      // Without this, a failure in a live run left no recording, and replaying that run with
+      // no key stopped on a missing recording instead of taking the same fallback.
+      if (error instanceof ModelError && this.record) {
+        writeRecording(this.recordingsDir, request, { error: error.code });
+      }
+      throw error;
+    }
+  }
+
+  private async send(request: ModelCall): Promise<ModelResponse> {
     const started = performance.now();
     let response: OpenAI.Responses.Response;
     try {
@@ -65,14 +80,12 @@ export class OpenAIModelClient implements ModelClient {
       );
     }
 
-    const result: ModelResponse = {
+    return {
       text: response.output_text,
       modelId: response.model,
       inputTokens: response.usage?.input_tokens ?? 0,
       outputTokens: response.usage?.output_tokens ?? 0,
       latencyMs: Math.round(performance.now() - started),
     };
-    if (this.record) writeRecording(this.recordingsDir, request, result);
-    return result;
   }
 }

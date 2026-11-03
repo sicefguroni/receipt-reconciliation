@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import { z } from "zod";
 import type { FileMime } from "@/core/schemas";
 
 // The model boundary (04, "Replay mode"). The pipeline builds a ModelCall; a live client
@@ -36,10 +36,13 @@ export interface ModelClient {
   call(request: ModelCall): Promise<ModelResponse>;
 }
 
+export const ModelErrorCode = z.enum(["MODEL_API_ERROR", "MODEL_REFUSED", "MODEL_EMPTY_OUTPUT"]);
+export type ModelErrorCode = z.infer<typeof ModelErrorCode>;
+
 /** A model failure the pipeline recovers from (fallback to manual entry). Codes go to run_log. */
 export class ModelError extends Error {
   constructor(
-    readonly code: "MODEL_API_ERROR" | "MODEL_REFUSED" | "MODEL_EMPTY_OUTPUT",
+    readonly code: ModelErrorCode,
     message: string,
   ) {
     super(message);

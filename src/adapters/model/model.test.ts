@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { requestKey, writeRecording } from "./recordings";
 import { ReplayModelClient } from "./replay";
-import type { ModelCall, ModelResponse } from "./types";
+import { type ModelCall, ModelError, type ModelResponse } from "./types";
 
 const call = (overrides: Partial<ModelCall> = {}): ModelCall => ({
   task: "extract",
@@ -66,6 +66,14 @@ describe("model recordings and replay", () => {
     const dir = mkdtempSync(join(tmpdir(), "rec-"));
     writeRecording(dir, call(), response);
     expect(await new ReplayModelClient(dir).call(call())).toEqual(response);
+  });
+
+  it("replay raises a recorded failure as the same ModelError, so the fallback replays", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "rec-"));
+    writeRecording(dir, call(), { error: "MODEL_API_ERROR" });
+    const failure = await new ReplayModelClient(dir).call(call()).catch((e: unknown) => e);
+    expect(failure).toBeInstanceOf(ModelError);
+    expect((failure as ModelError).code).toBe("MODEL_API_ERROR");
   });
 
   it("replay fails loudly on a miss, saying how to re-record", async () => {

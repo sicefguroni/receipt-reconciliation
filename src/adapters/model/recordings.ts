@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
-import type { ModelCall, ModelResponse } from "./types";
+import { type ModelCall, ModelErrorCode, type ModelResponse } from "./types";
 
 // Recorded model responses for replay mode, committed under fixtures/recordings/model.
 // The key covers everything that can change the answer: task, model, effort, prompt,
@@ -33,26 +33,37 @@ const Recording = z.object({
   recordedAt: z.string(),
   // What was sent, without file bytes: lets a reviewer see which receipt a recording is for.
   parts: z.array(z.union([z.object({ text: z.string() }), z.object({ file: z.string() })])),
-  response: z.object({
-    text: z.string(),
-    modelId: z.string(),
-    inputTokens: z.number().int().nonnegative(),
-    outputTokens: z.number().int().nonnegative(),
-    latencyMs: z.number().nonnegative(),
-  }),
+  response: z.union([
+    z.object({
+      text: z.string(),
+      modelId: z.string(),
+      inputTokens: z.number().int().nonnegative(),
+      outputTokens: z.number().int().nonnegative(),
+      latencyMs: z.number().nonnegative(),
+    }),
+    // A failed call, recorded by its code only (an error body can echo request content), so
+    // replay reproduces the pipeline's fallback instead of stopping on a missing recording.
+    z.object({ error: ModelErrorCode }),
+  ]),
 });
+
+export type RecordedOutcome = z.infer<typeof Recording>["response"];
 
 function pathFor(dir: string, key: string): string {
   return join(dir, `${key}.json`);
 }
 
-export function readRecording(dir: string, key: string): ModelResponse | null {
+export function readRecording(dir: string, key: string): RecordedOutcome | null {
   const path = pathFor(dir, key);
   if (!existsSync(path)) return null;
   return Recording.parse(JSON.parse(readFileSync(path, "utf8"))).response;
 }
 
-export function writeRecording(dir: string, request: ModelCall, response: ModelResponse): void {
+export function writeRecording(
+  dir: string,
+  request: ModelCall,
+  response: ModelResponse | { error: ModelErrorCode },
+): void {
   mkdirSync(dir, { recursive: true });
   const key = requestKey(request);
   const recording: z.infer<typeof Recording> = {
