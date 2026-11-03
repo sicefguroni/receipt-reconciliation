@@ -41,13 +41,13 @@ flowchart TB
 | Language | TypeScript (strict) | The candidate's strongest stack. Types are shared across UI, pipeline, and eval. | Python: better OCR ecosystem, but slower for the candidate to ship UI in |
 | Interface | Next.js App Router, one app | A non-developer needs a web UI. Route handlers serve as the API. | CLI only: fails the non-developer UX criterion |
 | Storage | SQLite file via `better-sqlite3` + Drizzle | Zero setup, reproducible, and the database file can be reset with `pnpm seed` | Postgres/Supabase: adds setup steps and a hosted dependency |
-| Receipt extraction | Claude with vision (default `claude-sonnet-5-5`, set by `MODEL_EXTRACT`) | Handles photos, PDFs, and varied layouts in one call, and returns structured JSON | Tesseract + regex: brittle on varied layouts. Keep it as the fallback idea for the case study. |
-| Category fallback | Claude (default `claude-haiku-5-5`, set by `MODEL_CATEGORISE`) | Cheap, short, text-only. Used only for vendors not in the rule table. | Model for every receipt: higher cost and less explainable |
+| Receipt extraction | OpenAI Responses API with vision and Zod structured output (default `gpt-5.6-sol`, set by `MODEL_EXTRACT`). *Changed 2026-11-03 from Claude: OpenAI is the API the candidate has access to. It is also the model family B1 used, so the B1 comparison holds the model constant.* | Handles photos, PDFs, and varied layouts in one call, and returns structured JSON | Tesseract + regex: brittle on varied layouts. Keep it as the fallback idea for the case study. |
+| Category fallback | OpenAI (default `gpt-5.6-sol`, set by `MODEL_CATEGORISE`) | Short and text-only. Used only for vendors not in the rule table. Same model as extraction: one access check, and it rarely runs. | Model for every receipt: higher cost and less explainable |
 | FX rates | Frankfurter public API (ECB reference rates, no key), cached in SQLite | A real, free, historical-rate integration. Check the current endpoint format on Day 2. | Hard-coded rates: not a real integration |
 | Statement input | CSV upload with a column-mapping step | This is what banks export. The mapping handles different bank formats. | Bank API: a non-goal |
 | Tests | Vitest (core and pipeline), Playwright (one critical UI flow) | Fast unit coverage of the money rules | n/a |
 
-**Integrations that satisfy "at least two real data-source or tool integrations":** (1) the Claude API for vision extraction, (2) the FX rates API, and (3) bank statement CSV import with format mapping.
+**Integrations that satisfy "at least two real data-source or tool integrations":** (1) the OpenAI API for vision extraction, (2) the FX rates API, and (3) bank statement CSV import with format mapping.
 
 ## Data contracts (Zod sketches; refine in `src/core/schemas.ts`)
 
@@ -132,7 +132,7 @@ Every pipeline run writes a `run_log` row per receipt per stage: stage, status, 
 - Data stays local: SQLite plus a local file store. Only receipt images and text are sent to the model API, which is stated in the README.
 - Before display or logging, mask any card number pattern to the last 4 digits. Prompts tell the model not to return full card numbers, and output is post-processed to mask them anyway.
 - Two simulated roles: `submitter` and `reviewer`. A switcher in the header suffices for the demo. Real authentication is a non-goal.
-- `.env` holds `ANTHROPIC_API_KEY`, `MODEL_EXTRACT`, `MODEL_CATEGORISE`, `MODE=live|replay`, `FX_BASE_URL`, and thresholds. `.env.example` is committed with placeholders.
+- `.env` holds `OPENAI_API_KEY`, `MODEL_EXTRACT`, `MODEL_CATEGORISE`, `MODEL_REASONING_EFFORT`, `MODE=live|replay`, `FX_BASE_URL`, and thresholds. `.env.example` is committed with placeholders.
 
 ## Replay mode (reproducibility)
 

@@ -47,7 +47,7 @@ Use this framing for the confidential origin: *"This system comes from a real fi
 
 | Section | Content |
 |---|---|
-| Tools and roles | For example: Claude Code (implementation, tests, docs drafts), Claude API (runtime extraction and categorisation), the chat assistant used for B1 |
+| Tools and roles | For example: Claude Code (implementation, tests, docs drafts), OpenAI API (runtime extraction and categorisation), the chat assistant used for B1 |
 | Delegated to AI | Scaffolding, receipt templates, test drafting, first drafts of docs |
 | Verification | Every money rule has a human-reviewed test; eval against ground truth; manual review of each failure analysis; confidentiality grep |
 | Rejected or corrected | Concrete examples with commit links (keep a running list in `TRACKER.md` during the week; do not reconstruct from memory) |

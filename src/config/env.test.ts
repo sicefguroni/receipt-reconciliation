@@ -12,8 +12,8 @@ describe("parseEnv", () => {
   });
 
   it("treats blank values as unset", () => {
-    const env = parseEnv({ ANTHROPIC_API_KEY: "", AMOUNT_DIFF_PCT_THRESHOLD: "  " });
-    expect(env.ANTHROPIC_API_KEY).toBeUndefined();
+    const env = parseEnv({ OPENAI_API_KEY: "", AMOUNT_DIFF_PCT_THRESHOLD: "  " });
+    expect(env.OPENAI_API_KEY).toBeUndefined();
     expect(env.AMOUNT_DIFF_PCT_THRESHOLD).toBe(10);
   });
 
@@ -24,7 +24,7 @@ describe("parseEnv", () => {
   });
 
   it("refuses live mode without an API key, with a fix in the message", () => {
-    expect(() => parseEnv({ MODE: "live" })).toThrow(/MODE=live needs ANTHROPIC_API_KEY/);
+    expect(() => parseEnv({ MODE: "live" })).toThrow(/MODE=live needs OPENAI_API_KEY/);
   });
 
   it("refuses RECORD=1 outside live mode", () => {

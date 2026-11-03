@@ -6,9 +6,11 @@ const EnvSchema = z
   .object({
     MODE: z.enum(["live", "replay"]).default("replay"),
     RECORD: z.enum(["0", "1"]).default("0"),
-    ANTHROPIC_API_KEY: z.string().trim().optional(),
-    MODEL_EXTRACT: z.string().min(1).default("claude-sonnet-5-5"),
-    MODEL_CATEGORISE: z.string().min(1).default("claude-haiku-5-5"),
+    OPENAI_API_KEY: z.string().trim().optional(),
+    MODEL_EXTRACT: z.string().min(1).default("gpt-5.6-sol"),
+    MODEL_CATEGORISE: z.string().min(1).default("gpt-5.6-sol"),
+    // Reading a receipt is perception, not deep reasoning. Tuned on Day 4 if accuracy needs it.
+    MODEL_REASONING_EFFORT: z.enum(["none", "minimal", "low", "medium", "high"]).default("low"),
 
     FX_BASE_URL: z.url().default("https://api.frankfurter.dev/v1"),
 
@@ -25,11 +27,11 @@ const EnvSchema = z
     QUALITY_MIN_SHORT_SIDE: z.coerce.number().int().positive().default(700),
   })
   .superRefine((env, ctx) => {
-    if (env.MODE === "live" && !env.ANTHROPIC_API_KEY) {
+    if (env.MODE === "live" && !env.OPENAI_API_KEY) {
       ctx.addIssue({
         code: "custom",
-        path: ["ANTHROPIC_API_KEY"],
-        message: "MODE=live needs ANTHROPIC_API_KEY. Set it in .env, or use MODE=replay.",
+        path: ["OPENAI_API_KEY"],
+        message: "MODE=live needs OPENAI_API_KEY. Set it in .env, or use MODE=replay.",
       });
     }
     if (env.RECORD === "1" && env.MODE !== "live") {
@@ -50,7 +52,7 @@ const EnvSchema = z
 
 export type Env = z.infer<typeof EnvSchema>;
 
-// Blank values in .env (e.g. `ANTHROPIC_API_KEY=`) mean "not set", so the default applies.
+// Blank values in .env (e.g. `OPENAI_API_KEY=`) mean "not set", so the default applies.
 function dropBlank(source: Record<string, string | undefined>): Record<string, string> {
   return Object.fromEntries(
     Object.entries(source).filter((entry): entry is [string, string] => {
