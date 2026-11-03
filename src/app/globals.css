@@ -1,0 +1,55 @@
+/* v0: plain and readable. The designed review UI arrives on Day 3. */
+body {
+  font-family: system-ui, sans-serif;
+  color: #1d1d1f;
+  background: #fff;
+  margin: 0;
+  padding: 1.5rem 1rem;
+}
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+main.wide {
+  max-width: 90rem;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+th,
+td {
+  border-bottom: 1px solid #ddd;
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+td ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+.muted {
+  color: #666;
+}
+.badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0 0.35rem;
+  border-radius: 0.25rem;
+  background: #fff3cd;
+  font-size: 0.8rem;
+}
+.error {
+  background: #fde8e8;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.3rem;
+}
+.stack {
+  display: grid;
+  gap: 0.8rem;
+}
+.stack label {
+  display: grid;
+  gap: 0.25rem;
+}
