@@ -66,14 +66,14 @@ Default chart (configurable in `config/categories.json`):
 | Software | canva, notion, slack, figma, adobe, zoom, google workspace |
 | Rent & Workspace | coworking, office rent, desk hire |
 | Equipment | chair, desk, monitor, laptop, keyboard |
-| Office Supplies | stationery, paper, printer ink |
+| Office Supplies | stationer (matches stationery and stationers; changed 2026-11-03), paper, printer ink |
 | Travel | airline, flight, hotel, uber, taxi |
 | Meals & Entertainment | cafe, restaurant, catering |
 | Repairs & Maintenance | repair, maintenance, servicing |
 | Utilities | electricity, water, internet, phone |
 | Other | (only by explicit human choice) |
 
-- **R-CAT-1** The rule table is applied first. A keyword hit gives source `rule` with confidence 1.0.
+- **R-CAT-1** The rule table is applied first. A keyword hit gives source `rule` with confidence 1.0. *Implemented 2026-11-03:* keywords match the start of a word, case and accents ignored, and the vendor name is checked before the extracted item summary (a hardware store sells both chairs and printer supplies). Known risk: a summary hit lets one item decide a mixed basket.
 - **R-CAT-2** If there is no rule hit, the model picks from the configured list only (enumerated in the schema) and returns a reason. Confidence below 0.7 flags `UNKNOWN_CATEGORY`.
 - **R-CAT-3** The model may never choose "Other". Only a human can. *(Evidence E3: "Other" became a dumping ground.)*
 - **R-CAT-4** When a human corrects a category, the UI offers "Always use this category for <vendor>", which appends to the rule table and is audited.

@@ -47,6 +47,13 @@ describe("R-CAT category rules", () => {
     ).toMatchObject({ category: "Equipment", reason: 'items matches the rule "chair"' });
   });
 
+  it("R-CAT-1: a stationer's mixed basket stays Office Supplies, not Equipment (R35, 'Desk organiser')", () => {
+    const summary = "Whiteboard markers, 8 pack; Spiral notebooks, 5 pack; Desk organiser";
+    expect(categoriseByRules("Sample Stationers", summary, config.rules)?.category).toBe(
+      "Office Supplies",
+    );
+  });
+
   it("R-CAT-1: no hit at all returns null, so the model is asked", () => {
     expect(categoriseByRules("Demo Cloud Pty Ltd", "Hosting", config.rules)).toBeNull();
   });

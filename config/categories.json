@@ -41,7 +41,7 @@
     { "keyword": "monitor", "category": "Equipment" },
     { "keyword": "laptop", "category": "Equipment" },
     { "keyword": "keyboard", "category": "Equipment" },
-    { "keyword": "stationery", "category": "Office Supplies" },
+    { "keyword": "stationer", "category": "Office Supplies" },
     { "keyword": "paper", "category": "Office Supplies" },
     { "keyword": "printer ink", "category": "Office Supplies" },
     { "keyword": "airline", "category": "Travel" },
