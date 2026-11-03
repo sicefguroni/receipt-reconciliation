@@ -35,17 +35,19 @@ Fill in the Baseline columns on Day 1 and the Final column on Day 4 and Day 5. T
 
 | Metric | Definition | Baseline B0 (manual) | Baseline B1 (single chat prompt) | Target | Final |
 |---|---|---|---|---|---|
-| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | **estimate, not measured:** 20–40 min for the 40-receipt month (30 s–1 min per receipt for the current process; candidate's estimate, revised from 1–4 min) | **5 min 35 s mean for 20 receipts** (runs: 5:26, 5:31, 5:47; full session); about 11 min 10 s for 40 receipts (×2 extrapolation) | at least 50% less than B0: convincing only at **≤ 10 min** (half the low end of the estimate) | |
-| **Human touches** | Receipts needing a human action / all receipts. Statement lines with no receipt (R-MAT-7) are reported separately as a count. | 100% by definition | n/a | 35% or fewer (floor by design on the October set: 9/40 = 22.5%) | |
-| **Exception recall** | Exceptions caught / exceptions planted (ground truth) | not measured (no human answer sheet) | 5/5 (100%) in all 3 runs | 100% for amount difference, missing purpose, duplicate | |
-| **Wrong auto-match rate** | Auto-matches that are incorrect / total auto-matches | n/a | **3/19 (16%) in all 3 runs** | 0% on the test set | |
-| **Match recall** | Correct matches found (auto plus suggested top-1) / matchable receipts | not measured | 16/16 (100%) in all 3 runs | at least 95% | |
-| **Extraction accuracy** | Correct total, currency, and date / receipts | n/a | 20/20 (100%) in all 3 runs | at least 95% on total and currency | |
-| **Category accuracy** | Correct category / receipts | not measured | 20/20 (100%) in all 3 runs | at least 90% before human review | |
-| **Cost per month closed** | Model spend for the test month | $0 | not measured (consumer subscription, no per-run cost shown) | report it; no target | |
+| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | **estimate, not measured:** 20–40 min for the 40-receipt month (30 s–1 min per receipt for the current process; candidate's estimate, revised from 1–4 min) | **5 min 35 s mean for 20 receipts** (runs: 5:26, 5:31, 5:47; full session); about 11 min 10 s for 40 receipts (×2 extrapolation) | at least 50% less than B0: convincing only at **≤ 10 min** (half the low end of the estimate) | **not measured** (Day 4): no person has closed a month with the system yet; the proxy session (P1) and builder run (C1) are pending |
+| **Human touches** | Receipts needing a human action / all receipts. Statement lines with no receipt (R-MAT-7) are reported separately as a count. | 100% by definition | n/a | 35% or fewer (floor by design on the October set: 9/40 = 22.5%) | Day 4 (`v2-day4-post`): **9/40 (23%)** full, 4/16 (25%) holdout; 9 no-receipt lines (count) |
+| **Exception recall** | Exceptions caught / exceptions planted (ground truth) | not measured (no human answer sheet) | 5/5 (100%) in all 3 runs | 100% for amount difference, missing purpose, duplicate | Day 4: **5/5 (100%)** full, 3/3 holdout; per-code precision 100% |
+| **Wrong auto-match rate** | Auto-matches that are incorrect / total auto-matches | n/a | **3/19 (16%) in all 3 runs** | 0% on the test set | Day 4: **0/33 (0%)** full, **0/14 (0%)** holdout; 0/14 on the B1 subset |
+| **Match recall** | Correct matches found (auto plus suggested top-1) / matchable receipts | not measured | 16/16 (100%) in all 3 runs | at least 95% | Day 4: 35/35 (100%) full, 15/15 holdout |
+| **Extraction accuracy** | Correct total, currency, and date / receipts | n/a | 20/20 (100%) in all 3 runs | at least 95% on total and currency | Day 4: 40/40 total, currency, and date (100%); 16/16 holdout |
+| **Category accuracy** | Correct category / receipts | not measured | 20/20 (100%) in all 3 runs | at least 90% before human review | Day 4: 40/40 (100%) full, 16/16 holdout |
+| **Cost per month closed** | Model spend for the test month | $0 | not measured (consumer subscription, no per-run cost shown) | report it; no target | at most **USD 0.45** for 40 receipts (USD 0.0113 per receipt, upper bound; `v1-day3` live, unchanged on Day 4) |
 
 B1 figures are from the 20-item baseline subset, scored on 2026-11-03 (`eval-results/baseline-b1/report.md`; detail in `days/day-1-discover-and-baseline/baseline-b1-runs.md`). **B1 already meets the extraction, category, match-recall, and headline exception-recall targets on this clean synthetic set.** Improvement over B1 can only be shown on the wrong-match rate, ledger integrity (one line, one receipt), and the Day 4 stress cases. Targets are kept as set; the final report must say this plainly. B0 was not measured, because the Accounting user was unavailable and no unbiased proxy was available; its time is a labelled estimate (`days/day-1-discover-and-baseline/baseline-b0.md`).
-| **Latency** | p50/p95 seconds per receipt, end to end | n/a | n/a | report it; p95 under 20 s | |
+
+*Final column, Day 4 (2026-11-03):* from `eval-results/v2-day4-post/` (replay of the recorded live run, no key). Every measured target is met; **time to close is the one target not measured**, because no person other than the scripted tests has closed a month yet. The Day 5 `final` live run replaces these numbers. On the stress set the system moved from 6/10 to 10/10 safe failures (`docs/EVALUATION.md`).
+| **Latency** | p50/p95 seconds per receipt, end to end | n/a | n/a | report it; p95 under 20 s | p50 3.0 s, p95 4.7 s model time per receipt (`v1-day3` live; no prompt changed on Day 4) |
 
 ### Business value link (for the case study)
 

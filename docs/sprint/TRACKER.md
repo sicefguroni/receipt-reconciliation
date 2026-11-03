@@ -9,6 +9,8 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
+**Day 4 blocks 1–4 done; human sessions pending** (2026-11-03). Branch `day-4-evaluate-and-harden` (local, not pushed). A 10-case stress set (`fixtures/stress/`, `pnpm eval:stress`) broke the system in 4 places, all in rules or data contracts, none in perception: refunds offered as payments, a chat screenshot told to "retake it closer", a valid statement with a title row rejected, and an FX outage that over-flagged paid receipts and contradicted the ledger in the summary. Six failure analyses with before/after numbers (`days/day-4-evaluate-and-harden/failures.md`), including the two Day 2 scoring findings, tuned on the tuning split only. **Stress 6/10 → 10/10; the 20-receipt B1 subset 10/11 → 11/11; the October month unchanged at 12/12, 0/33 (0/14 holdout), with no regression.** `docs/EVALUATION.md` has the full results. Live spend today about USD 0.09 from the run logs (upper bound), plus one probe call whose tokens were not logged (approved up to USD 1). **Still open, human:** P1 (naive proxy) + feedback questions in one sitting, and C1 (builder cold run); time to close is the one `03` target not measured. Next: those sessions, then Day 5.
+
 **Day 3 built; user session pending** (2026-11-03). Blocks 1–5 are done and merged to `main` (PR #1, rebase merge): every review action (including R-MAT-7) works through a pure reconcile step that re-derives the month from what was read plus each human decision; both statement formats read; the full pack and the Runs page exist; README drafted. `v1-day3` live: 12/12, 0/33 wrong auto-match, every metric unchanged from Day 2; a simulated reviewer closes the month to the ground-truth ledger total; 22/22 browser checks on a production build. **There is no Accounting user:** block 6 is a naive proxy session plus a builder cold run (candidate's ruling), protocol in `days/day-3-working-core/first-run-observations.md`. Next: run those two sessions, then Day 4. See `days/day-3-working-core/journal.md`.
 
 **Day 2 complete** (2026-11-03). All four exit criteria are met. The runtime model is now **OpenAI `gpt-5.6-sol`** (candidate's ruling). The whole October month was run live and recorded: **`v0-day2` passes 12/12 TCs with 0/33 wrong auto-matches** (0/14 on holdout), live and in replay with no key. On B1's 20 receipts the wrong-match rate is 0/14 vs B1's 3/19. Cost is at most USD 0.45 for the month. Two scoring weaknesses are queued for Day 4 (wordmark vendor names; no date gate). Next: Day 3 (`days/day-3-working-core/README.md`): review actions, column mapping, the full pack, the Runs page, and the first user session. See `days/day-2-design-and-v0/journal.md`.
@@ -53,10 +55,12 @@ Block-by-block detail: [`days/day-3-working-core/journal.md`](days/day-3-working
 
 ### Day 4: Evaluate, break, and harden
 
-- [ ] `v2-day4-pre` full run and baseline comparison
-- [ ] Stress cases; at least 3 failure analyses
-- [ ] Fixes; `v2-day4-post`; before/after comparison
-- [ ] User feedback session and changes (human)
+Block-by-block detail: [`days/day-4-evaluate-and-harden/journal.md`](days/day-4-evaluate-and-harden/journal.md)
+
+- [x] `v2-day4-pre` full run and baseline comparison: `Done` 2026-11-03. Paths: `eval-results/v2-day4-pre{,-subset20}/`, `docs/EVALUATION.md`. Validation: `pnpm eval -- --mode replay --label v2-day4-pre` with the key blanked: 12/12, 0/33; `eval:compare -- v1-day3 v2-day4-pre` all same; subset 10/11 (TC10, the known date-gate finding).
+- [x] Stress cases; at least 3 failure analyses: `Done` 2026-11-03. Paths: `scripts/dataset/stress.ts`, `scripts/generate-stress.ts`, `scripts/eval-stress.ts`, `fixtures/stress/**`, `fixtures/recordings/**`, `eval-results/v2-day4-pre-stress{,-2}/`, `days/day-4-evaluate-and-harden/failures.md`. Validation: two live runs (candidate approved the spend), both 6/10; keyless replay of the second identical to it. Six analyses (F1–F6).
+- [x] Fixes; `v2-day4-post`; before/after comparison: `Done` 2026-11-03. Paths: `src/core/{matching,quality}.ts`, `src/pipeline/{reconcile,decisions,config}.ts`, `src/adapters/statement/{csv,read-statement}.ts`, `src/adapters/model/{openai,replay,recordings,types}.ts`, `src/app/labels.ts`, `src/app/review/[runId]/panels.tsx`, `src/config/env.ts`, `.env.example`, `05` (R-MAT-8, R-MAT-9, vendor wordmark, R-CUR-3, R-QUA-1), `README.md`, `eval-results/v2-day4-{post,post-subset20,post-stress,tuning-before-scoring,tuning-after-scoring}/`. Validation: `pnpm test` 24 files, 279 passed (261 at the start of the day); 16 single mutations of today's rules, all caught; typecheck, lint, `pnpm build` clean; `eval:compare -- v2-day4-pre v2-day4-post` no change; stress 10/10; subset 11/11. Not checked in a browser: the refund wording (the October sample has no credit line).
+- [ ] User feedback session and changes (human): `Blocked` 2026-11-03. No Accounting user. Candidate's ruling: the naive proxy answers the `06` questions straight after P1, in the same sitting, on the Day 4 build; labelled proxy feedback. Protocol and blank record: `days/day-4-evaluate-and-harden/feedback-session.md`. Resume condition: P1 has run.
 
 ### Day 5: Hand off and present
 
@@ -135,6 +139,17 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-03 | **No Accounting user; first execution by a naive proxy (admin or bookkeeping background, never seen the repo) plus a builder cold run, each labelled** | Builder run only; an AI-driven "user" run | **Candidate's ruling.** Only someone else can answer "can someone else run it?"; the builder run is like-for-like with B1 (also the candidate's). Automated runs are completeness evidence, never a user session. | n/a |
 | 2026-11-03 | Run `v1-day3` live (about USD 0.45) | Replay only | **Candidate approved.** Exit criterion: model API, FX API, and CSV import working today | n/a |
 | 2026-11-02 | `pnpm` scripts limited to ones that work today (`dev`, `build`, `test`, `typecheck`, `lint`, `db:*`). `seed`, `eval`, `eval:compare` are added when their scripts exist. | Stub scripts that print "not yet" | A command that exists but does nothing would be a claim the code does not back | Yes |
+| 2026-11-03 | **Day 4 runs before the proxy session; P1 and the feedback questions in one sitting on the hardened build; C1 when convenient** | Pause Day 4 until C1/P1 run | **Candidate's ruling.** The agent blocks need no person; the proxy then judges the build that will ship, and answers about a close they just did | n/a |
+| 2026-11-03 | Live spend for Day 4 up to USD 1 (stress recordings; a full re-record only if a prompt changed) | Stress set only; no live calls | **Candidate approved.** Spent about USD 0.09 by the run logs (upper bound): stress runs USD 0.043 and 0.045, the S03 recording USD 0.0065; plus one probe call not logged. No prompt changed, so the 40 October recordings stay valid | n/a |
+| 2026-11-03 | Stress cases are a separate set (`fixtures/stress/`, `pnpm eval:stress`), each built to hit one mechanism, scored on *safe failure* (correct / safe / failure), not on the 12-TC assertions | Add them to the October month | Keeps every earlier run comparable; a stress case has no single right ledger row, only wrong ones | Yes |
+| 2026-11-03 | Fix in rules and contracts, not the prompt (F1–F6) | Prompt changes (for example "ignore logos") | Every failure traced to a rule or contract; a prompt change would invalidate all 40 recordings and need a live re-record | Yes |
+| 2026-11-03 | R-MAT-8: a credit line is never a receipt's payment; it is recorded against the category it reduces, or not an expense | Net refunds against their purchase automatically | A refund scored 40–50 and was offered as the payment (S07, S08). Automatic netting would be the system deciding which purchase a refund belongs to; the person decides | Yes |
+| 2026-11-03 | R-MAT-9 date gate at 7 days, set from the tuning split only (posting lag 0–2 days) | 5 days (the date-points window); no gate | 7 leaves margin for weekends and holidays; the holdout was not looked at while choosing it | Yes (config `MATCH_MAX_DAYS_APART`) |
+| 2026-11-03 | Wordmark vendor match on consecutive whole words, not substrings | Substring match; fuzzy edit distance | Whole words cannot match a short name inside an unrelated word (tested with "Ace" / "PLACEMENT") | Yes |
+| 2026-11-03 | R-CUR-3 flags only when the AUD amount needs a rate; the flag stays if the amount was never compared, even after a person chooses the line | Keep flagging every foreign receipt with no rate | Six already-paid receipts were flagged and the summary contradicted the ledger (S10). The guard keeps an uncompared amount from being cleared silently | Yes |
+| 2026-11-03 | **R-QUA-1 size floor for camera photos (JPEG) only** | Keep the confirmed rule and reword the message; a lower floor for PNGs | **Candidate's ruling** (R-QUA-1 was confirmed on Day 1, so the agent asked). A crisp screenshot is readable at 840 × 700; the model flags what it cannot read (S02) | Yes |
+| 2026-11-03 | Record failed model calls by error code only, and replay them as the same error | Leave failures unrecorded | A failure in a live run otherwise makes the keyless replay stop (non-negotiable 6); the code carries no request content | Yes |
+| 2026-11-03 | Leave the per-code `AMBIGUOUS_MATCH` recall artifact (0/1 since Day 2) as is, and document it | Change the harness to score it before the choice | Changing a metric definition mid-sprint breaks comparison with every earlier run; TC11 already checks the behaviour directly | Yes |
 
 ## AI corrections log
 
@@ -168,6 +183,12 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | 2026-11-03 | Day 3 journal draft: "13 decision tests … 10 boundary tests" | Written from memory; counting the files gave 14 and 9 | Agent counted with `grep` and corrected before committing. Third time this lesson appears: copy numbers from output. | Day 3 docs commit |
 | 2026-11-03 | Stopping `pnpm start` with the task tool | On Windows the `next` child kept running and held `data/app.db`, so `pnpm seed` failed with EPERM | Agent found the processes by port and stopped them; noted for the RUNBOOK | n/a |
 | 2026-11-02 | Repo-wide `eol=lf` in `.gitattributes` | Normalised fixture CSVs, which should keep CRLF like real bank exports | Agent marked `fixtures/**/*.csv` as `-text` | `7d069ae` |
+| 2026-11-03 | Shell edit that started with a `python3 -` heredoc | Hung on this machine (the Windows python3 alias): the **third** time this trap appears in this log; nothing was applied | Agent stopped the task, confirmed with `git diff` that no file changed, and made the edits with the editor tool. Rule for this repo: never call python here | `2b6b2c5` |
+| 2026-11-03 | Diagnosis of stress S03: "the model call failed, so no recording exists" | Wrong. The run log said `QUALITY_GATE`: R-QUA-1 rejected the 840 × 700 PNG before the model saw it. The agent inferred from a missing file instead of reading the log, and a probe that bypassed the gate seemed to confirm it | Agent added run-log error codes to the stress report, re-ran, found the real cause, corrected two code comments, and asked the candidate about R-QUA-1 (F2). The recording fix made on the wrong diagnosis is kept on its own merits | `2651a19` |
+| 2026-11-03 | First stress report (`eval-stress.ts`) | Printed no run-log error codes, so `v2-day4-pre-stress` cannot show which stage stopped S03 | Agent added a "run log errors" line per receipt; the second live run shows `quality QUALITY_GATE` | `40e18ac` |
+| 2026-11-03 | First R-CUR-3 outage test | Its "AUD-only line" case left R02 ambiguous, so the guard "the amount was compared" was never exercised; removing it would have gone unnoticed | Agent noticed while planning the mutations and added a test where a person chooses the AUD-only line; that mutation is now caught | `3a2469d` |
+| 2026-11-03 | Day 4 spend written as "about USD 0.17" and "0.08 per stress run" | An estimate from before the runs (USD 0.011 per receipt × 7), never checked; the token counts give 0.043 and 0.045 per run, about 0.09 in all | Agent computed it from each run's `summary.json` tokens and `config/pricing.json` before committing | Day 4 docs commit |
+| 2026-11-03 | TRACKER Day 4 entry: "18 single mutations" | Counted from memory; the runs were 4 + 3 + 3 + 4 + 2 = 16 | Agent recounted from the session's mutation output before committing. Fourth appearance of this lesson | Day 4 docs commit |
 
 ## Session history
 
@@ -222,6 +243,17 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
   - No real user has touched the review UI yet; the automated close shows each item *has* an action, not that a person finds it.
   - Approvals cannot be undone (approved items are locked); the session may ask for undo.
   - The two Day 2 scoring findings are still queued for Day 4.
+
+### 2026-11-03: Day 4, evaluate, break, and harden (blocks 1–4)
+
+- Work done: `v2-day4-pre` and the B1-subset rerun; a 10-case stress set and its eval (`pnpm dataset:stress`, `pnpm eval:stress`), recorded live twice; six failure analyses; fixes R-MAT-8 (credits), R-MAT-9 (date gate), the vendor wordmark match, R-CUR-3's scope, R-QUA-1's scope (candidate's ruling), statement title rows and ISO dates, recorded model failures; `v2-day4-post`; `EVALUATION.md`, the `03` Final column, README, `failures.md`, `feedback-session.md`.
+- Decisions: 11 rows added on Day 4, from "Day 4 runs before the proxy session" to "Leave the per-code AMBIGUOUS_MATCH recall artifact".
+- Validation: `pnpm test` 279/279; 16/16 mutations caught; typecheck, lint, build clean; October 12/12, 0/33 (0/14 holdout), unchanged; subset 11/11; stress 10/10; all post runs replayed with no key.
+- Remaining: P1 + feedback (one sitting) and C1; then the feedback → change pairs. Branch `day-4-evaluate-and-harden` not pushed or merged.
+- Known risks:
+  - Time to close is still not measured: no person has closed a month with the system.
+  - Residual risks per failure in `failures.md`, notably month-first statement dates (misread when the day is 12 or under) and no split-payment action (S06).
+  - The refund wording has not been seen in a browser (no credit line in the sample month).
 
 ### YYYY-MM-DD: Session title
 

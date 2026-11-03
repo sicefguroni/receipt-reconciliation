@@ -44,10 +44,12 @@ Saved elsewhere (paths fixed by the final layout in `08`):
 
 ## Exit criteria
 
-- [ ] `docs/EVALUATION.md` has full results: TC table, metrics on holdout and full, B0/B1 comparison, latency, cost, human touches
-- [ ] At least 3 failure analyses with before/after numbers
+- [x] `docs/EVALUATION.md` has full results: TC table, metrics on holdout and full, B0/B1 comparison, latency, cost, human touches
+- [x] At least 3 failure analyses with before/after numbers
 - [ ] User feedback recorded with the resulting changes
 
 Track task status in [`TRACKER.md`](../../TRACKER.md) under "Day 4".
 
 ## Notes
+
+- 2026-11-03: the first two criteria are met (time to close is the one result still not measured: it needs a person). The third waits for the proxy session; see `journal.md`.

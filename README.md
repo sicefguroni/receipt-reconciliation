@@ -2,7 +2,7 @@
 
 This app matches a month of staff receipts to the company's card and bank statement, then shows you only the items that need a person. When every item is resolved, it gives you the month-end pack: a ledger file, an exceptions log, and a summary.
 
-*Draft, Day 3 (2026-11-03). Screenshots and the operator's guide (RUNBOOK) come later in the sprint.*
+*Draft, Day 3 (2026-11-03), updated Day 4. Screenshots and the operator's guide (RUNBOOK) come later in the sprint.*
 
 ## Set it up (three steps)
 
@@ -45,6 +45,7 @@ The progress bar shows how many items are done. When it reaches the end, the pac
 | No matching payment on the statement | Nothing on the statement fits. | Choose a payment from the list, choose *Paid personally: reimburse* (with a reason), or remove the receipt until the payment appears. |
 | Paid personally (no flag) | A personal-card receipt with no statement line. | Approve it to reimburse the submitter. |
 | Payment with no receipt | A statement line that no receipt matched. | **Link receipt**, **Record a substitute** (a real payment whose receipt is missing; choose a category and give a reason), or **Not an expense** with a reason (a bank fee, for example). If the row says it *could be the payment for* a receipt, link it. |
+| Refund or credit | A statement line where money came back to the company (a negative amount). It is never matched to a receipt. | **Record the credit** against the category it reduces, with a reason (it lowers that category's total), or **Not an expense** with a reason. |
 | Small difference badge, e.g. "+$2.00 vs receipt" | The charge is a little different, within policy (a tip or card surcharge). | Nothing extra: approve as normal. |
 
 ## What the system decides, and what you decide
@@ -77,7 +78,7 @@ Messages say what happened and what to do. The **Runs** page shows each step of 
 
 | Message or code | What to do |
 |---|---|
-| "The statement's columns were not recognised" (`STATEMENT_FORMAT`) | Export the statement again as CSV in one of the layouts the message lists. |
+| "The statement's columns were not recognised" (`STATEMENT_FORMAT`) | Export the statement again as CSV in one of the layouts the message lists. A title row above the column names, and dates written like 2026-10-02, are fine. |
 | "This app is in replay mode…" (`RECORDING_MISSING`) | Replay mode can only read the sample receipts. Switch to live mode to read others. |
 | "The statement has no transactions in…" | Check the month you picked, or that you chose the right file. |
-| A run with `FX_API_ERROR` | The exchange-rate service was down. Stored rates are used where available; otherwise the receipt is flagged *No exchange rate available*. |
+| A run with `FX_API_ERROR` | The exchange-rate service was down. Stored rates are used where available; otherwise the receipt is flagged *No exchange rate available*, but only if its AUD amount needs a rate: a receipt matched to a payment that shows the foreign amount uses the AUD the bank charged and is not flagged. |

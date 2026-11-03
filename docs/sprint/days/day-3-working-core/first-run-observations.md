@@ -15,7 +15,7 @@ Not a user session, and never reported as one: the automated month close (`src/p
 
 ## Setup for both runs
 
-- Same build: note the commit hash below. Replay mode (no API key), `pnpm seed` first.
+- Same build: note the commit hash below. Replay mode (no API key), `pnpm seed` first. *Decided 2026-11-03:* run both on the Day 4 build (after the stress fixes), and for P1 go straight on to the feedback questions in `../day-4-evaluate-and-harden/feedback-session.md` in the same sitting.
 - The month: October sample, started with **`fixtures/dataset/statement-format-b.csv`** uploaded on the first page (exercises CSV import and the second format). `pnpm seed` already lists one October month (format A) under *Months in progress*; if the runner opens that one instead, let them, and note it: it is the same 40 receipts, and which they chose is itself an observation about the first page.
 - Acting as: *Accounting user (reviewer)*.
 - Goal given to the runner, word for word: *"Close the October month using this app and its README. When you think the month is done, download the ledger and the exceptions log. Think aloud if you can. I won't help unless you're completely stuck."*
