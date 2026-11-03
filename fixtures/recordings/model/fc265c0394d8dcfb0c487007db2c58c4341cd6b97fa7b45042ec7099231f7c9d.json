@@ -1,0 +1,22 @@
+{
+  "key": "fc265c0394d8dcfb0c487007db2c58c4341cd6b97fa7b45042ec7099231f7c9d",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:56.698Z",
+  "parts": [
+    {
+      "text": "File: R31.pdf"
+    },
+    {
+      "file": "R31.pdf sha256:2ec1fa4b0a4248cf406e824fd6d69f179766fccd663b8c301db81245aaecc013"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Nimbus Compute Inc.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-18\",\"confidence\":1},\"total\":{\"value\":112.4,\"confidence\":1},\"currency\":{\"value\":\"USD\",\"confidence\":1},\"tax\":{\"value\":0,\"confidence\":1},\"summary\":{\"value\":\"GPU inference credits\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3687,
+    "outputTokens": 85,
+    "latencyMs": 2806
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "key": "c87132b2f4bb36d3666f804ca30d0e7bed97eb656509f08437439c389fd90948",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:49.600Z",
+  "parts": [
+    {
+      "text": "File: R23.pdf"
+    },
+    {
+      "file": "R23.pdf sha256:e4e3bdb4a58cfa1a447606621f9e1d880c284c4ea43be5d5cc4ca8645a88dd9a"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Pixelboard Inc.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-01\",\"confidence\":1},\"total\":{\"value\":15,\"confidence\":1},\"currency\":{\"value\":\"USD\",\"confidence\":1},\"tax\":{\"value\":0,\"confidence\":1},\"summary\":{\"value\":\"Design workspace: Pro (monthly)\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3686,
+    "outputTokens": 87,
+    "latencyMs": 1725
+  }
+}

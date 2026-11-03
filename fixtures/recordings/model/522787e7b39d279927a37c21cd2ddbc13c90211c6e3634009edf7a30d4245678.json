@@ -1,0 +1,22 @@
+{
+  "key": "522787e7b39d279927a37c21cd2ddbc13c90211c6e3634009edf7a30d4245678",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:52.613Z",
+  "parts": [
+    {
+      "text": "File: R24.pdf"
+    },
+    {
+      "file": "R24.pdf sha256:46fcc7abc03c772355877df69df771856407163aaabc768fdc32bde1a17f332a"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Example Telco Pty Ltd\",\"confidence\":1},\"date\":{\"value\":\"2026-10-10\",\"confidence\":1},\"total\":{\"value\":89.95,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":8.18,\"confidence\":1},\"summary\":{\"value\":\"Business internet 100: October\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3695,
+    "outputTokens": 92,
+    "latencyMs": 2851
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "key": "60160f8b2a26b9ff0f9433220a09684998d2f9f75f008dbe51bee7397471d2a3",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T06:09:56.450Z",
+  "parts": [
+    {
+      "text": "Vendor: brightreachads\nItems: Retargeting campaign advertising (clicks)\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Advertising & Marketing\",\"confidence\":0.99,\"reason\":\"Paid retargeting campaign clicks are a direct advertising expense.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 209,
+    "outputTokens": 36,
+    "latencyMs": 1428
+  }
+}

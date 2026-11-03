@@ -1,0 +1,19 @@
+{
+  "key": "099c91a5165da7fbe0dc8b717875152444d5ce2d5a1faaa0c32c6cbbf10cb3ff",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T06:09:39.853Z",
+  "parts": [
+    {
+      "text": "Vendor: Nordhavn Analytics GmbH\nItems: Analytics dashboard licence: October\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Software\",\"confidence\":0.98,\"reason\":\"A monthly analytics dashboard licence is a software subscription.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 209,
+    "outputTokens": 32,
+    "latencyMs": 1133
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "key": "8a7bbd56a47d9229314d34f5a3c94daa38511265cf7d042c92af1a12dd112dae",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:40.864Z",
+  "parts": [
+    {
+      "text": "File: R07.jpg"
+    },
+    {
+      "file": "R07.jpg sha256:333cbf4dffb11d0e85c1616ca032b83b20f620eb955d1c30d7aa52aecd4786d9"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Sample Stationers\",\"confidence\":1},\"date\":{\"value\":\"2026-10-13\",\"confidence\":1},\"total\":{\"value\":27.95,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":2.54,\"confidence\":1},\"summary\":{\"value\":\"A4 copy paper, 5 ream box; ballpoint pens, 10 pack\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1465,
+    "outputTokens": 102,
+    "latencyMs": 1836
+  }
+}

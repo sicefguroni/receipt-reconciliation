@@ -1,0 +1,19 @@
+{
+  "key": "20e0bf2257cbc3e190c17258ec8f4a4abddbbb0a10081de5779b7e2468fc4344",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T06:09:45.928Z",
+  "parts": [
+    {
+      "text": "Vendor: Sample App Store\nItems: Pro subscription: monthly\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Software\",\"confidence\":0.98,\"reason\":\"A monthly Pro app subscription is a software expense.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 205,
+    "outputTokens": 32,
+    "latencyMs": 1103
+  }
+}

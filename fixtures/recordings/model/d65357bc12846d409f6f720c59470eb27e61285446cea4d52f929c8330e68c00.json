@@ -1,0 +1,22 @@
+{
+  "key": "d65357bc12846d409f6f720c59470eb27e61285446cea4d52f929c8330e68c00",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:38.378Z",
+  "parts": [
+    {
+      "text": "File: R01.pdf"
+    },
+    {
+      "file": "R01.pdf sha256:b3a906ba1b54d858659cca139954a71a6aa1d015274c9894ea4a32c7be3ce991"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"SAMPLE CAFÉ\",\"confidence\":1},\"date\":{\"value\":\"2026-10-02\",\"confidence\":1},\"total\":{\"value\":18.5,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":1.68,\"confidence\":1},\"summary\":{\"value\":\"Flat white, ham & cheese croissant, banana bread\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 697,
+    "outputTokens": 98,
+    "latencyMs": 2858
+  }
+}

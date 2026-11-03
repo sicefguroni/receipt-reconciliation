@@ -1,0 +1,22 @@
+{
+  "key": "3c6d51bb119475fc64eee92951756546946348cde9fe4e3dc613e67cd3906b7d",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:38.711Z",
+  "parts": [
+    {
+      "text": "File: R03.pdf"
+    },
+    {
+      "file": "R03.pdf sha256:8acf8abca04e73c46799dd40f7f5bdd5b470d1b3503bd06a3ee94ce570ba0d8e"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Nordhavn Analytics GmbH\",\"confidence\":1},\"date\":{\"value\":\"2026-10-06\",\"confidence\":0.99},\"total\":{\"value\":89,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":0,\"confidence\":1},\"summary\":{\"value\":\"Analytics dashboard licence: October\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3689,
+    "outputTokens": 90,
+    "latencyMs": 3186
+  }
+}

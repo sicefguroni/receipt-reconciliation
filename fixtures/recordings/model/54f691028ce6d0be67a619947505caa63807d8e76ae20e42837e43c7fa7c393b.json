@@ -1,0 +1,22 @@
+{
+  "key": "54f691028ce6d0be67a619947505caa63807d8e76ae20e42837e43c7fa7c393b",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:58.458Z",
+  "parts": [
+    {
+      "text": "File: R35.jpg"
+    },
+    {
+      "file": "R35.jpg sha256:829522ee977accc46b3903f53cd2d103e58b2e07db22bbab2c2b18cc95791fe7"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Sample Stationers\",\"confidence\":1},\"date\":{\"value\":\"2026-10-06\",\"confidence\":1},\"total\":{\"value\":41.3,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":3.75,\"confidence\":1},\"summary\":{\"value\":\"Whiteboard markers (8 pack), spiral notebooks (5 pack), and desk organiser\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1866,
+    "outputTokens": 100,
+    "latencyMs": 2005
+  }
+}

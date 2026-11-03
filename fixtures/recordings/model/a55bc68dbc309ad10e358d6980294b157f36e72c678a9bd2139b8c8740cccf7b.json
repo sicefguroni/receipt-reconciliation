@@ -1,0 +1,22 @@
+{
+  "key": "a55bc68dbc309ad10e358d6980294b157f36e72c678a9bd2139b8c8740cccf7b",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:46.787Z",
+  "parts": [
+    {
+      "text": "File: R17.pdf"
+    },
+    {
+      "file": "R17.pdf sha256:7f581924e1ce5e6934d07f47857eb9fb07a8ca2638cf87a4e2245289bb400fa3"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Demo Cloud Pty Ltd\",\"confidence\":1},\"date\":{\"value\":\"2026-10-03\",\"confidence\":1},\"total\":{\"value\":182.4,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":16.58,\"confidence\":1},\"summary\":{\"value\":\"Cloud compute (September usage), object storage, and data transfer\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3714,
+    "outputTokens": 97,
+    "latencyMs": 2115
+  }
+}

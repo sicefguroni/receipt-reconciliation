@@ -1,0 +1,22 @@
+{
+  "key": "8fce1b9b7cbdf6880b700a197c44c6bf9706d603e6d88f4e5c2ca9822c38816d",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:47.036Z",
+  "parts": [
+    {
+      "text": "File: R18.pdf"
+    },
+    {
+      "file": "R18.pdf sha256:fe7a9ee247812d8d103b8ea04772e84e49516085d2739301bf59fc40b9e566f0"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Hub Coworking\",\"confidence\":1},\"date\":{\"value\":\"2026-10-19\",\"confidence\":1},\"total\":{\"value\":135,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":12.27,\"confidence\":1},\"summary\":{\"value\":\"3 day passes\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 654,
+    "outputTokens": 88,
+    "latencyMs": 1704
+  }
+}

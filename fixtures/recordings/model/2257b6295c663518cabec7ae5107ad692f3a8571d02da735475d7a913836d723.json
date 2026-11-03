@@ -1,0 +1,22 @@
+{
+  "key": "2257b6295c663518cabec7ae5107ad692f3a8571d02da735475d7a913836d723",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:10:02.050Z",
+  "parts": [
+    {
+      "text": "File: R39.pdf"
+    },
+    {
+      "file": "R39.pdf sha256:76e95a289deced3fab694770c94d476ec2b4fcc41805c7a347bc10aa23584314"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Vectorly Inc.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-12\",\"confidence\":1},\"total\":{\"value\":24,\"confidence\":1},\"currency\":{\"value\":\"USD\",\"confidence\":1},\"tax\":{\"value\":0,\"confidence\":1},\"summary\":{\"value\":\"Vector editor: Individual (monthly)\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3687,
+    "outputTokens": 87,
+    "latencyMs": 3478
+  }
+}

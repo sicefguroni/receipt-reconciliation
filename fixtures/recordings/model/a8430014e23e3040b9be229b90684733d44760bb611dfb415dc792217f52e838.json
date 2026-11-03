@@ -1,0 +1,22 @@
+{
+  "key": "a8430014e23e3040b9be229b90684733d44760bb611dfb415dc792217f52e838",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:44.668Z",
+  "parts": [
+    {
+      "text": "File: R12.pdf"
+    },
+    {
+      "file": "R12.pdf sha256:ef298e2adc643357ec1535c85affda8b62c9e5cda971a29a37c69ef22cdb82e1"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"TEST AIRLINE\",\"confidence\":1},\"date\":{\"value\":\"2026-10-04\",\"confidence\":1},\"total\":{\"value\":389,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":35.36,\"confidence\":1},\"summary\":{\"value\":\"Economy fare from Sample City to Example Bay, seat selection, and 23 kg checked bag\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 709,
+    "outputTokens": 101,
+    "latencyMs": 2816
+  }
+}

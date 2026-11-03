@@ -1,0 +1,22 @@
+{
+  "key": "88a4e2bc771aa13ec0caf275a3c192afd54a7af1639a0d5c926db72b0bf35567",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:42.380Z",
+  "parts": [
+    {
+      "text": "File: R11.jpg"
+    },
+    {
+      "file": "R11.jpg sha256:8433e83f101c223eff435649d0bd23063e265ad83ce52605212c0fdd88d0d45d"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"CORNER BISTRO RESTAURANT\",\"confidence\":1},\"date\":{\"value\":\"2026-10-16\",\"confidence\":1},\"total\":{\"value\":65.5,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":5.95,\"confidence\":1},\"summary\":{\"value\":\"Grilled barramundi, Caesar salad, sparkling water\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1866,
+    "outputTokens": 103,
+    "latencyMs": 1505
+  }
+}

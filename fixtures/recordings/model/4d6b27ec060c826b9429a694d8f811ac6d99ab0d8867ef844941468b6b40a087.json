@@ -1,0 +1,22 @@
+{
+  "key": "4d6b27ec060c826b9429a694d8f811ac6d99ab0d8867ef844941468b6b40a087",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:55.021Z",
+  "parts": [
+    {
+      "text": "File: R30.pdf"
+    },
+    {
+      "file": "R30.pdf sha256:8be3e439af3e1589a0c9b544aaf0a5a7dbb98496cc8acd4bb5c7209ae7b27717"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"brightreachads\",\"confidence\":0.99},\"date\":{\"value\":\"2026-10-28\",\"confidence\":1},\"total\":{\"value\":420.0,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":38.18,\"confidence\":1},\"summary\":{\"value\":\"Retargeting campaign advertising (clicks)\",\"confidence\":0.99}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 694,
+    "outputTokens": 97,
+    "latencyMs": 1486
+  }
+}

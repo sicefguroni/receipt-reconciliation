@@ -1,0 +1,22 @@
+{
+  "key": "12af1b6b65f9e421326a324d7d9c1d6811a953e051d269f05b73d2433745e89c",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:54.195Z",
+  "parts": [
+    {
+      "text": "File: R28.pdf"
+    },
+    {
+      "file": "R28.pdf sha256:4a2288fcdf984a279ddc2a2c3b598250800e3bb0ca95667dd9c67e644d1adc58"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Sample Harbour Hotel\",\"confidence\":1},\"date\":{\"value\":\"2026-10-25\",\"confidence\":1},\"total\":{\"value\":189,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":17.18,\"confidence\":1},\"summary\":{\"value\":\"1 night, standard queen room\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3695,
+    "outputTokens": 88,
+    "latencyMs": 2069
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "key": "3fbbca40c182c1bca96e51a4ca9547e3970f583d9b90c8dadca1ca77a7710027",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:44.822Z",
+  "parts": [
+    {
+      "text": "File: R15.png"
+    },
+    {
+      "file": "R15.png sha256:44cefde4c87cdc760f262f752995184f89149b02c33ad11c7359c181aa3f42ee"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Sample App Store\",\"confidence\":1},\"date\":{\"value\":\"2026-10-14\",\"confidence\":1},\"total\":{\"value\":19.99,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":1.82,\"confidence\":1},\"summary\":{\"value\":\"Pro subscription: monthly\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3517,
+    "outputTokens": 88,
+    "latencyMs": 2183
+  }
+}

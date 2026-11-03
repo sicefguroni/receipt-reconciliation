@@ -1,0 +1,22 @@
+{
+  "key": "48b933a7399c45bbbb796070cdf6020c5d16674bb746d791813b518c8e96bdb9",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:49.679Z",
+  "parts": [
+    {
+      "text": "File: R22.png"
+    },
+    {
+      "file": "R22.png sha256:a8816d5c5846051a4bfc56e3c4aa1bb3fc579c03ad124b722245dfc191fe5863"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Teamline Inc.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-17\",\"confidence\":1},\"total\":{\"value\":12,\"confidence\":1},\"currency\":{\"value\":\"USD\",\"confidence\":1},\"tax\":{\"value\":0,\"confidence\":1},\"summary\":{\"value\":\"Team plan: 1 seat (monthly)\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3517,
+    "outputTokens": 89,
+    "latencyMs": 1839
+  }
+}

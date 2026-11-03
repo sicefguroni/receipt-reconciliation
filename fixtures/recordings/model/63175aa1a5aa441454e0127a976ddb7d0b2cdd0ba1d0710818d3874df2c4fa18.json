@@ -1,0 +1,22 @@
+{
+  "key": "63175aa1a5aa441454e0127a976ddb7d0b2cdd0ba1d0710818d3874df2c4fa18",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:10:00.554Z",
+  "parts": [
+    {
+      "text": "File: R37.pdf"
+    },
+    {
+      "file": "R37.pdf sha256:3617e1dfbd7f6b7dfed42d4e0c7f94cc5bf15346e10b2b01113635a4dedd5b44"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Example Energy Pty Ltd\",\"confidence\":1},\"date\":{\"value\":\"2026-10-14\",\"confidence\":1},\"total\":{\"value\":146.55,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":13.32,\"confidence\":1},\"summary\":{\"value\":\"Electricity: September billing period\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3693,
+    "outputTokens": 91,
+    "latencyMs": 2279
+  }
+}

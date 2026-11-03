@@ -1,0 +1,22 @@
+{
+  "key": "e3b3c15318574378b9cbf7803a923050825d3af0226e5515d5dd593c8b7a4bf6",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:38.479Z",
+  "parts": [
+    {
+      "text": "File: R02.pdf"
+    },
+    {
+      "file": "R02.pdf sha256:23c1e4950151b0ec9b327df29de2edb35a39e530cfd9e030ff8f588dd53de101"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Nimbus Compute Inc.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-05\",\"confidence\":1},\"total\":{\"value\":49,\"confidence\":1},\"currency\":{\"value\":\"USD\",\"confidence\":1},\"tax\":{\"value\":0,\"confidence\":1},\"summary\":{\"value\":\"Compute plan: Team (October 2026)\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3693,
+    "outputTokens": 90,
+    "latencyMs": 2956
+  }
+}

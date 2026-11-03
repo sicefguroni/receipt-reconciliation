@@ -1,0 +1,155 @@
+{
+  "label": "v0-day2-tc01-live",
+  "mode": "live",
+  "ranAt": "2026-11-03T06:08:33.254Z",
+  "commit": "e94beef",
+  "model": "gpt-5.6-sol",
+  "reasoningEffort": "low",
+  "policy": {
+    "pctThreshold": 10,
+    "audThreshold": 100,
+    "minScore": 75,
+    "minMargin": 20
+  },
+  "receipts": 2,
+  "fullSet": false,
+  "testCasesRun": [
+    "TC01",
+    "TC02"
+  ],
+  "metrics": {
+    "all": {
+      "extractionTotal": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "extractionCurrency": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "extractionDate": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "extractionVendor": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "categoryAccuracy": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "matchRecallTop1": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "wrongAutoMatchRate": {
+        "hit": 0,
+        "of": 2,
+        "rate": 0
+      },
+      "headlineExceptionRecall": {
+        "hit": 0,
+        "of": 0,
+        "rate": null
+      },
+      "exceptionRecall": {},
+      "exceptionPrecision": {},
+      "humanTouches": {
+        "hit": 0,
+        "of": 2,
+        "rate": 0
+      },
+      "noReceiptLineRecall": null
+    },
+    "holdout": {
+      "extractionTotal": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "extractionCurrency": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "extractionDate": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "extractionVendor": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "categoryAccuracy": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "matchRecallTop1": {
+        "hit": 2,
+        "of": 2,
+        "rate": 1
+      },
+      "wrongAutoMatchRate": {
+        "hit": 0,
+        "of": 2,
+        "rate": 0
+      },
+      "headlineExceptionRecall": {
+        "hit": 0,
+        "of": 0,
+        "rate": null
+      },
+      "exceptionRecall": {},
+      "exceptionPrecision": {},
+      "humanTouches": {
+        "hit": 0,
+        "of": 2,
+        "rate": 0
+      },
+      "noReceiptLineRecall": null
+    }
+  },
+  "testCases": [
+    {
+      "testCase": "TC01",
+      "receipts": [
+        "R01"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC02",
+      "receipts": [
+        "R02"
+      ],
+      "pass": true,
+      "failures": []
+    }
+  ],
+  "measuredFrom": "this run",
+  "latencyMsPerReceipt": {
+    "p50": 3579,
+    "p95": 5980
+  },
+  "tokens": {
+    "input": 4600,
+    "output": 223
+  },
+  "cost": {
+    "upperBound": 0.0229,
+    "perReceipt": 0.0114,
+    "currency": "USD",
+    "basis": "4/M input, 20/M output; OpenAI API Pricing page, as reported by the candidate, 2026-11-03"
+  }
+}

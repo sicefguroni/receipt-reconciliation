@@ -1,0 +1,22 @@
+{
+  "key": "c57d947996a83983aff217dacaed9c77f678401282827cdc3966b5a111133c40",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:58.269Z",
+  "parts": [
+    {
+      "text": "File: R34.jpg"
+    },
+    {
+      "file": "R34.jpg sha256:b941ad456f86f4ec2e4f4f866e9ccdb8e97db1375959208c18bce02f49124e98"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"CORNER BISTRO RESTAURANT\",\"confidence\":1},\"date\":{\"value\":\"2026-10-30\",\"confidence\":1},\"total\":{\"value\":88.2,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":8.02,\"confidence\":1},\"summary\":{\"value\":\"2 set menus and 2 soft drinks\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1866,
+    "outputTokens": 100,
+    "latencyMs": 1983
+  }
+}

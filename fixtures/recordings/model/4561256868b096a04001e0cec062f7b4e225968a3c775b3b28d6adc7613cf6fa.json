@@ -1,0 +1,19 @@
+{
+  "key": "4561256868b096a04001e0cec062f7b4e225968a3c775b3b28d6adc7613cf6fa",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T06:09:40.142Z",
+  "parts": [
+    {
+      "text": "Vendor: Nimbus Compute Inc.\nItems: Compute plan: Team (October 2026)\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"AI & Cloud\",\"confidence\":0.97,\"reason\":\"A monthly team compute plan from Nimbus Compute Inc. is a cloud computing service.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 210,
+    "outputTokens": 40,
+    "latencyMs": 1655
+  }
+}

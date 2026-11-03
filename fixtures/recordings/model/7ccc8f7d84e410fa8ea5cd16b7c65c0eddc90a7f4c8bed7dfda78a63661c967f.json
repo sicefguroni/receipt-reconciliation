@@ -1,0 +1,22 @@
+{
+  "key": "7ccc8f7d84e410fa8ea5cd16b7c65c0eddc90a7f4c8bed7dfda78a63661c967f",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:10:00.353Z",
+  "parts": [
+    {
+      "text": "File: R38.jpg"
+    },
+    {
+      "file": "R38.jpg sha256:4479d7283467cb69a35b67255032d1f7b968717de921180c459164d3f9032a19"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"HARBOUR LANE CAFE\",\"confidence\":1},\"date\":{\"value\":\"2026-10-05\",\"confidence\":1},\"total\":{\"value\":15.5,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":1.41,\"confidence\":1},\"summary\":{\"value\":\"Long black, blueberry muffin, English breakfast tea\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1604,
+    "outputTokens": 99,
+    "latencyMs": 1891
+  }
+}

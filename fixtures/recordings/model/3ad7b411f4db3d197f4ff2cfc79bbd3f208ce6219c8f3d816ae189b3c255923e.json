@@ -1,0 +1,19 @@
+{
+  "key": "3ad7b411f4db3d197f4ff2cfc79bbd3f208ce6219c8f3d816ae189b3c255923e",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T06:09:47.863Z",
+  "parts": [
+    {
+      "text": "Vendor: Demo Cloud Pty Ltd\nItems: Cloud compute (September usage), object storage, and data transfer\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"AI & Cloud\",\"confidence\":0.99,\"reason\":\"Cloud compute, object storage, and data transfer are cloud infrastructure services.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 214,
+    "outputTokens": 38,
+    "latencyMs": 1067
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "key": "0071daa5ce86fa315fb739131ed017d0d69a63658d24ae15204b380c2502e684",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:45.326Z",
+  "parts": [
+    {
+      "text": "File: R14.jpg"
+    },
+    {
+      "file": "R14.jpg sha256:37210d7a40e763d62f1be609a105720385f27c63429709109b064998edc5ce40"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"METRO TAXI CO.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-21\",\"confidence\":1},\"total\":{\"value\":52.1,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":4.74,\"confidence\":1},\"summary\":{\"value\":\"Taxi fare and booking fee\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1866,
+    "outputTokens": 93,
+    "latencyMs": 2938
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "key": "54a6a31f6a6067543df62603bc71a37e1450a63b7bf3c6a685c12642e4f41cbf",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:58.785Z",
+  "parts": [
+    {
+      "text": "File: R36.pdf"
+    },
+    {
+      "file": "R36.pdf sha256:b81e3c4cca47960198a775aa000eafa557a86f8d34895c9c034d77e6239a014e"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"QuickFix Repairs\",\"confidence\":1},\"date\":{\"value\":\"2026-10-20\",\"confidence\":1},\"total\":{\"value\":220,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":20,\"confidence\":1},\"summary\":{\"value\":\"Laptop screen replacement labour and replacement screen panel\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 709,
+    "outputTokens": 88,
+    "latencyMs": 2056
+  }
+}

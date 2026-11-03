@@ -1,0 +1,22 @@
+{
+  "key": "dbeeb7b19a4ba0ff87ceb0a8de4b8a528eeab20fcb68eda0735eeaf7f5e92d97",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:47.829Z",
+  "parts": [
+    {
+      "text": "File: R19.jpg"
+    },
+    {
+      "file": "R19.jpg sha256:ed278c8e0568cfc42236cbb1c8f8a02584c6ff35b2fbe3fbe68451e9f7e7b2f4"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Ironbark Hardware\",\"confidence\":1},\"date\":{\"value\":\"2026-10-22\",\"confidence\":1},\"total\":{\"value\":429,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":39,\"confidence\":1},\"summary\":{\"value\":\"1 ergonomic office chair, mesh back\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1604,
+    "outputTokens": 88,
+    "latencyMs": 1899
+  }
+}

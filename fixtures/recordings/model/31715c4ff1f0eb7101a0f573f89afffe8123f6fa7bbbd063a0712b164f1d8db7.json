@@ -1,0 +1,22 @@
+{
+  "key": "31715c4ff1f0eb7101a0f573f89afffe8123f6fa7bbbd063a0712b164f1d8db7",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:39.024Z",
+  "parts": [
+    {
+      "text": "File: R05.jpg"
+    },
+    {
+      "file": "R05.jpg sha256:ef453987bd11614e74d11dd9607ca186aff08d753b09acc4d5b8e1dbdfbdcc72"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"HARBOUR LANE CAFE\",\"confidence\":1},\"date\":{\"value\":\"2026-10-09\",\"confidence\":1},\"total\":{\"value\":42,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":3.82,\"confidence\":1},\"summary\":{\"value\":\"Lunch special x2; long black x2\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1866,
+    "outputTokens": 97,
+    "latencyMs": 1561
+  }
+}

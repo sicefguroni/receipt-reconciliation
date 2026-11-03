@@ -1,0 +1,19 @@
+{
+  "key": "a850a9415b89ceb44eba372ead85b0165381d0817dff6ccf3f47029442ac26b5",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T06:10:03.320Z",
+  "parts": [
+    {
+      "text": "Vendor: Vectorly Inc.\nItems: Vector editor: Individual (monthly)\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Software\",\"confidence\":0.99,\"reason\":\"A monthly subscription to a vector editing application is a software expense.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 207,
+    "outputTokens": 35,
+    "latencyMs": 1266
+  }
+}

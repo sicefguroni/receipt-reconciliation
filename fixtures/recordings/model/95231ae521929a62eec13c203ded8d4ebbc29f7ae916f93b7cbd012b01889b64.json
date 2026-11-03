@@ -1,0 +1,22 @@
+{
+  "key": "95231ae521929a62eec13c203ded8d4ebbc29f7ae916f93b7cbd012b01889b64",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:42.025Z",
+  "parts": [
+    {
+      "text": "File: R10.jpg"
+    },
+    {
+      "file": "R10.jpg sha256:5996f3af073e4aca44dc7dde58bed69d80954b55f86f3c19aaad4ba8c1d7f4ed"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Bayside Catering Co.\",\"confidence\":0.99},\"date\":{\"value\":\"2026-10-15\",\"confidence\":0.99},\"total\":{\"value\":312,\"confidence\":0.99},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":28.36,\"confidence\":0.99},\"summary\":{\"value\":\"Working lunch platter (12 people); juice and sparkling water\",\"confidence\":0.99}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 1604,
+    "outputTokens": 107,
+    "latencyMs": 1720
+  }
+}

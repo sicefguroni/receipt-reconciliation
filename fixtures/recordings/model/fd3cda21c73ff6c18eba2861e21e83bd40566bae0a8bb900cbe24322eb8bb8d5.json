@@ -1,0 +1,22 @@
+{
+  "key": "fd3cda21c73ff6c18eba2861e21e83bd40566bae0a8bb900cbe24322eb8bb8d5",
+  "task": "extract",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "extract-v1",
+  "recordedAt": "2026-11-03T06:09:56.276Z",
+  "parts": [
+    {
+      "text": "File: R32.pdf"
+    },
+    {
+      "file": "R32.pdf sha256:d719d836294b2953a5aca3308ede436999ac8e7eab023f56933cfd14a8148246"
+    }
+  ],
+  "response": {
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Bayside Catering Co.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-29\",\"confidence\":1},\"total\":{\"value\":156,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":14.18,\"confidence\":1},\"summary\":{\"value\":\"Morning tea platter (8 people)\",\"confidence\":1}}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 3697,
+    "outputTokens": 91,
+    "latencyMs": 2073
+  }
+}
