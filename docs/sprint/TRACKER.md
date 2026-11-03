@@ -9,7 +9,7 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
-Day 1 in progress. Done: scaffold, dataset, rules confirmation, interview (second-hand), B1 (scored; time not measured), B0 (labelled estimate only), and the scope addition for statement lines with no receipt (R-MAT-7). **B1 already meets four `03` targets; its weakness is a 16% wrong-match rate.** Next: block 5 (finalise targets, candidate approves the v1 scope), then block 6 (core rule tests). See `days/day-1-discover-and-baseline/README.md`.
+**Day 1 complete** (2026-11-03). All six blocks are done, and the v1 scope and targets are approved. **B1 already meets four `03` targets; its weakness is a 16% wrong-match rate.** Optional before Day 2: one stopwatch-timed B1 run (run 4) to measure B1 time to close. Next: Day 2 (`days/day-2-design-and-v0/README.md`). See `days/day-1-discover-and-baseline/README.md`.
 
 ## Tasks
 
@@ -24,7 +24,7 @@ Block-by-block detail: [`days/day-1-discover-and-baseline/journal.md`](days/day-
 - [ ] B0 manual baseline, timed and scored (human + agent): `Skipped` 2026-11-03. The Accounting user is unavailable; the candidate has seen the answer key; an agent cannot stand in for a person. Recorded instead: a **labelled time estimate** for the current, post-redesign process: 30 s–1 min per receipt (revised from 1–4 min), giving 20–40 min for the 40-receipt month, in `days/day-1-discover-and-baseline/baseline-b0.md`. Accuracy not measured. Resume condition: a person who has not seen the repo runs `fixtures/dataset/baseline/b0-kit/`.
 - [x] B1 single-prompt baseline ×3, scored: `Done` 2026-11-03. Paths: `eval-results/baseline-b1/`, `days/day-1-discover-and-baseline/baseline-b1-runs.md`, `scripts/eval/*`, `scripts/score-baseline.ts`. Validation: `pnpm score:baseline` over the 3 runs; 50/50 tests pass. Time to close is **not measured**: only ChatGPT's response time (25–29 s) was recorded. Run 1 used a different model (GPT 6-Sol) from runs 2 and 3 (GPT 5.6-Sol).
 - [x] Metrics table baseline columns filled; v1 scope approved: `Done` 2026-11-03. Paths: `03-scope-and-success.md` (approval note, B0 and B1 columns, targets). The candidate approved the scope and targets. Open risk: the time target (≤ 10 min for 40 receipts) is tight.
-- [ ] Core rule tests: R-CUR, R-AMT, R-DUP, R-REQ
+- [x] Core rule tests: R-CUR, R-AMT, R-DUP, R-REQ: `Done` 2026-11-03. Paths: `src/core/{money,currency,amounts,duplicates,required}.ts` and their `*.test.ts`. Validation: `pnpm test` 10 files, 91 tests passed (42 in `src/core`); every rule ID from R-CUR-1 to R-REQ-3 has at least one named test; 8 deliberate rule mutations: 7 caught, 1 equivalent (dead code, removed); boundary test confirms no I/O in core; `pnpm typecheck` and `pnpm lint` clean.
 
 ### Day 2: Design and v0
 
@@ -90,6 +90,12 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-03 | Add "statement lines with no receipt" to v1 scope (R-MAT-7), with link / substitute / not-an-expense actions | Leave out of v1 | From the interview: the Accounting user creates a substitute invoice when the payment is certain. It is cheap to build (whatever is left after matching), and the dataset already has 9 such lines. The candidate approved it. | Yes |
 | 2026-11-03 | B0 estimate revised from 1–4 min to 30 s–1 min per receipt, explicitly for the current (post-redesign) process; the convincing time bar moves from ≤ 20 to ≤ 10 min | Keep 1–4 min; use the pre-redesign process | B0 must be the process the system replaces, not the one before the redesign (which the candidate also built). Revised before any system timing exists, and it makes B0 faster, so it cannot flatter the system. Both values are kept in `baseline-b0.md`. | Yes |
 | 2026-11-03 | Human touches counted over receipts only; statement lines with no receipt reported as a separate count | Count no-receipt lines as items | Counting them makes the 35% target impossible by design (best possible 18/49 = 36.7%). Over receipts, the best possible is 9/40 = 22.5%. Set before any measurement. | Yes |
+| 2026-11-03 | Core money maths in integer cents | Floating-point dollars | Makes "above $0.01" and "exactly 10%" exact (0.1 + 0.2 ≠ 0.3 in floating point); covered by a test | Yes |
+| 2026-11-03 | R-AMT-2 "over" is strict: exactly 10% or exactly $100 is not over | Inclusive (≥) | `05` says "over"; tested at both boundaries | Yes (one character) |
+| 2026-11-03 | R-CUR-2 looks back at most 7 days for a rate | Unlimited lookback | Covers weekends and the longest ECB holiday gap, but a stale rate after a long outage falls to R-CUR-3 (unavailable) instead of being used silently | Yes (parameter) |
+| 2026-11-03 | R-CUR-4 converts a foreign difference to AUD at the bank's implied rate (AUD charged / original amount) for the $100 test | Use the ECB rate | The bank's rate is the one actually paid, and it is available on the line itself with no lookup | Yes |
+| 2026-11-03 | R-DUP-1 vendor normalisation drops case, accents, punctuation, and legal suffixes (Pty, Ltd, Inc, Co, GmbH...) | Exact text match | "SAMPLE CAFE" and "Sample Café" are the same vendor; a re-photo can read the name slightly differently | Yes |
+| 2026-11-03 | R-REQ-1 placeholders also include "na", "n.a.", "--", ".", "nil", "null" | Only the three examples in `05` | Same intent as `05` ("placeholder text such as"); tested | Yes |
 | 2026-11-02 | `pnpm` scripts limited to ones that work today (`dev`, `build`, `test`, `typecheck`, `lint`, `db:*`). `seed`, `eval`, `eval:compare` are added when their scripts exist. | Stub scripts that print "not yet" | A command that exists but does nothing would be a claim the code does not back | Yes |
 
 ## AI corrections log
@@ -107,7 +113,8 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | 2026-11-02 | R10 re-photographed duplicate of R08 | Showed a different invoice number and time from R08 | Agent made duplicates reuse their original's printed details | `5bc626d` |
 | 2026-11-02 | Fixtures README file counts | Placeholder text ("18 PDF, 8 PNG...") left in | Agent corrected it from `receipts.json` | `5bc626d` |
 | 2026-11-02 | Dataset generator and the claim "a rerun gives the same data" | Chromium stamps each PDF with the current time, so every rerun changed all 23 PDF hashes | Agent noticed 23 changed binaries after a rules-only change, then pinned the timestamps; two reruns now give identical hashes | `b14526d` |
-| 2026-11-03 | Test count in the TRACKER and journal entries for B1 | Written as "46/46" from memory; the real run showed 49 | Agent re-ran the tests and replaced it with the count from the output. Lesson: copy numbers from command output, never retype them. | this commit |
+| 2026-11-03 | Test count in the TRACKER and journal entries for B1 | Written as "46/46" from memory; the real run showed 49 | Agent re-ran the tests and replaced it with the count from the output. Lesson: copy numbers from command output, never retype them. | `f8c94e3` |
+| 2026-11-03 | `accountMatchesSource` with a `source !== "unknown"` guard | The guard was dead code: there is no `unknown` statement account, so removing it changed nothing (an equivalent mutant) | Mutation testing exposed it; the guard was removed and the doc comment explains why `unknown` still never matches | this commit |
 | 2026-11-02 | Repo-wide `eol=lf` in `.gitattributes` | Normalised fixture CSVs, which should keep CRLF like real bank exports | Agent marked `fixtures/**/*.csv` as `-text` | `7d069ae` |
 
 ## Session history
@@ -130,6 +137,17 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
   - *(Resolved 2026-11-02: candidate chose option (a); `05` and `06` were updated and ground truth expects `AMBIGUOUS_MATCH`, then `AMOUNT_DIFFERS_OVER_THRESHOLD` after the choice.)* **TC04 cannot reach its expected outcome under R-MAT as written.** A 12% difference earns no amount points (it is outside the threshold), so the best score is 25 (date) + 20 (vendor) + 5 (account) = 50. That gives `ambiguous`, not `amount_differs` with `AMOUNT_DIFFERS_OVER_THRESHOLD`. Decide in block 6 / Day 2: either score over-threshold amounts when date and vendor are strong, or accept TC04 as ambiguous-then-flagged. Ground truth keeps the intent from `06`.
   - R27's same-day distractor (31.20 vs 28.70) leaves a margin of exactly 20, the R-MAT-1 boundary. This is deliberate, and sensitive to Day 4 tuning.
   - *(Resolved 2026-11-02: `bank` added, R-REQ-3.)* The intake `paymentSource` enum has no `bank` value; direct-debit receipts (R24, R37) are recorded as `company_card`, so they never earn the +5 account point.
+
+### 2026-11-03: Day 1, blocks 3 to 6
+
+- Work done: second-hand interview notes; B1 scored (3 ChatGPT runs) with a reusable scorer; B0 recorded as a labelled estimate; scope addition R-MAT-7 (statement lines with no receipt); v1 scope and targets approved; core rules and tests for R-CUR, R-AMT, R-DUP, and R-REQ.
+- Decisions: see the 2026-11-03 rows in the decision log (second-hand interview, flag coding, B0 estimate and its revision, human-touch definition, scope addition, core rule details).
+- Validation: `pnpm test` 91/91; `pnpm typecheck` and `pnpm lint` clean; mutation check on 8 rule changes (7 caught, 1 equivalent).
+- Remaining: optional B1 run 4 (stopwatch) to measure B1 time to close. Day 2 next.
+- Known risks:
+  - The time target (≤ 10 min for 40 receipts) is tight.
+  - B1 already meets four targets on clean synthetic data, so improvement can only be shown on wrong matches, ledger integrity, and stress cases.
+  - The interview and B0 rest on the candidate's estimates.
 
 ### YYYY-MM-DD: Session title
 

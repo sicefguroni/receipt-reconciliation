@@ -141,4 +141,37 @@ Time to close and how often each exception occurs remain **not measured**. The a
 
 **Approved.** The candidate approved the 11-item scope (with the Day 1 changes: bank source, no-receipt lines, small-difference badge, TC04 never auto-paired), the 8 unchanged non-goals, and the targets.
 
-**Risk carried forward.** The ≤ 10 min time target needs about 20 human actions in 10 minutes. If it is missed, report the real time against both 10 min (half the low end) and 15 min (half the midpoint). The strongest measurable claim remains a 0% wrong-match rate against B1's 16%.
+**Risk carried forward (block 5).** The ≤ 10 min time target needs about 20 human actions in 10 minutes. If it is missed, report the real time against both 10 min (half the low end) and 15 min (half the midpoint). The strongest measurable claim remains a 0% wrong-match rate against B1's 16%.
+
+---
+
+## Block 6: Core rules and tests (2026-11-03)
+
+**Goal.** Pure `src/core` rules for R-CUR, R-AMT, R-DUP, and R-REQ, with no I/O, and at least one named test per rule ID.
+
+**Built.**
+
+| File | Rules | Key behaviour |
+|---|---|---|
+| `money.ts` | (helpers) | Integer cents; ISO currency check |
+| `currency.ts` | R-CUR-1 to 5 | AUD skips FX; rate for the date or the latest earlier business day (7-day lookback); no rate means `FX_RATE_UNAVAILABLE`, the amount is excluded, and the summary shows it by currency; a missing or low-confidence currency is never assumed to be AUD |
+| `amounts.ts` | R-AMT-1 to 4, R-CUR-4 | Signed difference plus AUD gap; strict "over" 10% **or** $100; above one cent and under the threshold is "small" (badge); foreign purchases compare on the original amount, so the FX fee is never a difference; reason of 3+ characters |
+| `duplicates.ts` | R-DUP-1, 2 | Same hash, or same normalised vendor + date + total + currency; the earliest upload is the original, copies of copies point at it; flags only, never deletes |
+| `required.ts` | R-REQ-1 to 3 | Blank and placeholder purposes; "Unknown — set payment source"; `bank` matches bank lines |
+
+Thresholds are function arguments (`AmountPolicy`), never read from `.env`. The boundary test enforces that.
+
+**How it was checked.** 42 core tests, every rule ID from R-CUR-1 to R-REQ-3 covered. Because they all passed on the first run, 8 deliberate rule changes were then tried (for example OR → AND on R-AMT-2, `>` → `>=` on the $100 limit, dropping the date from the duplicate key). 7 were caught. The 8th survived because it was dead code (a guard against an `unknown` account that cannot exist), so the guard was removed rather than a test added.
+
+**What went wrong.** Only the dead-code guard above (logged in the AI corrections log).
+
+**Open.** R-MAT (scoring, auto-match, R-MAT-7 no-receipt lines), R-CAT, R-QUA, R-APR, and R-QUE rules are Day 2 work (`05`; TRACKER Day 2 "Remaining `src/core` rules with tests").
+
+---
+
+## Day 1 summary
+
+All six blocks are done, and the v1 scope and targets are approved. The two facts that most shape the rest of the sprint:
+
+1. **B1 is strong.** On clean synthetic data, ChatGPT already reads, categorises, and finds payments at 100%. The system's measurable edge is the 16% → 0% wrong-match rate and ledger integrity (one payment per receipt), plus whatever the Day 4 stress cases reveal.
+2. **The human evidence is thin.** The interview is second-hand, B0 is an estimate (30 s to 1 min per receipt), and B1 time to close is not measured yet. The case study must say so plainly.
