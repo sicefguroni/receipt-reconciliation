@@ -33,8 +33,8 @@ Fill in the Baseline columns on Day 1 and the Final column on Day 4 and Day 5. T
 
 | Metric | Definition | Baseline B0 (manual) | Baseline B1 (single chat prompt) | Target | Final |
 |---|---|---|---|---|---|
-| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | **estimate, not measured:** 40–160 min for the 40-receipt month (1–4 min per receipt, candidate's estimate) | not measured (only ChatGPT response time recorded: 25–29 s per run) | at least 50% less than B0: convincing only at **≤ 20 min** (half the low end of the estimate) | |
-| **Human touches** | Items needing a human action / total items | 100% by definition | n/a | 35% or fewer | |
+| **Time to close** | Minutes for the user to reach a signed-off ledger on the test month | **estimate, not measured:** 20–40 min for the 40-receipt month (30 s–1 min per receipt for the current process; candidate's estimate, revised from 1–4 min) | not measured (only ChatGPT response time recorded: 25–29 s per run) | at least 50% less than B0: convincing only at **≤ 10 min** (half the low end of the estimate) | |
+| **Human touches** | Receipts needing a human action / all receipts. Statement lines with no receipt (R-MAT-7) are reported separately as a count. | 100% by definition | n/a | 35% or fewer (floor by design on the October set: 9/40 = 22.5%) | |
 | **Exception recall** | Exceptions caught / exceptions planted (ground truth) | not measured (no human answer sheet) | 5/5 (100%) in all 3 runs | 100% for amount difference, missing purpose, duplicate | |
 | **Wrong auto-match rate** | Auto-matches that are incorrect / total auto-matches | n/a | **3/19 (16%) in all 3 runs** | 0% on the test set | |
 | **Match recall** | Correct matches found (auto plus suggested top-1) / matchable receipts | not measured | 16/16 (100%) in all 3 runs | at least 95% | |
