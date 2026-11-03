@@ -95,6 +95,17 @@ Model latency p50 2.1 s, p95 4.6 s per receipt. Tokens 91,426 input and 4,188 ou
 
 Against the v1 bar: criteria 1–4 are all met on this set. That is on clean synthetic data, before the Day 4 stress cases.
 
+### v1-day3 (full month, after the Day 3 refactor)
+
+`pnpm eval -- --mode live --label v1-day3`, then `--mode replay --label v1-day3-replay` with the key blanked. Day 3 split the pipeline into a read step and a pure reconcile step that also applies human decisions; the eval scores the month with no decisions, so the numbers should not move. They did not: `pnpm eval:compare -- v0-day2-live v1-day3` shows every metric and all 12 test cases unchanged (12/12; wrong auto-match 0/33, 0/14 on holdout; human touches 9/40), and the replay matches the live run exactly.
+
+Model latency p50 3.0 s, p95 4.7 s per receipt (Day 2: 2.1 s and 4.6 s; same model and prompts, so this is API variance). Tokens 91,425 input and 4,235 output; cost at most USD 0.45 (USD 0.0113 per receipt).
+
+- The live run re-recorded the fixtures. Two category-fallback requests are new: the model worded R16's and R30's item lists differently from Day 2, so those requests hash differently. Categories are still 40/40. The two Day 2 recordings they replace are no longer used.
+- The run's `summary.json` names commit `31077eb` because it started just before the Day 3 code was committed; the tree it ran is the one committed as `3b77a92`.
+
+What the eval does not cover: the human decisions themselves. Those are covered by tests over the oracle month (`src/pipeline/reconcile.test.ts`, `decisions.test.ts`), including a simulated reviewer who closes the whole month and lands on the ground-truth ledger total, and by a scripted browser run on a production build (22 checks). Neither is a user session.
+
 ### Oracle: the rules alone
 
 `pnpm eval -- --mode oracle --label oracle-day2` feeds the ground-truth fields in place of the model, so it measures the rules and pipeline without perception. Result: 12/12 test cases and identical match, exception, and human-touch numbers to v0-day2. So every remaining error in a live run is a perception error, not a rules error, on this set. Building this mode caught one rules bug before any live run: a stationer's mixed basket ("Desk organiser") categorised as Equipment (fixed; see the TRACKER AI corrections log).
@@ -131,7 +142,7 @@ Found on Day 2, not fixed yet: `06` reserves threshold and scoring changes for D
 
 | What | Why | How it will be measured |
 |---|---|---|
-| Time to close with the system | Needs the Accounting user (or a proxy) | Day 3 first-run session, stopwatch |
+| Time to close with the system | No Accounting user; the proxy session and the builder cold run have not happened yet | `docs/sprint/days/day-3-working-core/first-run-observations.md` (protocol and blank record), stopwatch |
 | B0 accuracy | Accounting user unavailable; candidate has seen the answer key | A person who has not seen the repo runs `fixtures/dataset/baseline/b0-kit/` |
 | Stress cases (unreadable photo, non-receipt, bare "$", ambiguous date, refund, FX outage, extra CSV header) | Planned for Day 4 | `pnpm eval` on the Day 4 stress set |
 | Cost at cached-input rates | The run log does not split cached from uncached input | Record `input_tokens_details.cached_tokens` per call |

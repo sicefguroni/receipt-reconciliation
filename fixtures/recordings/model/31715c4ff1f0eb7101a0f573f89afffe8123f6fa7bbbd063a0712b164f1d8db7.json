@@ -3,7 +3,7 @@
   "task": "extract",
   "model": "gpt-5.6-sol",
   "promptVersion": "extract-v1",
-  "recordedAt": "2026-11-03T06:09:39.024Z",
+  "recordedAt": "2026-11-03T07:17:26.663Z",
   "parts": [
     {
       "text": "File: R05.jpg"
@@ -17,6 +17,6 @@
     "modelId": "gpt-5.6-sol",
     "inputTokens": 1866,
     "outputTokens": 97,
-    "latencyMs": 1561
+    "latencyMs": 4178
   }
 }

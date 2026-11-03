@@ -1,0 +1,19 @@
+{
+  "key": "553dad4e5942836d203c96fb96012c9497617acd1bf44c9e792f3a143e85f9b0",
+  "task": "categorise",
+  "model": "gpt-5.6-sol",
+  "promptVersion": "categorise-v1",
+  "recordedAt": "2026-11-03T07:17:34.331Z",
+  "parts": [
+    {
+      "text": "Vendor: brightreachads\nItems: Spring promo clicks; brand awareness impressions\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
+    }
+  ],
+  "response": {
+    "text": "{\"category\":\"Advertising & Marketing\",\"confidence\":0.99,\"reason\":\"Promotional clicks and brand awareness impressions are digital advertising expenses.\"}",
+    "modelId": "gpt-5.6-sol",
+    "inputTokens": 208,
+    "outputTokens": 36,
+    "latencyMs": 1810
+  }
+}
