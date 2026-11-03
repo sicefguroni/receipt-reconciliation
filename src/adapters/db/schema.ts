@@ -30,8 +30,9 @@ export const fxRate = sqliteTable(
   (t) => [primaryKey({ columns: [t.currency, t.date] })],
 );
 
-// One pipeline run over a month. v0 stores the derived result as JSON for the pages;
-// Day 3 adds per-item tables for decisions.
+// One pipeline run over a month. `result_json` holds what was read (a MonthSnapshot, version 2):
+// the input, extractions, categories, and FX rates. Statuses are never stored; they are derived
+// from this plus the decisions below each time the month is shown.
 export const monthRun = sqliteTable("month_run", {
   id: text("id").primaryKey(),
   monthKey: text("month_key").notNull(),
@@ -39,4 +40,29 @@ export const monthRun = sqliteTable("month_run", {
   startedAt: text("started_at").notNull(),
   finishedAt: text("finished_at").notNull(),
   resultJson: text("result_json").notNull(),
+});
+
+// Every human action, one immutable row (04, Decision). Rows are only ever inserted.
+export const decision = sqliteTable("decision", {
+  seq: integer("seq").primaryKey({ autoIncrement: true }),
+  id: text("id").notNull().unique(),
+  runId: text("run_id")
+    .notNull()
+    .references(() => monthRun.id),
+  subjectId: text("subject_id").notNull(),
+  actorId: text("actor_id").notNull(),
+  action: text("action").notNull(),
+  beforeJson: text("before_json").notNull(),
+  afterJson: text("after_json").notNull(),
+  reason: text("reason"),
+  at: text("at").notNull(),
+});
+
+// R-CAT-4: "Always use this category for <vendor>". Applied before config/categories.json on
+// the next run; the decision that created it is the audit record.
+export const vendorRule = sqliteTable("vendor_rule", {
+  keyword: text("keyword").primaryKey(),
+  category: text("category").notNull(),
+  decisionId: text("decision_id").notNull(),
+  createdAt: text("created_at").notNull(),
 });

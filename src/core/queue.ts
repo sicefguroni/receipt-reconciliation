@@ -33,14 +33,19 @@ const MISSING_INFO: readonly ExceptionCode[] = [
 ];
 const MATCH_DECISION: readonly ExceptionCode[] = ["AMBIGUOUS_MATCH", "NO_PAYMENT_FOUND"];
 
-/** R-QUE: an item belongs to the first group whose condition it meets. */
+/**
+ * R-QUE: an item belongs to the first group whose condition it meets. `exceptions` are the
+ * item's open ones: an amount difference that has been signed off (R-AMT-4) is no longer open,
+ * so the item moves on to group 5 to be approved, one at a time (R-APR-3 keeps it out of bulk).
+ */
 export function queueGroup(item: QueueItem): QueueGroupNumber {
   if (item.kind === "no_receipt_line") return 4;
   const has = (codes: readonly ExceptionCode[]) => item.exceptions.some((c) => codes.includes(c));
   if (has(INTAKE)) return 1;
   if (item.exceptions.includes("AMOUNT_DIFFERS_OVER_THRESHOLD")) return 2;
   if (has(MISSING_INFO)) return 3;
-  if (has(MATCH_DECISION) || item.reimbursement || item.status !== "matched") return 4;
+  if (has(MATCH_DECISION) || item.reimbursement) return 4;
+  if (item.status === "ambiguous" || item.status === "unmatched") return 4;
   return 5;
 }
 

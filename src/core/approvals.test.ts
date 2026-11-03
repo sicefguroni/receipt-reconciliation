@@ -52,6 +52,16 @@ describe("R-APR approval rules", () => {
     });
   });
 
+  it("R-APR-2 (added 2026-11-03): an item with no category at all cannot be approved", () => {
+    const none = { ...clean, exceptions: ["UNKNOWN_CATEGORY" as const], category: null };
+    expect(checkApproval(none, "REVIEWER")).toEqual({
+      allowed: false,
+      code: "UNKNOWN_CATEGORY",
+      reason: "Choose a category first.",
+    });
+    expect(checkApproval({ ...none, category: "Software" }, "REVIEWER").allowed).toBe(true);
+  });
+
   it("R-APR-3: bulk approve covers only matched items with no exceptions", () => {
     expect(isBulkApprovable(clean)).toBe(true);
     expect(isBulkApprovable({ status: "matched", exceptions: ["LOW_CONFIDENCE_FIELD"] })).toBe(

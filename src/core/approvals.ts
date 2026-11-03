@@ -20,6 +20,8 @@ export interface ApprovalSubject {
   exceptions: readonly ExceptionCode[];
   /** R-AMT-4: the reviewer's reason for signing off an over-threshold difference. */
   signOffReason?: string | null;
+  /** R-APR-2 (added 2026-11-03): null means no category at all, not even a suggestion. */
+  category?: string | null;
 }
 
 export type ApprovalCheck =
@@ -55,6 +57,11 @@ export function checkApproval(subject: ApprovalSubject, actorId: string): Approv
       continue;
     }
     return { allowed: false, code, reason: BLOCK_REASONS[code] ?? "Resolve the flag first." };
+  }
+  // A flagged suggestion can be approved (it is the reviewer's call), but an item with no
+  // category at all would enter the ledger uncategorised.
+  if (subject.category === null) {
+    return { allowed: false, code: "UNKNOWN_CATEGORY", reason: "Choose a category first." };
   }
   return { allowed: true };
 }

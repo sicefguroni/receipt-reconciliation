@@ -51,6 +51,11 @@ describe("R-QUE review queue order", () => {
     expect(queueGroup(item("a"))).toBe(5);
   });
 
+  it("R-QUE: a signed-off amount difference moves to group 5 to be approved (R-AMT-4)", () => {
+    // Its only open exception was signed off, so it no longer waits for a decision.
+    expect(queueGroup(item("a", [], { status: "amount_differs" }))).toBe(5);
+  });
+
   it("R-QUE: an item with several flags goes to its earliest group", () => {
     expect(queueGroup(item("a", ["MISSING_PURPOSE", "DUPLICATE"]))).toBe(1);
   });

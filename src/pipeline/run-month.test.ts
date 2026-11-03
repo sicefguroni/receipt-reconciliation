@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { parseFormatA } from "@/adapters/statement/format-a";
+import { readStatement } from "@/adapters/statement/read-statement";
 import { parseEnv } from "@/config/env";
 import type { CategoryConfig } from "@/core/categories";
 import { GroundTruth, Intake } from "../../scripts/dataset/schema";
@@ -27,7 +27,7 @@ async function runOracleMonth() {
     {
       monthKey: intake.monthKey,
       receipts: intake.receipts,
-      statementLines: parseFormatA(read("statement-format-a.csv")),
+      statementLines: readStatement(read("statement-format-a.csv")).lines,
       readFile: async () => Buffer.from(""),
     },
     {
