@@ -1,6 +1,6 @@
 import { isValidSignOffReason } from "@/core/amounts";
 import { checkApproval } from "@/core/approvals";
-import { isCredit } from "@/core/matching";
+import { clearMismatch, combinedPayment, isCredit } from "@/core/matching";
 import { reasonProblem } from "@/core/reasons";
 import {
   type CorrectableField,
@@ -133,6 +133,12 @@ export function checkDecision(
     decision: { subjectId: request.subjectId, actorId, reason, before, ...after },
   });
   // Day 4 (C1): a reason must be specific, not "Good" (src/core/reasons.ts).
+  // R-MAT-11: a pairing that is clearly someone else's payment is refused, from any screen.
+  const mismatch = (r: ReceiptResult, lineIds: string[]): string | null => {
+    const lines = lineIds.flatMap((id) => month.statementLines.find((l) => l.id === id) ?? []);
+    if (!r.matchInput || lines.length !== lineIds.length) return null;
+    return clearMismatch(r.matchInput, combinedPayment(lines), config.matchPolicy);
+  };
   const needReason = (what: string) => {
     const problem = reasonProblem(reason);
     return problem ? `Give a reason ${what}: ${problem}.` : null;
@@ -154,6 +160,8 @@ export function checkDecision(
       if (r.outcome !== "open") return fail(`Receipt ${r.id} is ${OUTCOME_TEXT[r.outcome]}.`);
       if (r.match === null)
         return fail(`Receipt ${r.id} must be readable before it can be linked.`);
+      const problem = mismatch(r, [listed.line.id]);
+      if (problem) return fail(problem);
       return record(change, { receiptLine: r.match.statementLineId, status: r.state.status });
     }
     if (change.action === "record_substitute") {
@@ -220,7 +228,7 @@ export function checkDecision(
             : needReason("for reimbursing with no statement line");
         if (problem) return fail(problem);
       } else {
-        const problem = lineAvailable(month, lineId, r.id);
+        const problem = lineAvailable(month, lineId, r.id) ?? mismatch(r, [lineId]);
         if (problem) return fail(problem);
       }
       return record(change, { statementLineId: r.match.statementLineId, status: r.state.status });
@@ -238,6 +246,8 @@ export function checkDecision(
         const problem = lineAvailable(month, lineId, r.id);
         if (problem) return fail(problem);
       }
+      const together = mismatch(r, ids);
+      if (together) return fail(together);
       return record(change, {
         statementLineId: r.match.statementLineId,
         extraLineIds: r.match.extraLineIds ?? [],

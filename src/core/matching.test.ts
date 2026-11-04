@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   applyChosenLine,
   applyChosenLines,
+  clearMismatch,
   combinedPayment,
   inMatchWindow,
   linesWithoutReceipt,
@@ -183,6 +184,27 @@ describe("R-MAT-10 split payments", () => {
     expect(applyChosenLines(receipt(), [line()], policy)).toEqual(
       applyChosenLine(receipt(), line(), policy),
     );
+  });
+});
+
+describe("R-MAT-11 clear mismatch (Day 4, P1)", () => {
+  const cafe = receipt(); // Sample Café, $18.50, 2 Oct, company card
+  const otherShop = line({ description: "METRO PETROL CITY", amountAud: 8 }); // 57% less
+
+  it("another vendor, not suggested, more than half off: refused, saying why", () => {
+    expect(clearMismatch(cafe, otherShop, policy)).toBe(
+      "L1 (METRO PETROL CITY, $8.00) does not look like this receipt's payment: a different vendor, 57% less, and not one of the suggested payments. Choose another payment, reimburse, or remove the receipt.",
+    );
+  });
+
+  it("the same vendor far off (a deposit, say) is not refused: the pairing check asks instead", () => {
+    const deposit = line({ date: "2026-10-20", amountAud: 5 }); // SQ *SAMPLE CAFE, 73% less
+    expect(clearMismatch(cafe, deposit, policy)).toBeNull();
+  });
+
+  it("a suggested payment is never refused, even under a looser policy the finance lead sets", () => {
+    const loose = { ...policy, pctThreshold: 60 }; // 57% is now within policy: +30, a candidate
+    expect(clearMismatch(cafe, otherShop, loose)).toBeNull();
   });
 });
 

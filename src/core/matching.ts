@@ -404,6 +404,37 @@ export function pairingConcerns(
   return concerns;
 }
 
+/** R-MAT-11: how far off an amount may be, as a share of the receipt, before a pairing that
+ * is also not suggested and from another vendor is refused. */
+export const CLEAR_MISMATCH_SHARE = 0.5;
+
+/**
+ * R-MAT-11 (Day 4, P1; candidate's ruling): a person may not pair a receipt with a payment that
+ * is clearly someone else's: not one of the suggested payments, a vendor that does not look
+ * alike, and an amount more than half off. Both cold runs did exactly this and signed it off
+ * (C1: a $14.70 coffee with a $75.20 petrol charge; P1, with the pairing check on screen: a
+ * $268 hotel with a $10 card fee). Returns the refusal for the person, or null.
+ */
+export function clearMismatch(
+  receipt: MatchReceipt,
+  line: StatementLine,
+  policy: AmountPolicy,
+): string | null {
+  const candidate = scorePair(receipt, line, policy);
+  if (candidate.score >= MIN_CANDIDATE_SCORE) return null;
+  if (!receipt.vendor || vendorSimilarity(receipt.vendor, line.description) >= 0.3) return null;
+  const amount = candidate.amount;
+  if (!amount || amount.receiptAmount === 0) return null;
+  const share = Math.abs(amount.difference) / Math.abs(amount.receiptAmount);
+  if (share <= CLEAR_MISMATCH_SHARE) return null;
+  const pct = Math.round(share * 100);
+  return (
+    `${line.id} (${line.description}, ${formatAud(line.amountAud)}) does not look like this receipt's payment: ` +
+    `a different vendor, ${pct}% ${amount.difference > 0 ? "more" : "less"}, and not one of the suggested payments. ` +
+    "Choose another payment, reimburse, or remove the receipt."
+  );
+}
+
 /** R-MAT-5: paid if and only if matched or amount_differs, with a statement line. */
 export function paymentStatus(
   status: MatchStatus,

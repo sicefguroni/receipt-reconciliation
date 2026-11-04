@@ -312,12 +312,15 @@ describe("R-CUR-3 during an FX outage (stress S10)", () => {
     reconcileMonth({ ...snapshot, rates: [], statementLines: lines }, decisions, config);
   const r02Line = () => receipt(month(), "R02").match?.statementLineId ?? "";
   /** R02's line as a bank that shows only the AUD charge would export it. */
-  const audOnly = () =>
-    snapshot.statementLines.map((l) => {
-      if (l.id !== r02Line()) return l;
+  // r02Line() reconciles the whole month, so it is called once, not once per line.
+  const audOnly = () => {
+    const lineId = r02Line();
+    return snapshot.statementLines.map((l) => {
+      if (l.id !== lineId) return l;
       const { originalAmount: _dropped, ...rest } = l;
       return rest;
     });
+  };
 
   it("a USD receipt paid at the bank's AUD charge needs no rate: not flagged, not 'excluded'", () => {
     const m = outage();
@@ -350,7 +353,9 @@ describe("R-CUR-3 during an FX outage (stress S10)", () => {
   });
 });
 
-describe("closing the October month", () => {
+// Each test replays about 50 decisions and derives the whole month again after every one:
+// about 1 s alone, but up to 10 s with the full suite running in parallel, past the 5 s default.
+describe("closing the October month", { timeout: 30_000 }, () => {
   it("every item can be resolved; the closed ledger equals the ground truth", () => {
     const { m, decisions } = closeMonth();
     expect(m.closed).toBe(true);

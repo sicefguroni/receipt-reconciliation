@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
-    "includes": ["**", "!docs", "!fixtures", "!eval-results", "!drizzle", "!**/*.md"]
+    "includes": ["**", "!docs", "!fixtures", "!eval-results", "!drizzle", "!**/*.md", "!.claude"]
   },
   "formatter": {
     "enabled": true,

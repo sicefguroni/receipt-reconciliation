@@ -213,6 +213,35 @@ describe("Day 4 (C1): pairing a receipt with an unrelated payment", () => {
   });
 });
 
+describe("R-MAT-11: a pairing that is clearly someone else's payment is refused (Day 4, P1)", () => {
+  const ask = (subjectId: string, change: Parameters<typeof checkDecision>[1]["change"]) =>
+    message(checkDecision(month(), { subjectId, change }, REVIEWER, config));
+  const refusal =
+    "L44 (MONTHLY CARD FEE, $10.00) does not look like this receipt's payment: a different vendor, 96% less, and not one of the suggested payments. Choose another payment, reimburse, or remove the receipt.";
+
+  it("P1's pairing, R20 ($268 hotel) with L44 ($10 card fee), is refused with what to do", () => {
+    expect(ask("R20", { action: "choose_match", after: { statementLineId: "L44" } })).toBe(refusal);
+  });
+
+  it("the same from the line's side, and inside a split", () => {
+    expect(ask("L44", { action: "link_receipt", after: { receiptId: "R20" } })).toBe(refusal);
+    expect(
+      ask("R20", { action: "split_payment", after: { statementLineIds: ["L44", "L02"] } }),
+    ).toMatch(/does not look like this receipt's payment/);
+  });
+
+  it("C1's pairing, R13 with the petrol charge, is refused too", () => {
+    expect(ask("R13", { action: "choose_match", after: { statementLineId: "L26" } })).toContain(
+      "L26 (SAMPLE PETROL SAMPLE CITY, $75.20) does not look like this receipt's payment",
+    );
+  });
+
+  it("the key's own human choices still go through (TC04, TC11)", () => {
+    expect(ask("R04", { action: "choose_match", after: { statementLineId: "L16" } })).toBe("ok");
+    expect(ask("R15", { action: "choose_match", after: { statementLineId: "L22" } })).toBe("ok");
+  });
+});
+
 describe("decision checks", () => {
   it("R-APR-1: a submitter's own approval is refused with the reason", () => {
     const r = month().receipts.find((x) => x.id === "R01");

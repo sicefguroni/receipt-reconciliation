@@ -32,8 +32,33 @@ const GENERIC = new Set([
   "all",
   "very",
   "looks",
+  // P1 (Day 4): "This is good", "done with this", "proceed with this", "Correct for this" all
+  // passed. Filler and function words say nothing on their own either.
   "is",
   "it",
+  "this",
+  "that",
+  "a",
+  "an",
+  "the",
+  "with",
+  "for",
+  "to",
+  "of",
+  "and",
+  "be",
+  "been",
+  "was",
+  "has",
+  "proceed",
+  "continue",
+  "go",
+  "ahead",
+  "finished",
+  "complete",
+  "ready",
+  "sure",
+  "right",
 ]);
 
 /** Null when the reason is specific enough; otherwise what is wrong with it, for the person. */

@@ -8,6 +8,17 @@ describe("reasons a person gives (Day 4, C1)", () => {
     expect(reasonProblem("Approved")).toBe('saying what happened, not just "good" or "ok"');
   });
 
+  it("P1's filler reasons are refused (Day 4)", () => {
+    for (const filler of [
+      "This is good",
+      "done with this",
+      "proceed with this",
+      "Correct for this",
+    ]) {
+      expect(reasonProblem(filler)).toBe('saying what happened, not just "good" or "ok"');
+    }
+  });
+
   it("a reason that says something is accepted, whatever its case", () => {
     expect(isSpecificReason("Bank fee")).toBe(true);
     expect(isSpecificReason("Tip added at the table")).toBe(true);

@@ -71,6 +71,8 @@ export interface ReceiptResult {
   enteredByHand: boolean;
   /** R-MAT-6 (Day 4, C1): what does not fit between the receipt and its payment, if anything. */
   concerns: string[];
+  /** What matching used for this receipt (null when it was not readable): the decision checks judge a person's pairing on the same numbers (R-MAT-11). */
+  matchInput: MatchReceipt | null;
   signOff: Stamp | null;
   approval: Stamp | null;
 }
@@ -549,6 +551,7 @@ function derive(snapshot: MonthSnapshot, decisions: readonly Decision[], config:
       outcome,
       corrected: [...(e?.fields.keys() ?? [])],
       enteredByHand: d.enteredByHand,
+      matchInput: d.readable ? toMatchReceipt(d) : null,
       concerns:
         line && chosen
           ? pairingConcerns(
