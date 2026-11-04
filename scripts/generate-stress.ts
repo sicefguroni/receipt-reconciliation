@@ -140,9 +140,30 @@ async function main() {
     join(OUT, "statement-extra-header-iso-dates.csv"),
     withExtraHeaderAndIsoDates(toFormatA(october.statementLines)),
   );
+  // S11: the same month exported US-style, month first (10/02/2026 = 2 October).
+  writeFileSync(
+    join(OUT, "statement-us-dates.csv"),
+    toFormatA(october.statementLines).replace(/^(\d{2})\/(\d{2})\//gm, "$2/$1/"),
+  );
+  // For a person to try a split payment and a refund on the sample month (R-MAT-8, R-MAT-10):
+  // R01's $18.50 charged as $10.00 and $8.50, and $4.50 of it refunded two days later.
+  writeFileSync(
+    join(OUT, "statement-october-split-and-refund.csv"),
+    toFormatA(
+      october.statementLines.flatMap((l) =>
+        l.receiptId === "R01"
+          ? [
+              { ...l, amountAud: 10 },
+              { ...l, amountAud: 8.5 },
+              { ...l, date: "2026-10-04", amountAud: -4.5, receiptId: null },
+            ]
+          : [l],
+      ),
+    ),
+  );
 
   console.log(
-    `Wrote ${intake.length} stress receipts, ${STRESS_LINES.length} statement lines, and the extra-header statement.`,
+    `Wrote ${intake.length} stress receipts, ${STRESS_LINES.length} statement lines, and four October statement variants.`,
   );
 }
 

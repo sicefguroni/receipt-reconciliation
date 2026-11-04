@@ -330,6 +330,34 @@ const expectedLines: StatementLine[] = truth.statementLines.map(
   });
 }
 
+{
+  const failures: string[] = [];
+  const observed: string[] = [];
+  try {
+    const read = readStatement(readFileSync(join(STRESS, "statement-us-dates.csv"), "utf8"));
+    observed.push(`read ${read.lines.length} lines as ${read.format}`);
+    if (JSON.stringify(read.lines) !== JSON.stringify(expectedLines)) {
+      failures.push("lines differ from the plain format-A statement (dates misread?)");
+    }
+    if (!read.format.includes("month first"))
+      failures.push("the month-first reading is not stated");
+  } catch (error) {
+    if (!(error instanceof StatementFormatError)) throw error;
+    observed.push(`rejected: "${error.problems.join(" ")}"`);
+    failures.push("a valid statement was rejected");
+  }
+  results.push({
+    id: "S11",
+    title: "Statement with US-style (month-first) dates",
+    stress: "a date in ambiguous 03/04/2026 format, in the statement rather than a receipt",
+    expect:
+      "The October statement written month first (10/02/2026 = 2 October) reads exactly as the plain file, and the page says the dates were read month first. Before Day 4's follow-up, every date with a day of 12 or under was misread silently.",
+    ...verdict(failures, failures.length === 0),
+    observed,
+    failures,
+  });
+}
+
 class DownFx implements FxClient {
   async getRates(): Promise<FxRate[]> {
     throw new FxError("FX_API_ERROR", "simulated outage");

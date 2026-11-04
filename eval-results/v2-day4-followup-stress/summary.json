@@ -1,0 +1,181 @@
+{
+  "label": "v2-day4-followup-stress",
+  "mode": "replay",
+  "ranAt": "2026-11-04T04:50:42.436Z",
+  "commit": "b29bd56",
+  "model": "gpt-5.6-sol",
+  "reasoningEffort": "low",
+  "passed": 11,
+  "of": 11,
+  "outcomes": {
+    "correct": 8,
+    "safe": 3,
+    "failure": 0
+  },
+  "tokens": {
+    "input": 7278,
+    "output": 1128,
+    "measuredFrom": "the recorded live run"
+  },
+  "cases": [
+    {
+      "id": "S01",
+      "title": "Unreadable photo, 400 px",
+      "stress": "an unreadable photo (heavy blur, 400 px)",
+      "expect": "Stopped at the quality gate (R-QUA-1) with the measured size and a fix; never sent to the model; not matched; out of totals.",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "read: nothing read",
+        "status unmatched; exceptions [UNREADABLE]; queue group 1",
+        "candidates: none",
+        "run log errors: quality QUALITY_GATE",
+        "note: Photo is 300 × 400. Retake it closer, or upload the original PDF."
+      ],
+      "failures": []
+    },
+    {
+      "id": "S02",
+      "title": "Heavy blur at full size",
+      "stress": "an unreadable photo (heavy blur), at a size that passes the gate",
+      "expect": "Either read correctly, or every doubtful field is flagged (LOW_CONFIDENCE_FIELD or UNREADABLE). Never a wrong total, date, or currency with high confidence that a person could bulk-approve.",
+      "pass": true,
+      "outcome": "safe",
+      "observed": [
+        "read: total null (0), date null (0), currency null (0); isReceipt true",
+        "status unmatched; exceptions [NO_PAYMENT_FOUND, LOW_CONFIDENCE_FIELD, UNKNOWN_CATEGORY]; queue group 3",
+        "candidates: none",
+        "run log errors: none"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S03",
+      "title": "Chat screenshot",
+      "stress": "a non-receipt image (a screenshot of a chat)",
+      "expect": "NOT_A_RECEIPT (R-QUA-4), in the first queue group; it must not take the $45.00 Sample Supplies line, which stays listed as a line with no receipt.",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "read: total null (0), date null (0), currency null (0); isReceipt false",
+        "status unmatched; exceptions [LOW_CONFIDENCE_FIELD, NOT_A_RECEIPT]; queue group 1",
+        "candidates: none",
+        "run log errors: none"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S04",
+      "title": "Bare $ with no currency clues",
+      "stress": "\"$\" with no currency clues",
+      "expect": "Currency flagged for a person (R-CUR-5: never assumed to be AUD without evidence), so it is not bulk-approvable. No address, ABN, GST, or currency code is printed.",
+      "pass": true,
+      "outcome": "safe",
+      "observed": [
+        "read: total 24 (1), date \"2026-10-09\" (0.75), currency null (0); isReceipt true",
+        "status ambiguous; exceptions [AMBIGUOUS_MATCH, LOW_CONFIDENCE_FIELD]; queue group 3",
+        "candidates: L06:50 L05:30 L03:20",
+        "run log errors: none"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S05",
+      "title": "Ambiguous numeric date from a US vendor",
+      "stress": "a date in ambiguous 03/04/2026 format",
+      "expect": "The printed 10/09/2026 is month-first (a US invoice: 9 October). Read as 2026-10-09, or the date flagged low-confidence. Never 2026-09-10 with high confidence.",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "read: total 29 (1), date \"2026-10-09\" (0.75), currency \"USD\" (1); isReceipt true",
+        "status matched → L07; exceptions [LOW_CONFIDENCE_FIELD]; queue group 3",
+        "candidates: L07:100 L05:60 L06:30",
+        "run log errors: none"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S06",
+      "title": "One receipt, two payments",
+      "stress": "a receipt covering two items paid in two transactions",
+      "expect": "Never auto-paired with either part payment (each is far from $620). It goes to a person, and both lines stay visible, so the $620 is not lost or counted twice.",
+      "pass": true,
+      "outcome": "safe",
+      "observed": [
+        "read: total 620 (1), date \"2026-10-03\" (1), currency \"AUD\" (1); isReceipt true",
+        "status ambiguous; exceptions [AMBIGUOUS_MATCH, UNKNOWN_CATEGORY]; queue group 3",
+        "candidates: L02:50 L01:40 L03:20",
+        "run log errors: none"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S07",
+      "title": "Purchase later refunded",
+      "stress": "a refund (a negative statement line)",
+      "expect": "Matched to the $64.00 purchase. The −$64.00 refund three days later is never offered as a payment for any receipt; it is listed as a credit for a person to record.",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "read: total 64 (1), date \"2026-10-12\" (1), currency \"AUD\" (0.98); isReceipt true",
+        "status matched → L08; exceptions []; queue group 5",
+        "candidates: L08:100 L06:20 L04:10",
+        "run log errors: none"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S08",
+      "title": "Only the refund is on the statement",
+      "stress": "a refund (a negative statement line), with no purchase line",
+      "expect": "The purchase is not on this statement, only a −$38.50 refund two days later. NO_PAYMENT_FOUND; the refund is never offered as the payment (choosing it would put a negative amount in the ledger as if paid).",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "read: total 38.5 (1), date \"2026-10-20\" (1), currency \"AUD\" (0.99); isReceipt true",
+        "status unmatched; exceptions [NO_PAYMENT_FOUND]; queue group 4",
+        "candidates: none",
+        "run log errors: none"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S09",
+      "title": "Statement with an extra header row and ISO dates",
+      "stress": "a statement CSV with an extra header row and a different date format",
+      "expect": "The October statement (44 lines) read exactly as the plain format-A file reads it.",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "read 44 lines as Format A (one signed Amount column)"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S11",
+      "title": "Statement with US-style (month-first) dates",
+      "stress": "a date in ambiguous 03/04/2026 format, in the statement rather than a receipt",
+      "expect": "The October statement written month first (10/02/2026 = 2 October) reads exactly as the plain file, and the page says the dates were read month first. Before Day 4's follow-up, every date with a day of 12 or under was misread silently.",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "read 44 lines as Format A (one signed Amount column), dates read month first (10/02/2026 = 2 October)"
+      ],
+      "failures": []
+    },
+    {
+      "id": "S10",
+      "title": "FX API unreachable",
+      "stress": "the FX API being unreachable (simulated)",
+      "expect": "No rate of 1, ever. With a cold cache: each foreign receipt is paid at the bank's AUD charge or flagged FX_RATE_UNAVAILABLE and left out of totals with the amount shown. With a warm cache: the same month as normal.",
+      "pass": true,
+      "outcome": "correct",
+      "observed": [
+        "foreign receipts: 6; cold cache: 0 flagged FX_RATE_UNAVAILABLE, of which 0 already paid at the bank's AUD charge (none)",
+        "ledger total: normal 4811.26, cold 4811.26, warm 4811.26; excluded (cold): []",
+        "human touches over 40 receipts: normal 9, cold 9, warm 9"
+      ],
+      "failures": []
+    }
+  ]
+}
