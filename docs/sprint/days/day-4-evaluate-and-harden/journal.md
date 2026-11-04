@@ -77,6 +77,26 @@ Proxy only, straight after P1, on this build. Protocol and blank record in `feed
 
 ---
 
+## Follow-up: the open items (2026-11-04)
+
+**Goal.** Close what Day 4 left open that did not need a person: see the refund wording in a browser, stop misreading month-first statement dates, and give S06 (one receipt, two payments) a real resolution.
+
+**Built.**
+
+- Statement dates: the slash order is decided from the whole file (a number over 12 proves it; both proofs refused; otherwise the shorter period; day first on a tie), and a month-first reading is named on the review page. Stress case S11.
+- **R-MAT-10** split payment: a person ticks the lines that together paid a receipt; the amount rules apply to the sum; the ledger amount is the sum; a later claim on any line undoes the split; approval keeps it; the pack lists "L03 + L04".
+- A statement fixture for the sample month with a split payment and a refund, so a person (or a script) can try both.
+
+**What went wrong.**
+
+- A half-written shell command meant for the S11 "before" measurement ran and put the pre-fix reader into the working tree. Caught from the tool's warning, restored from `HEAD`, nothing lost; measured afterwards from a temporary copy.
+- A probe reported one wrong date after the fix; it was the probe matching TC11's twin line. Position by position: 0 wrong.
+- The browser screenshots showed two problems no test had: "$-4.50", and a split form listing 13 lines under every receipt. Both fixed and re-checked.
+
+**Verified.** `pnpm test` 290/290; 11 mutations caught; stress 11/11 keyless; on a production build 16/16 browser checks, including the ledger moving by exactly +18.50 (split) and −4.50 (credit). Before/after for S11: the old reader rejected the full US-style month and read an all-ambiguous excerpt with 15 of 18 dates wrong; the new one reads both exactly.
+
+---
+
 ## Day 4 summary
 
 - Exit criterion "`EVALUATION.md` has full results (TC table, holdout and full, B0/B1, latency, cost, human touches)": **met**, except time to close, which needs a person.

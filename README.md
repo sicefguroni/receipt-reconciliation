@@ -43,6 +43,7 @@ The progress bar shows how many items are done. When it reaches the end, the pac
 | No exchange rate available | A foreign receipt has no rate for its date, so it is left out of the totals. Its amount and currency are listed in the pack. | Nothing is guessed; a rate of 1 is never used. It can still be approved. |
 | More than one payment could match | Two or more statement lines fit about equally well. | Under *Choose the payment*, pick the right one and press **Use this payment**. |
 | No matching payment on the statement | Nothing on the statement fits. | Choose a payment from the list, choose *Paid personally: reimburse* (with a reason), or remove the receipt until the payment appears. |
+| Paid in two parts | A deposit and a balance, for example: no single payment fits, but two together do. | Under *Choose the payment*, open **Paid in more than one payment?**, tick each payment, and press **Use these payments together**. Their total is compared with the receipt. |
 | Paid personally (no flag) | A personal-card receipt with no statement line. | Approve it to reimburse the submitter. |
 | Payment with no receipt | A statement line that no receipt matched. | **Link receipt**, **Record a substitute** (a real payment whose receipt is missing; choose a category and give a reason), or **Not an expense** with a reason (a bank fee, for example). If the row says it *could be the payment for* a receipt, link it. |
 | Refund or credit | A statement line where money came back to the company (a negative amount). It is never matched to a receipt. | **Record the credit** against the category it reduces, with a reason (it lowers that category's total), or **Not an expense** with a reason. |
@@ -78,7 +79,7 @@ Messages say what happened and what to do. The **Runs** page shows each step of 
 
 | Message or code | What to do |
 |---|---|
-| "The statement's columns were not recognised" (`STATEMENT_FORMAT`) | Export the statement again as CSV in one of the layouts the message lists. A title row above the column names, and dates written like 2026-10-02, are fine. |
+| "The statement's columns were not recognised" (`STATEMENT_FORMAT`) | Export the statement again as CSV in one of the layouts the message lists. A title row above the column names, and dates written like 2026-10-02, are fine. Dates written month first (10/02/2026 for 2 October) are recognised, and the review page says so. |
 | "This app is in replay mode…" (`RECORDING_MISSING`) | Replay mode can only read the sample receipts. Switch to live mode to read others. |
 | "The statement has no transactions in…" | Check the month you picked, or that you chose the right file. |
 | A run with `FX_API_ERROR` | The exchange-rate service was down. Stored rates are used where available; otherwise the receipt is flagged *No exchange rate available*, but only if its AUD amount needs a rate: a receipt matched to a payment that shows the foreign amount uses the AUD the bank charged and is not flagged. |

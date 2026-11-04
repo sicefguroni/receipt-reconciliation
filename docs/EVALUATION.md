@@ -12,7 +12,7 @@ How the system is measured, what counts as passing, and what the measurements sa
 | Wrong auto-match rate | **0/33 (0%)** | **0/14 (0%)** | 0% on holdout ✔ |
 | Exception recall (amount, purpose, duplicate) | 5/5 (100%) | 3/3 (100%) | 100% on full ✔ |
 | Extraction: total / currency | 40/40, 40/40 | 16/16, 16/16 | ≥ 95% on holdout ✔ |
-| Stress cases (safe failure) | **10/10** (7 correct, 3 safe) | — | no target; was 6/10 |
+| Stress cases (safe failure) | **11/11** (8 correct, 3 safe) | — | no target; was 6/10 (S11 added 2026-11-04) |
 | Same 20 receipts as B1 | 11/11 test cases; 0/14 wrong matches (B1: 3/19) | — | — |
 
 All four v1 criteria are met. That is on synthetic data; the stress set is where the system was broken, and four of its ten cases failed before the Day 4 fixes.
@@ -166,8 +166,11 @@ The tuning-split check for F5 and F6 (`v2-day4-tuning-before-scoring` → `-afte
 | S08 | Only the refund on the statement | **failure**: the refund was the top candidate | correct: `NO_PAYMENT_FOUND` |
 | S09 | Statement with a title row and ISO dates | **failure**: rejected | correct: 44 lines identical |
 | S10 | FX API unreachable | safe, but over-flagged and a contradictory summary | correct |
+| S11 | Statement with US-style (month-first) dates *(added 2026-11-04)* | **failure**: full month rejected; a 1–12 October excerpt read with 15 of 18 dates wrong, silently (measured on the Day 4 reader) | correct: 44 lines identical, "dates read month first" shown |
 
-Every failure was in the rules or data contracts, not in perception: on blur, a bare "$", and an ambiguous date, the model said it was unsure or got it right. The stress run was recorded live twice (`v2-day4-pre-stress`, `-2`; at most USD 0.043 and 0.045, 6,022–6,023 input tokens each) with the same outcomes; two date confidences moved between runs (0.99 → 0.75, 0.95 → 0.75), so one live run can change the human-touch count by one or two. S06 is *safe* but awkward to resolve: a receipt can be paired with one line only, so the reviewer must choose one part payment (then sign off the difference, R-AMT-4) and record the other as a substitute. A "split across payments" action (R-MAT-4 allows a human split) is not built.
+Every failure was in the rules or data contracts, not in perception: on blur, a bare "$", and an ambiguous date, the model said it was unsure or got it right. The stress run was recorded live twice (`v2-day4-pre-stress`, `-2`; at most USD 0.043 and 0.045, 6,022–6,023 input tokens each) with the same outcomes; two date confidences moved between runs (0.99 → 0.75, 0.95 → 0.75), so one live run can change the human-touch count by one or two. S06 is *safe*, and since 2026-11-04 also resolvable: R-MAT-10 lets a person pay one receipt from several lines, compared on their sum. Before that, the reviewer had to sign off a false difference against one part and record the other as a substitute. The *after* column for S01–S10 is `v2-day4-post-stress`; S11 is `v2-day4-followup-stress`.
+
+**Browser check (2026-11-04).** The refund wording and the split payment were checked on a production build with `fixtures/stress/statement-october-split-and-refund.csv`: 16 of 16 checks pass (details in `failures.md`, "Follow-up"). The screenshots led to two fixes no test had caught: negative amounts printed as "$-4.50", and a split form that listed every free line under each receipt.
 
 ### Oracle: the rules alone
 
@@ -215,7 +218,6 @@ Found on Day 2 and left alone until Day 4, because `06` reserves threshold and s
 | Time to close with the system | No Accounting user; the proxy session and the builder cold run have not happened yet | `docs/sprint/days/day-3-working-core/first-run-observations.md` (protocol and blank record), stopwatch |
 | B0 accuracy | Accounting user unavailable; candidate has seen the answer key | A person who has not seen the repo runs `fixtures/dataset/baseline/b0-kit/` |
 | Cost at cached-input rates | The run log does not split cached from uncached input | Record `input_tokens_details.cached_tokens` per call |
-| US-style (month-first) statement dates | Not in the stress set; the reader assumes day-first slashes (F3 residual risk) | Add a month-first statement to `fixtures/stress/` |
 | A small screenshot of a real receipt | S03 is a chat, not a receipt; the R-QUA-1 change relies on the model flagging what it cannot read (F2 residual risk) | Add a small receipt PNG to the stress set, record live |
 
 ## How to run

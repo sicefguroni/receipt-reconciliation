@@ -45,7 +45,7 @@ A stress case passes when the system **fails safely**: the right answer, or a pe
 - **Root cause (data contract):** the reader took row 1 as the header, and each format accepted one date style only. Both are common in real bank exports. The month could not start at all, so this would have stopped the Accounting user at the first step.
 - **Fix:** the header is the first of the opening 5 rows that a supported format recognises; ISO dates are accepted in every format (they cannot be misread); row numbers in error messages still count the title and blank rows, as a spreadsheet shows them. Commit `2fb710a`. One existing test had encoded the old behaviour (an ISO date in format B was expected to fail) and was changed to a date that is still wrong for that format. 3 of 3 mutations caught.
 - **Regression:** S09 FAIL → PASS, lines identical (`v2-day4-post-stress`). Reader tests 12 → 14.
-- **Residual risk:** slash dates are still read day-first. A US-style export (`10/02/2026` meaning 2 October) would be rejected when the day is over 12, but **misread silently when it is 12 or under**. Not tested; detecting the order from the whole file is the fix.
+- **Residual risk:** slash dates are still read day-first. A US-style export (`10/02/2026` meaning 2 October) would be rejected when the day is over 12, but **misread silently when it is 12 or under**. Not tested; detecting the order from the whole file is the fix. **Fixed 2026-11-04** (see the follow-up below).
 
 ### F4: An FX outage flagged receipts that did not need a rate, and the summary contradicted the ledger
 
@@ -78,6 +78,16 @@ A stress case passes when the system **fails safely**: the right answer, or a pe
 - **Residual risk:** a genuinely late posting (a hotel that charges at checkout a week later, a delayed settlement) becomes `NO_PAYMENT_FOUND`, with the line listed as "No receipt". It fails safe: the reviewer can link the two by hand.
 
 ---
+
+## Follow-up on the open items (2026-11-04)
+
+Three items left open on Day 4 were closed the next morning. Commits `fe7731d`, `b29bd56`, `2bb74a5`, `f1df119`.
+
+**Month-first statement dates (F3 residual).** New stress case **S11**: the October statement written US-style (`10/02/2026` = 2 October). Measured on the Day 4 reader (`f373625`): the full month was *rejected* at "10/13/2026"; an excerpt of 1–12 October was **read with 15 of 18 dates wrong, silently** (2 October became 10 February). The order is now decided from the whole file: a first number over 12 proves day first, a second number over 12 proves month first, both together are refused; when every date fits both ways, the reading that keeps the statement within the shorter period wins, and day first wins a tie. The review page states "dates read month first". After: full month and excerpt both 0 wrong; S11 PASS (`v2-day4-followup-stress`, 11/11). 3 tests, 4 mutations caught. *Residual:* a one-line file such as `05/06/2026` is read day first (no evidence either way).
+
+**Split payment (S06 residual).** New rule **R-MAT-10**: a person can say one receipt was paid by two or more lines; the amount rules apply to the sum, the ledger amount is the sum of the AUD charged, every line leaves the no-receipt list, credits are refused, and a later claim on any line undoes the whole split (R-MAT-4). Before: S06 could only be closed by signing off a false difference against one part and recording the other as a substitute. 8 tests (4 core, 4 at the decision boundary), 7 mutations caught.
+
+**Browser check of the refund wording and the split** on a production build (`pnpm build && next start`), using `fixtures/stress/statement-october-split-and-refund.csv` (R01's $18.50 charged as $10.00 + $8.50, and $4.50 refunded): **16 of 16 checks pass**. The refund row reads "A refund or credit, not a payment", offers no "Link a receipt", and is never among R01's payments to choose; the split brings the ledger to the normal October total (4,792.76 → 4,811.26); recording the credit lowers it by 4.50; the ledger CSV lists "L03 + L04"; no sideways scroll at 390 px. The screenshots found two problems no test had: refunds printed as "$-4.50" (now "−$4.50"), and the split form listing all 13 free lines under every receipt that needed a match (now a closed "Paid in more than one payment?" section).
 
 ## Also fixed while investigating
 
