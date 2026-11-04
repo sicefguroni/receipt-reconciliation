@@ -9,6 +9,8 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
+**Day 4 complete** (all three exit criteria met). P1 (naive proxy, business management, 1 year) closed the month in 9 min, assisted once, 39/40, ledger $10.00 over; its one miss was again a person's pairing, made with the pairing check on screen. Feedback recorded word for word, and every point acted on or answered: R-MAT-11 refuses clear mismatches, filler reasons refused, only real candidates suggested, tabs switch on the page (inputs kept, about 60 ms), always-light card layout. `pnpm test` 307/307; browser 12/12. Next: Day 5.
+
 **C1 done, P1 pending** (Day 4). The builder cold run closed the month in about 8 min (under the ≤ 10 min target) with 3 wrong pairings the person made and signed off as "Good" (ledger $106.66 over); every automatic match was right. Changes made in response: a pairing guardrail (candidate's ruling: warn and show both; specific reasons), loading indicators, the queue as tabs, and an in-app guide rendered from the README. `pnpm test` 299/299; browser 15/15. **Still open, human only:** P1 + feedback.
 
 **Day 4 follow-up done** (2026-11-04). Day 4 merged to `main` and pushed (fast-forward). The three open items are closed: month-first statement dates are detected from the whole file (new stress case S11, 11/11); **R-MAT-10** lets a person pay one receipt from several lines; the refund wording and the split were checked in a browser on a production build, 16/16, which led to two display fixes. `pnpm test` 290/290. **Still open, human only:** P1 + feedback (one sitting) and C1.
@@ -55,7 +57,7 @@ Block-by-block detail: [`days/day-3-working-core/journal.md`](days/day-3-working
 - [x] Month-end pack: `Done` 2026-11-03. Paths: `src/pipeline/pack.ts`, `src/app/pack/[runId]/{page.tsx,ledger.csv,exceptions.csv}`. Validation: closed-month test (category and payment-source totals equal the ledger; no open exception rows); browser download of both CSVs with the substitute row and the sign-off reason.
 - [x] Run log and Runs page: `Done` 2026-11-03. Paths: `src/pipeline/run-log.ts` (`statement`, `run` stages; fixed error codes), `src/app/runs/**`. Validation: browser run shows a failed statement upload as `STATEMENT_FORMAT` and no receipt or statement text.
 - [x] README draft; run `v1-day3` live: `Done` 2026-11-03. Paths: `README.md`, `eval-results/v1-day3{,-replay}/`, `fixtures/recordings/**`, `docs/EVALUATION.md`. Validation: `pnpm eval -- --mode live --label v1-day3` 12/12, 0/33; `eval:compare -- v0-day2-live v1-day3` all same; replay with the key blanked identical.
-- [ ] First execution by the target user (human): `In Progress` Day 4. **C1 (builder) done:** about 8 min, 37/40 against the key, record and changes in `first-run-observations.md`. P1 (proxy) still to run. Was `Blocked` 2026-11-03. No Accounting user exists for this sprint. Candidate's ruling: a naive proxy (admin or bookkeeping background, never seen the repo) plus a builder cold run, each labelled. Resume condition: run both sessions with `days/day-3-working-core/first-run-observations.md` and fill in its record.
+- [x] First execution by the target user (human): `Done` Day 4, **by proxy** (no Accounting user). C1 (builder): about 8 min, 37/40. P1 (naive proxy): 9 min, assisted once, 39/40. Paths: `days/day-3-working-core/first-run-observations.md`. Validation: both ledgers scored by script against `ground-truth.json`. No Accounting user exists for this sprint. Candidate's ruling: a naive proxy (admin or bookkeeping background, never seen the repo) plus a builder cold run, each labelled. Resume condition: run both sessions with `days/day-3-working-core/first-run-observations.md` and fill in its record.
 
 ### Day 4: Evaluate, break, and harden
 
@@ -64,7 +66,7 @@ Block-by-block detail: [`days/day-4-evaluate-and-harden/journal.md`](days/day-4-
 - [x] `v2-day4-pre` full run and baseline comparison: `Done` 2026-11-03. Paths: `eval-results/v2-day4-pre{,-subset20}/`, `docs/EVALUATION.md`. Validation: `pnpm eval -- --mode replay --label v2-day4-pre` with the key blanked: 12/12, 0/33; `eval:compare -- v1-day3 v2-day4-pre` all same; subset 10/11 (TC10, the known date-gate finding).
 - [x] Stress cases; at least 3 failure analyses: `Done` 2026-11-03. Paths: `scripts/dataset/stress.ts`, `scripts/generate-stress.ts`, `scripts/eval-stress.ts`, `fixtures/stress/**`, `fixtures/recordings/**`, `eval-results/v2-day4-pre-stress{,-2}/`, `days/day-4-evaluate-and-harden/failures.md`. Validation: two live runs (candidate approved the spend), both 6/10; keyless replay of the second identical to it. Six analyses (F1–F6).
 - [x] Fixes; `v2-day4-post`; before/after comparison: `Done` 2026-11-03. Paths: `src/core/{matching,quality}.ts`, `src/pipeline/{reconcile,decisions,config}.ts`, `src/adapters/statement/{csv,read-statement}.ts`, `src/adapters/model/{openai,replay,recordings,types}.ts`, `src/app/labels.ts`, `src/app/review/[runId]/panels.tsx`, `src/config/env.ts`, `.env.example`, `05` (R-MAT-8, R-MAT-9, vendor wordmark, R-CUR-3, R-QUA-1), `README.md`, `eval-results/v2-day4-{post,post-subset20,post-stress,tuning-before-scoring,tuning-after-scoring}/`. Validation: `pnpm test` 24 files, 279 passed (261 at the start of the day); 16 single mutations of today's rules, all caught; typecheck, lint, `pnpm build` clean; `eval:compare -- v2-day4-pre v2-day4-post` no change; stress 10/10; subset 11/11. Not checked in a browser: the refund wording (the October sample has no credit line).
-- [ ] User feedback session and changes (human): `Blocked` 2026-11-03. No Accounting user. Candidate's ruling: the naive proxy answers the `06` questions straight after P1, in the same sitting, on the Day 4 build; labelled proxy feedback. Protocol and blank record: `days/day-4-evaluate-and-harden/feedback-session.md`. Resume condition: P1 has run.
+- [x] User feedback session and changes (human): `Done` Day 4, **proxy feedback**. Paths: `days/day-4-evaluate-and-harden/feedback-session.md` (answers word for word; five feedback → change pairs), `src/core/{matching,reasons}.ts`, `src/pipeline/{decisions,reconcile}.ts`, `src/app/review/[runId]/{page,panels,queue-tabs}.tsx`, `src/app/globals.css`, `05` (R-MAT-11, R-AMT-4). Validation: `pnpm test` 307/307; 7 mutations of R-MAT-11 and the reason rule caught; browser 12/12 on `next start`.
 
 - [x] Day 4 follow-up: refund wording in a browser, month-first statement dates, split payment: `Done` 2026-11-04. Paths: `src/adapters/statement/read-statement{,.test}.ts`, `src/core/{matching,schemas}.ts`, `src/core/matching.test.ts`, `src/pipeline/{reconcile,decisions,pack}.ts`, `src/pipeline/decisions.test.ts`, `src/app/{actions,labels}.ts`, `src/app/review/[runId]/panels.tsx`, `scripts/{generate-stress,eval-stress}.ts`, `fixtures/stress/statement-{us-dates,october-split-and-refund}.csv`, `eval-results/v2-day4-followup-stress/`, `05` (R-MAT-10), `README.md`. Validation: `pnpm test` 24 files, 290 passed; 11 single mutations (dates 4, split 7), all caught; typecheck, lint, build clean; stress 11/11 keyless; scripted browser run on `next start`, 16/16 checks.
 
@@ -165,6 +167,11 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | Day 4 | The queue groups as tabs (six, with counts), server-rendered links, opening on the first group with work | Keep stacked sections; collapsible sections | **Candidate's request.** Design-system guidance (GOV.UK, Parliament, Carbon) fits tabs to parallel groups worked one at a time, at most six; links keep it server-rendered and bookmarkable | Yes |
 | Day 4 | One client component (`SubmitButton`) for pending state | Keep zero client JavaScript (Day 3 design) | C1: "it feels hanging". `useFormStatus` is the smallest change; with JavaScript off it is a plain submit button | Yes |
 | Day 4 | The in-app guide renders the README's user sections with a small renderer (React elements, no HTML injection) | Hand-written guide page; a markdown dependency | One text for both, so they cannot drift; the README uses only a small markdown subset; no new dependency | Yes |
+| Day 4 | **R-MAT-11: refuse a pairing that is not suggested, from another vendor, and more than 50% off** | Warn only (C1's ruling); leave as is | **Candidate's ruling** after P1 pushed one through with the warning on screen. Same-vendor and suggested payments are never refused, so a deposit or a looser policy still works | Yes (`CLEAR_MISMATCH_SHARE`) |
+| Day 4 | Only candidates scoring 40+ are offered as suggestions; weak lines go to the full list | Keep weak lines marked "Weak match" | P1's screen offered a $10 card fee first for a $268 hotel; the refusal message's "not one of the suggested payments" also has to be true on screen | Yes |
+| Day 4 | **Tabs switch on the page** (all groups rendered once, show/hide), still `?tab=` links | Save drafts in the browser; warn before leaving | **Candidate's ruling.** Keeps typed input and makes switching instant; works without JavaScript | Yes |
+| Day 4 | **Always light, groups as cards** | Light palette only; a full design pass | **Candidate's ruling.** Answers P1 directly while keeping the layout and wording, so the two runs stay comparable | Yes |
+| Day 4 | Exclude `.claude/` (local Claude Code settings) from Biome | Reformat the file | It is the candidate's untracked local settings, not project code | Yes |
 
 ## AI corrections log
 
@@ -210,6 +217,11 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | Day 4 | Ran `pnpm seed` while the server held the database | Seed failed (the known Windows lock); nothing deleted | Agent stopped the server first, then seeded | n/a |
 | Day 4 | Suppression comments in `guide/markdown.tsx` inserted as JSX comments inside `.map()` callbacks | Invalid syntax: lint reported 22 errors and the file would not compile | Agent read the file and changed them to line comments; lint clean | this commit |
 | Day 4 | A regex edited through `sed` | The shell dropped the backslashes (`[\s\S]` became `[sS]`), failing the guide test | Agent fixed it with the editor tool | this commit |
+| Day 4 | The reason rule shipped for C1 | Accepted "This is good" and "done with this": "this" was not a generic word. P1 used exactly these | Agent read the P1 ledger's reasons, then added filler and function words with tests for P1's phrases | `b1887e2` |
+| Day 4 | Day 4's own FX-outage test helper | Reconciled the whole month 44 times; took 5.4 s and timed out under the full suite | Agent computed the line once (0.47 s) | `b1887e2` |
+| Day 4 | Inline `node -e` scripts and `sed` with `$` and backslashes | Failed or silently mangled the text three times today, against the agent's own saved memory | Agent switched to script files and the editor tool; a reusable `mutate.cjs` helper for mutation runs | n/a |
+| Day 4 | A docs script using JavaScript `replace` with text as the replacement | The text contained `$` followed by a backtick, which `replace` reads as "everything before the match": the journal and the TRACKER were pasted into themselves (journal 120 → 245 lines) | Agent noticed a repeated section, compared line counts with the last commit, restored the six uncommitted files, and re-ran with function replacements (literal text); committed files checked and unaffected | n/a (caught before commit) |
+| Day 4 | First R-MAT-11 test fixture | Used "SAMPLE PETROL" against "Sample Café": the shared word "sample" counts as alike, so the rule correctly did not fire. Also exposed a real limit, now in `05` | Agent used a vendor with no shared word and recorded the limit | `b1887e2` |
 
 ## Session history
 
@@ -291,6 +303,14 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: `pnpm test` 299/299; 6 guardrail mutations caught; typecheck, lint, build clean; scripted browser run on `next start`, 15/15.
 - Remaining: P1 + feedback (human).
 - Known risks: C1 is the builder; whether the guardrail changes what someone else does is for P1 to show.
+
+### Day 4: P1 and the changes it led to
+
+- Work done: P1 recorded from the observer's report and its ledger scored; feedback recorded word for word; R-MAT-11; filler reasons refused; only real candidates suggested; on-page tabs; always-light cards; a load-sensitive test made fast; month-close tests given an explicit timeout.
+- Decisions: 5 rows, from "R-MAT-11" to "Exclude `.claude/` from Biome".
+- Validation: `pnpm test` 307/307; 7 mutations caught; typecheck, lint, build clean; scripted browser run on `next start`, 12/12.
+- Remaining: Day 5 (final live run, handoff documents, demo).
+- Known risks: the guardrail changes are untested on a person; two businesses that share a common word are not refused by R-MAT-11; the substitutes in both runs had odd categories (pharmacy under Other, a cafe under Rent), which nothing checks.
 
 ### YYYY-MM-DD: Session title
 

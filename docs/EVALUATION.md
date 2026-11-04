@@ -190,7 +190,7 @@ B1 is one fixed ChatGPT prompt, run 3 times by the candidate, scored with the sa
 | `NO_PAYMENT_FOUND` recall | not measured | 0/1 in all 3 runs | 1/1 | 1/1 |
 | Test cases on the subset | — | — | 10/11 (TC10 fail) | **11/11** |
 | Human touches | 100% by definition | n/a | 8/20 (40%) | 8/20 (40%) |
-| Time to close | estimate only: 30 s–1 min per receipt (labelled estimate, see `baseline-b0.md`) | 5 min 35 s mean, full session (20 receipts) | not measured | **C1, builder, 40 receipts: about 8 min**, with 3 wrong pairings made by the person. P1 (proxy) not run yet |
+| Time to close | estimate only: 30 s–1 min per receipt (labelled estimate, see `baseline-b0.md`) | 5 min 35 s mean, full session (20 receipts) | not measured | **C1, builder, 40 receipts: about 8 min**, 3 wrong pairings made by the person. **P1, proxy (business management, 1 year), 9 min, assisted once**, 1 wrong pairing |
 
 Read with care:
 
@@ -203,6 +203,22 @@ Read with care:
 ## Builder cold run (C1, Day 4)
 
 The candidate closed the October month from a fresh clone in **about 8 minutes** (install 17.3 s). Scored against the key: 37 of 40 receipts right. The 3 misses were all pairings the person chose and signed off as "Good" (a $14.70 coffee with a $75.20 petrol charge, a $19.99 app with a $34.95 bookshop charge, a $268 hotel with a $31.20 taxi), so the ledger was **$106.66 over** the ground truth. Every automatic match was correct. This is the first evidence that the risk is not only the model or the rules: the human step needs a guardrail too. Changes made in response are in `sprint/days/day-3-working-core/first-run-observations.md`. One person, the builder, so it is a floor, not usability evidence; P1 is the test for someone else.
+
+## Proxy run (P1, Day 4)
+
+Someone with a year of business-management experience, new to the app, closed the October month in **9 minutes** with help once (when and what was not recorded), on commit `db8579c`. Scored against the key: **39 of 40**; the one miss was again a pairing the person chose: the $268 hotel (R20, no payment on the statement) with the $10 monthly card fee, signed off "This is good", **with the pairing check on screen**. Ledger **$10.00 over**. Every automatic match was correct.
+
+What the two runs show together:
+
+| | C1 (builder) | P1 (proxy) |
+|---|---|---|
+| Build | `4b537cd`, no pairing check | `db8579c`, pairing check, specific reasons |
+| Time to close (target ≤ 10 min) | about 8 min | 9 min, assisted once |
+| Receipts right | 37 / 40 | 39 / 40 |
+| Ledger vs ground truth | $106.66 over | $10.00 over |
+| Wrong automatic matches | 0 | 0 |
+
+The difference cannot be credited to the pairing check: different people, builds, and help. Both runs say the same thing: **the system's own matching was right every time; every wrong number came from a person pairing a receipt with an unrelated payment.** A screenshot of P1's screen showed why: for a receipt with no real candidate, the payment list filled up with weak lines, and the card fee was the first one offered. Changes made in response (R-MAT-11, only real candidates suggested, on-page tabs, light cards) are listed with their checks in `sprint/days/day-4-evaluate-and-harden/feedback-session.md`. Whether they change what a person does has not been measured: that needs another run.
 
 ## Known measurement artifact
 

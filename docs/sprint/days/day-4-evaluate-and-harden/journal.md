@@ -111,10 +111,24 @@ Proxy only, straight after P1, on this build. Protocol and blank record in `feed
 
 ---
 
+## P1, the proxy run, and the feedback
+
+**Measured.** Business management, 1 year, new to the app: the month closed in 9 minutes with help once. 39 of 40 receipts as the key expects; the miss was R20 (a $268 hotel with no payment) paired with the $10 card fee and signed off "This is good", with the pairing check on screen. Ledger $10.00 over. Answers recorded word for word in `feedback-session.md`.
+
+**What it means.** Two people, two builds, the same failure: the system's matching was right every time, and every wrong number was a person pairing a receipt with an unrelated payment. The screenshot of P1's screen showed the mechanism: with no real candidate, the payment list filled with weak lines, and the fee was first.
+
+**Changed** (candidate chose each): R-MAT-11 refuses clear mismatches; filler reasons refused; only real candidates suggested; tabs switch on the page and keep what was typed; always light, with groups as cards.
+
+**What went wrong.** The reason rule built for C1 let P1's "This is good" through. One of today's own tests took 5.4 s because it reconciled the month 44 times. Inline shell scripts mangled `$` and backslashes again, despite a saved note; switched to script files.
+
+**Verified.** 307/307 tests; 7 mutations caught; 12/12 browser checks, including P1's exact pairing refused on screen and a typed reason surviving a tab switch.
+
+---
+
 ## Day 4 summary
 
 - Exit criterion "`EVALUATION.md` has full results (TC table, holdout and full, B0/B1, latency, cost, human touches)": **met**, except time to close, which needs a person.
 - Exit criterion "at least 3 failure analyses with before/after numbers": **met** (six).
-- Exit criterion "user feedback recorded with the resulting changes": **open** (P1 + feedback).
+- Exit criterion "user feedback recorded with the resulting changes": **met**, by proxy (P1), with five feedback → change pairs.
 
 The fact that most shapes Day 5: on clean data the system and B1 look alike; under stress the differences were all in the deterministic layer, and that layer is now what makes the difference. What nobody has measured yet is a person closing the month.

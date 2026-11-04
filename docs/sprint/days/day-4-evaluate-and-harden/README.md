@@ -46,7 +46,7 @@ Saved elsewhere (paths fixed by the final layout in `08`):
 
 - [x] `docs/EVALUATION.md` has full results: TC table, metrics on holdout and full, B0/B1 comparison, latency, cost, human touches
 - [x] At least 3 failure analyses with before/after numbers
-- [ ] User feedback recorded with the resulting changes
+- [x] User feedback recorded with the resulting changes (proxy, P1)
 
 Track task status in [`TRACKER.md`](../../TRACKER.md) under "Day 4".
 

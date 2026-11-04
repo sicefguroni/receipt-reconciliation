@@ -58,6 +58,12 @@ Then, only if they did not come up on their own (mark each answer as **prompted*
 
 Fill after the session. Each change also goes in `TRACKER.md` with the feedback that caused it. "No change" is a valid decision when the reason is written down.
 
+The candidate chose each change (Day 4). Browser checks ran on a production build (`next start`), 12 of 12 passing.
+
 | Feedback (row #) | Change made, or "no change" and why | Commit | Checked how |
 |---|---|---|---|
-| | | | |
+| "when i switch when tabs, my inputs are erased" (other comments) | Every group is rendered once; switching a tab shows one and hides the rest, so nothing typed is lost. The tabs are still `?tab=` links (they work without JavaScript and update the address) | `0aacdce` | Browser: a typed reason survives switching away and back |
+| "would stop me... if the loading and rendering times are slow, like rendering content per tab" (4) | Same change: switching makes no request | `0aacdce` | Browser: 0 requests, about 60–70 ms from click to visible. Server actions (approve, choose) were not timed |
+| "standard light colors and modern tables/card... it looks like the UI is just separated with breaklines or lines" (3); "UI should just be standard light" | Always light (dark mode removed); each group a white card with the column headings inside as the table header; an open row's detail in a shaded inset | `0aacdce` | Browser: background stays light with the system set to dark; cards measured (white, 10 px radius, shadow); screenshots |
+| The one wrong decision: R20 ($268 hotel) paired with the $10 card fee, signed off "This is good", with the pairing check on screen (scoring, not an answer) | Candidate's ruling: **R-MAT-11** refuses a pairing that is not suggested, from another vendor, and more than 50% off, from any screen; filler reasons ("This is good", "done with this") are refused. The screenshot then showed why the fee was picked: it was the *first* option offered, as a "Weak match". Only real candidates (score 40+) are now suggested | `b1887e2`, `0aacdce` | 13 tests; 7 mutations caught; browser: the fee is no longer suggested, and choosing it is refused with what to do instead |
+| "the matching" (1, trusted); "nothing" (2) | No change. Read against the scoring: the one error was a pairing the person made, which the system had flagged; trust in the matching was earned, and the guardrail above is about the human step | — | — |
