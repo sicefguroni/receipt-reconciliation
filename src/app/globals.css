@@ -509,15 +509,21 @@ table {
 th,
 td {
   border-bottom: 1px solid var(--rule);
-  padding: 0.4rem 0.6rem;
+  padding: 0.6rem 1rem;
   text-align: left;
   vertical-align: top;
 }
 th {
   font-weight: 600;
-  border-bottom: 2px solid var(--rule-strong);
+  background: var(--inset);
+  border-bottom: 1px solid var(--rule);
   font-size: 0.85rem;
   color: var(--ink-soft);
+}
+td.num,
+th.num,
+td.nowrap {
+  white-space: nowrap;
 }
 td.num,
 th.num {
@@ -525,7 +531,9 @@ th.num {
 }
 tfoot td {
   font-weight: 600;
-  border-top: 2px solid var(--rule-strong);
+  background: var(--inset);
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: none;
 }
 .table-wrap {
   overflow-x: auto;
@@ -736,4 +744,51 @@ button[aria-busy="true"] {
 }
 .item[open] > .panel {
   background: var(--inset);
+}
+
+/* Day 4 (P1): the month-end pack as cards, like the review queue. */
+.card {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  margin-top: 1rem;
+}
+.card-head {
+  padding: 0.85rem 1rem 0.6rem;
+}
+.card-head .hint {
+  margin: 0.25rem 0 0;
+}
+.card tbody tr:last-child td {
+  border-bottom: none;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 0 1rem;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.stat {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 0.75rem 1rem;
+}
+.stat dt {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.stat dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }

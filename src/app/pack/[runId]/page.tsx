@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
 import { personLabel } from "@/config/people";
 import { packSummary, type Total } from "@/pipeline/pack";
 import { getMonth } from "@/server/months";
@@ -10,6 +11,19 @@ export const dynamic = "force-dynamic";
 
 // The readable month-end summary (03, v1 item 9): totals by category and payment source,
 // what was left out and why, and how each statement line with no receipt was resolved.
+// Day 4 (P1): the same light cards and tables as the review queue.
+
+function Card({ title, note, children }: { title: string; note?: ReactNode; children: ReactNode }) {
+  return (
+    <section className="card">
+      <div className="card-head">
+        <h2>{title}</h2>
+        {note ? <p className="hint">{note}</p> : null}
+      </div>
+      {children}
+    </section>
+  );
+}
 
 function TotalsTable({ caption, rows, total }: { caption: string; rows: Total[]; total: number }) {
   return (
@@ -56,22 +70,38 @@ export default async function PackPage({ params }: { params: Promise<{ runId: st
   });
 
   return (
-    <main className="wide">
+    <main className="wide pack">
       <p>
         <Link href={`/review/${runId}`}>Back to the review queue</Link>
       </p>
       <h1>Month-end pack: {name}</h1>
       {month.closed ? (
-        <p className="notice">
-          Every item is resolved. Ledger total <strong>{money(s.ledgerAud)}</strong> from{" "}
-          {s.entryCount} entries; {s.resolvedFlags} flags resolved.
-        </p>
+        <p className="notice">Every item is resolved. The month is ready to close.</p>
       ) : (
         <p role="status" className="notice error">
           Not ready to close: {s.openCount} items still need a decision ({s.openFlags} open flags).
           The files below show the month as it stands now.
         </p>
       )}
+
+      <dl className="stats">
+        <div className="stat">
+          <dt>Ledger total</dt>
+          <dd>{money(s.ledgerAud)}</dd>
+        </div>
+        <div className="stat">
+          <dt>Entries</dt>
+          <dd>{s.entryCount}</dd>
+        </div>
+        <div className="stat">
+          <dt>Flags resolved</dt>
+          <dd>{s.resolvedFlags}</dd>
+        </div>
+        <div className="stat">
+          <dt>Still open</dt>
+          <dd className={s.openCount > 0 ? "query" : undefined}>{s.openCount}</dd>
+        </div>
+      </dl>
 
       <p className="row">
         <a className="button primary" href={`/pack/${runId}/ledger.csv`} download>
@@ -82,97 +112,113 @@ export default async function PackPage({ params }: { params: Promise<{ runId: st
         </a>
       </p>
 
-      <h2>By category</h2>
-      <TotalsTable caption="Category" rows={s.byCategory} total={s.ledgerAud} />
+      <div className="card-grid">
+        <Card title="By category">
+          <TotalsTable caption="Category" rows={s.byCategory} total={s.ledgerAud} />
+        </Card>
+        <Card title="By payment source">
+          <TotalsTable caption="Payment source" rows={s.bySource} total={s.ledgerAud} />
+        </Card>
+      </div>
 
-      <h2 className="spaced">By payment source</h2>
-      <TotalsTable caption="Payment source" rows={s.bySource} total={s.ledgerAud} />
-
-      <h2 className="spaced">Left out of the totals</h2>
-      {s.excludedFx.length > 0 ? (
-        <p>
-          No exchange rate, so not converted to AUD:{" "}
-          {s.excludedFx
-            .map((x) => `${money(x.amount, x.currency)} (${x.count} receipts)`)
-            .join("; ")}
-          .
-        </p>
-      ) : (
-        <p className="muted">Every foreign receipt had an exchange rate.</p>
-      )}
-      {s.excludedReceipts.length > 0 ? (
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Receipt</th>
-                <th>Vendor</th>
-                <th className="num">Receipt amount</th>
-                <th>Why it is not in the ledger</th>
-              </tr>
-            </thead>
-            <tbody>
-              {s.excludedReceipts.map((r) => (
-                <tr key={r.id}>
-                  <td>{r.id}</td>
-                  <td>{r.extraction?.vendor.value ?? "—"}</td>
-                  <td className="num">
-                    {money(r.extraction?.total.value, r.extraction?.currency.value ?? "AUD")}
-                  </td>
-                  <td>
-                    {r.outcome === "duplicate_confirmed"
-                      ? `Duplicate of ${r.duplicateOf}`
-                      : r.outcome === "removed"
-                        ? "Removed: re-upload requested"
-                        : r.state.exceptions.map((c) => FLAG_LABELS[c]).join("; ") ||
-                          "Not resolved yet"}
-                  </td>
+      <Card
+        title="Left out of the totals"
+        note={
+          s.excludedFx.length > 0
+            ? `No exchange rate, so not converted to AUD: ${s.excludedFx
+                .map((x) => `${money(x.amount, x.currency)} (${x.count} receipts)`)
+                .join("; ")}.`
+            : "Every foreign receipt had an exchange rate."
+        }
+      >
+        {s.excludedReceipts.length > 0 ? (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Receipt</th>
+                  <th>Vendor</th>
+                  <th className="num">Receipt amount</th>
+                  <th>Why it is not in the ledger</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : null}
+              </thead>
+              <tbody>
+                {s.excludedReceipts.map((r) => (
+                  <tr key={r.id}>
+                    <td>{r.id}</td>
+                    <td>{r.extraction?.vendor.value ?? "—"}</td>
+                    <td className="num">
+                      {money(r.extraction?.total.value, r.extraction?.currency.value ?? "AUD")}
+                    </td>
+                    <td>
+                      {r.outcome === "duplicate_confirmed"
+                        ? `Duplicate of ${r.duplicateOf}`
+                        : r.outcome === "removed"
+                          ? "Removed: re-upload requested"
+                          : r.state.exceptions.map((c) => FLAG_LABELS[c]).join("; ") ||
+                            "Not resolved yet"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
+      </Card>
 
-      <h2 className="spaced">Statement lines with no receipt</h2>
-      {s.noReceipt.length === 0 ? (
-        <p className="muted">Every payment on the statement has a receipt.</p>
-      ) : (
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Line</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th className="num">AUD</th>
-                <th>Resolved as</th>
-                <th>Reason</th>
-              </tr>
-            </thead>
-            <tbody>
-              {s.noReceipt.map(({ line, resolution }) => (
-                <tr key={line.id}>
-                  <td>{line.id}</td>
-                  <td>{day(line.date)}</td>
-                  <td>{line.description}</td>
-                  <td className="num">{money(line.amountAud)}</td>
-                  <td>
-                    {resolution === null ? (
-                      <span className="query">Not resolved</span>
-                    ) : resolution.kind === "substitute" ? (
-                      `Substitute (${resolution.category}), by ${personLabel(resolution.stamp.by)}`
-                    ) : (
-                      `Not an expense, by ${personLabel(resolution.stamp.by)}`
-                    )}
-                  </td>
-                  <td>{resolution?.stamp.reason ?? ""}</td>
+      <Card
+        title="Statement lines with no receipt"
+        note={
+          s.noReceipt.length === 0 ? "Every payment on the statement has a receipt." : undefined
+        }
+      >
+        {s.noReceipt.length > 0 ? (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Line</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th className="num">AUD</th>
+                  <th>Resolved as</th>
+                  <th>Reason</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {s.noReceipt.map(({ line, resolution, suggestedCategory }) => (
+                  <tr key={line.id}>
+                    <td>{line.id}</td>
+                    <td className="nowrap">{day(line.date)}</td>
+                    <td>{line.description}</td>
+                    <td className="num">{money(line.amountAud)}</td>
+                    <td>
+                      {resolution === null ? (
+                        <span className="query">Not resolved</span>
+                      ) : resolution.kind === "substitute" ? (
+                        <>
+                          Substitute ({resolution.category}), by {personLabel(resolution.stamp.by)}
+                          {/* R-CAT-6: a category chosen over the suggestion stays visible. */}
+                          {suggestedCategory &&
+                          suggestedCategory.category !== resolution.category ? (
+                            <span className="flag-note">
+                              {" "}
+                              (suggested {suggestedCategory.category})
+                            </span>
+                          ) : null}
+                        </>
+                      ) : (
+                        `Not an expense, by ${personLabel(resolution.stamp.by)}`
+                      )}
+                    </td>
+                    <td>{resolution?.stamp.reason ?? ""}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
+      </Card>
     </main>
   );
 }
