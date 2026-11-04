@@ -205,6 +205,16 @@ describe("Day 4 (C1): pairing a receipt with an unrelated payment", () => {
     expect(line("mark_not_expense", "Monthly card fee")).toBe("ok");
   });
 
+  it("a hotel paired with a taxi fare is called a different vendor, though both say 'Sample'", () => {
+    const hotelWithTaxi = decision("R20", {
+      action: "choose_match",
+      after: { statementLineId: "L40" },
+    });
+    expect(month([hotelWithTaxi]).receipts.find((r) => r.id === "R20")?.concerns).toContain(
+      'The payment is "METRO TAXI CO SAMPLE CITY", which does not look like Sample Harbour Hotel.',
+    );
+  });
+
   it("no automatic match in October carries a concern, so a warning means something", () => {
     const flagged = month()
       .receipts.filter((r) => r.state.status === "matched" && r.concerns.length > 0)
@@ -239,6 +249,22 @@ describe("R-MAT-11: a pairing that is clearly someone else's payment is refused 
   it("the key's own human choices still go through (TC04, TC11)", () => {
     expect(ask("R04", { action: "choose_match", after: { statementLineId: "L16" } })).toBe("ok");
     expect(ask("R15", { action: "choose_match", after: { statementLineId: "L22" } })).toBe("ok");
+  });
+
+  it("every wrong pairing from both cold runs is refused (C1: 3, P1: 1)", () => {
+    // R15 and R20's lines share "SAMPLE" with the vendor, which used to count as alike.
+    const pairs: [string, string][] = [
+      ["R13", "L26"], // C1: coffee with the petrol charge
+      ["R15", "L32"], // C1: app with the bookshop charge
+      ["R20", "L40"], // C1: hotel with a taxi fare
+      ["R20", "L44"], // P1: hotel with the card fee
+    ];
+    for (const [receiptId, lineId] of pairs) {
+      expect(
+        ask(receiptId, { action: "choose_match", after: { statementLineId: lineId } }),
+        `${receiptId} with ${lineId}`,
+      ).toMatch(/does not look like this receipt's payment/);
+    }
   });
 });
 

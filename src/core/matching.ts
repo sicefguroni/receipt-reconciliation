@@ -81,6 +81,78 @@ export function vendorSimilarity(vendor: string, description: string): number {
 }
 
 /**
+ * Words that say what kind of business it is, or where, not which one. Two cafés share "cafe";
+ * a statement adds the city; the synthetic data puts "Sample" or "Example" in front of most
+ * names, as a real statement repeats a suburb. For deciding whether two names are the same
+ * business, only the other words count (Day 4, after P1). Scoring (R-MAT-1) is not changed.
+ */
+const GENERIC_VENDOR_WORDS = new Set([
+  "sample",
+  "example",
+  "demo",
+  "test",
+  "sq",
+  "the",
+  "and",
+  "of",
+  "cafe",
+  "coffee",
+  "espresso",
+  "restaurant",
+  "bistro",
+  "bar",
+  "kitchen",
+  "catering",
+  "hotel",
+  "motel",
+  "lodge",
+  "inn",
+  "taxi",
+  "taxis",
+  "cab",
+  "cabs",
+  "airline",
+  "airlines",
+  "store",
+  "stores",
+  "shop",
+  "shops",
+  "supplies",
+  "services",
+  "service",
+  "station",
+  "group",
+  "online",
+  "city",
+  "town",
+  "centre",
+  "center",
+  "au",
+  "aus",
+  "australia",
+  "us",
+  "usa",
+]);
+
+/**
+ * R-MAT-6 and R-MAT-11 (not scoring): do the vendor and the statement description name the
+ * same business? The share of the vendor's distinctive words found in the description. A
+ * vendor made only of generic words ("Test Airline") is compared on all its words instead.
+ */
+export function distinctiveSimilarity(vendor: string, description: string): number {
+  const words = normaliseVendor(vendor).split(" ").filter(Boolean);
+  const distinctive = words.filter((w) => !GENERIC_VENDOR_WORDS.has(w));
+  if (distinctive.length === 0) return vendorSimilarity(vendor, description);
+  const descriptionWords = normaliseVendor(description).split(" ").filter(Boolean);
+  const inDescription = new Set(descriptionWords);
+  const found = distinctive.filter((w) => inDescription.has(w)).length;
+  if (found === distinctive.length) return 1;
+  // A wordmark ("brightreachads") is still the same name (F5).
+  if (runTogether(words.join(""), descriptionWords)) return 1;
+  return found / distinctive.length;
+}
+
+/**
  * R-MAT vendor signal, Day 4 (failure F5): a logo prints the name as one word
  * ("brightreachads") where the bank writes "BRIGHTREACH ADS", or the reverse. They are the
  * same name if the run-together vendor equals consecutive whole words of the description.
@@ -373,7 +445,7 @@ export function pairingConcerns(
   const concerns: string[] = [];
   if (candidate.score < MIN_CANDIDATE_SCORE)
     concerns.push("It was not one of the suggested payments.");
-  if (receipt.vendor && vendorSimilarity(receipt.vendor, line.description) < 0.3) {
+  if (receipt.vendor && distinctiveSimilarity(receipt.vendor, line.description) < 0.3) {
     concerns.push(
       `The payment is "${line.description}", which does not look like ${receipt.vendor}.`,
     );
@@ -422,7 +494,8 @@ export function clearMismatch(
 ): string | null {
   const candidate = scorePair(receipt, line, policy);
   if (candidate.score >= MIN_CANDIDATE_SCORE) return null;
-  if (!receipt.vendor || vendorSimilarity(receipt.vendor, line.description) >= 0.3) return null;
+  if (!receipt.vendor || distinctiveSimilarity(receipt.vendor, line.description) >= 0.3)
+    return null;
   const amount = candidate.amount;
   if (!amount || amount.receiptAmount === 0) return null;
   const share = Math.abs(amount.difference) / Math.abs(amount.receiptAmount);

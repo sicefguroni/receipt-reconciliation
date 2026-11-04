@@ -4,6 +4,7 @@ import {
   applyChosenLines,
   clearMismatch,
   combinedPayment,
+  distinctiveSimilarity,
   inMatchWindow,
   linesWithoutReceipt,
   type MatchPolicy,
@@ -184,6 +185,36 @@ describe("R-MAT-10 split payments", () => {
     expect(applyChosenLines(receipt(), [line()], policy)).toEqual(
       applyChosenLine(receipt(), line(), policy),
     );
+  });
+});
+
+describe("distinctive vendor words (R-MAT-6, R-MAT-11; not scoring)", () => {
+  it("two different cafés are different businesses, though both say 'cafe'", () => {
+    expect(distinctiveSimilarity("Harbour Lane Cafe", "SQ *SAMPLE CAFE SAMPLE CITY AU")).toBe(0);
+    expect(vendorSimilarity("Harbour Lane Cafe", "SQ *SAMPLE CAFE SAMPLE CITY AU")).toBeCloseTo(
+      1 / 3,
+    );
+  });
+
+  it("a shared placeholder or place word does not make two businesses alike", () => {
+    expect(distinctiveSimilarity("Sample Harbour Hotel", "METRO TAXI CO SAMPLE CITY")).toBe(0);
+  });
+
+  it("the same business still matches, including names made only of generic words", () => {
+    expect(distinctiveSimilarity("Harbour Lane Cafe", "HARBOUR LANE CAFE SAMPLE CITY")).toBe(1);
+    expect(distinctiveSimilarity("Sample Café", "SQ *SAMPLE CAFE SAMPLE CITY AU")).toBe(1);
+    expect(distinctiveSimilarity("Test Airline", "TEST AIRLINE SAMPLE CITY")).toBe(1);
+    expect(distinctiveSimilarity("brightreachads", "BRIGHTREACH ADS SAMPLE CITY AU")).toBe(1);
+  });
+
+  it("two cafés, more than half apart and not suggested: refused", () => {
+    const harbour = receipt({ vendor: "Harbour Lane Cafe", total: 15.5, date: "2026-10-20" });
+    const otherCafe = line({
+      description: "SQ *SAMPLE CAFE SAMPLE CITY AU",
+      amountAud: 40,
+      date: "2026-10-12",
+    });
+    expect(clearMismatch(harbour, otherCafe, policy)).toMatch(/a different vendor, 158% more/);
   });
 });
 
