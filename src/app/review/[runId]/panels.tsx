@@ -307,35 +307,38 @@ export function ReceiptPanel({
             </div>
           </form>
           {splitLines.length >= 2 ? (
-            <form action={review} className="act">
-              <Hidden runId={runId} subjectId={r.id} />
-              <h4>Paid in more than one payment?</h4>
-              <p className="hint">
-                For a deposit and a balance, for example. Tick every payment for this receipt; their
-                total is compared with the receipt.
-              </p>
-              <fieldset>
-                <legend className="sr-only">Payments that together paid {r.id}</legend>
-                {splitLines.map((l) => (
-                  <label key={l.id} className="choice">
-                    <input
-                      type="checkbox"
-                      name="splitLine"
-                      value={l.id}
-                      defaultChecked={paidBy.includes(l.id)}
-                    />
-                    <span>
-                      <strong>{lineLabel(l)}</strong>
-                    </span>
-                  </label>
-                ))}
-              </fieldset>
-              <div className="row">
-                <button type="submit" name="action" value="split_payment">
-                  Use these payments together
-                </button>
-              </div>
-            </form>
+            // Rare, so closed unless the receipt is already split (R-MAT-10).
+            <details className="sub" open={paidBy.length > 1}>
+              <summary>Paid in more than one payment?</summary>
+              <form action={review} className="act">
+                <Hidden runId={runId} subjectId={r.id} />
+                <p className="hint">
+                  For a deposit and a balance, for example. Tick every payment for this receipt;
+                  their total is compared with the receipt.
+                </p>
+                <fieldset>
+                  <legend className="sr-only">Payments that together paid {r.id}</legend>
+                  {splitLines.map((l) => (
+                    <label key={l.id} className="choice">
+                      <input
+                        type="checkbox"
+                        name="splitLine"
+                        value={l.id}
+                        defaultChecked={paidBy.includes(l.id)}
+                      />
+                      <span>
+                        <strong>{lineLabel(l)}</strong>
+                      </span>
+                    </label>
+                  ))}
+                </fieldset>
+                <div className="row">
+                  <button type="submit" name="action" value="split_payment">
+                    Use these payments together
+                  </button>
+                </div>
+              </form>
+            </details>
           ) : null}
         </details>
       ) : null}

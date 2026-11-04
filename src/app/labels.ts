@@ -38,10 +38,12 @@ export const FIELD_LABELS: Record<string, string> = {
 
 export function money(amount: number | null | undefined, currency = "AUD"): string {
   if (amount === null || amount === undefined) return "—";
-  return `${currency === "AUD" ? "$" : `${currency} `}${amount.toLocaleString("en-AU", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
+  // A refund is the first negative amount shown: "−$4.50", not "$-4.50".
+  const sign = amount < 0 ? "−" : "";
+  return `${sign}${currency === "AUD" ? "$" : `${currency} `}${Math.abs(amount).toLocaleString(
+    "en-AU",
+    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+  )}`;
 }
 
 function sentence(text: string): string {
