@@ -1,4 +1,5 @@
 import { fromCents, toCents } from "./money";
+import { isSpecificReason } from "./reasons";
 import { BASE_CURRENCY, type Money } from "./schemas";
 
 // Amount-difference rules R-AMT-1 to R-AMT-4, with R-CUR-4 for foreign purchases
@@ -104,7 +105,7 @@ export function compareAmounts(
   };
 }
 
-/** R-AMT-4: signing off an over-threshold difference needs a reason of 3+ characters. */
+/** R-AMT-4: signing off an over-threshold difference needs a specific reason (`reasons.ts`). */
 export function isValidSignOffReason(reason: string | null | undefined): boolean {
-  return (reason?.trim().length ?? 0) >= 3;
+  return isSpecificReason(reason);
 }

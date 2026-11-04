@@ -1,6 +1,7 @@
 import { isValidSignOffReason } from "@/core/amounts";
 import { checkApproval } from "@/core/approvals";
 import { isCredit } from "@/core/matching";
+import { reasonProblem } from "@/core/reasons";
 import {
   type CorrectableField,
   type Decision,
@@ -131,8 +132,11 @@ export function checkDecision(
     ok: true,
     decision: { subjectId: request.subjectId, actorId, reason, before, ...after },
   });
-  const needReason = (what: string) =>
-    reason && reason.length >= 3 ? null : `Give a reason (at least 3 characters) ${what}.`;
+  // Day 4 (C1): a reason must be specific, not "Good" (src/core/reasons.ts).
+  const needReason = (what: string) => {
+    const problem = reasonProblem(reason);
+    return problem ? `Give a reason ${what}: ${problem}.` : null;
+  };
 
   // R-MAT-7 actions act on a statement line with no receipt.
   if (
@@ -246,7 +250,7 @@ export function checkDecision(
       }
       if (!isValidSignOffReason(reason)) {
         return fail(
-          'Give a reason for the difference (at least 3 characters), for example "tip added".',
+          `Give a reason for the difference: ${reasonProblem(reason)}, for example "tip added at the table".`,
         );
       }
       if (change.after.statementLineId !== r.match?.statementLineId) {

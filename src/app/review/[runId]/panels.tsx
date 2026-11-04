@@ -1,6 +1,7 @@
 import { personLabel } from "@/config/people";
 import { checkApproval } from "@/core/approvals";
 import { inMatchWindow, isCredit, MIN_CANDIDATE_SCORE } from "@/core/matching";
+import { MIN_REASON_CHARS } from "@/core/reasons";
 import type { StatementLine } from "@/core/schemas";
 import type { MonthResult, NoReceiptLine, ReceiptResult } from "@/pipeline/reconcile";
 import { review } from "../../actions";
@@ -41,12 +42,58 @@ function ReasonField({ id, label, required }: { id: string; label: string; requi
       <input
         name="reason"
         id={id}
-        minLength={required ? 3 : undefined}
+        minLength={required ? MIN_REASON_CHARS : undefined}
         required={required}
         maxLength={300}
         autoComplete="off"
       />
     </label>
+  );
+}
+
+/**
+ * Day 4 (C1): the receipt and the payment it is paired with, side by side, and what does not
+ * fit (R-MAT-6). Shown before sign-off and approval, so a $14.70 coffee paired with a $75.20
+ * petrol charge cannot pass as "Good" unnoticed.
+ */
+function PairingCheck({ r, month }: { r: ReceiptResult; month: MonthResult }) {
+  const ids = r.match?.statementLineId
+    ? [r.match.statementLineId, ...(r.match.extraLineIds ?? [])]
+    : [];
+  const lines = ids.flatMap((id) => month.statementLines.find((l) => l.id === id) ?? []);
+  if (r.concerns.length === 0 || lines.length === 0) return null;
+  const e = r.extraction;
+  return (
+    <div className="pairing" role="note" aria-label={`Check this pairing for ${r.id}`}>
+      <p className="pairing-head">Check this pairing: {r.concerns.length} things do not fit.</p>
+      <dl className="pairing-grid">
+        <div>
+          <dt>Receipt</dt>
+          <dd>
+            {e?.vendor.value ?? "Unknown vendor"},{" "}
+            {money(e?.total.value, e?.currency.value ?? "AUD")}, {day(e?.date.value)},{" "}
+            {r.paymentSourceLabel.toLowerCase()}
+          </dd>
+        </div>
+        <div>
+          <dt>Payment</dt>
+          <dd>
+            {lines
+              .map((l) => `${l.id}, ${l.description}, ${money(l.amountAud)}, ${day(l.date)}`)
+              .join(" + ")}
+          </dd>
+        </div>
+      </dl>
+      <ul>
+        {r.concerns.map((c) => (
+          <li key={c}>{c}</li>
+        ))}
+      </ul>
+      <p className="hint">
+        If this is right, say why in the reason. If not, choose another payment, reimburse, or
+        remove the receipt.
+      </p>
+    </div>
   );
 }
 
@@ -152,6 +199,8 @@ export function ReceiptPanel({
           </div>
         </form>
       ) : null}
+
+      <PairingCheck r={r} month={month} />
 
       {open.includes("AMOUNT_DIFFERS_OVER_THRESHOLD") ? (
         <form action={review} className="act">

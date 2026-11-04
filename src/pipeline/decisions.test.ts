@@ -147,6 +147,72 @@ describe("R-MAT-10: one receipt paid in two payments (stress S06)", () => {
   });
 });
 
+describe("Day 4 (C1): pairing a receipt with an unrelated payment", () => {
+  // The builder's run paired R13 ($14.70 coffee, personal card) with L26 ($75.20 petrol, company
+  // card) and signed it off as "Good".
+  const chosen = decision("R13", { action: "choose_match", after: { statementLineId: "L26" } });
+
+  it("the pairing lists what does not fit, in plain words", () => {
+    const r13 = month([chosen]).receipts.find((r) => r.id === "R13");
+    expect(r13?.concerns).toEqual([
+      "It was not one of the suggested payments.",
+      'The payment is "SAMPLE PETROL SAMPLE CITY", which does not look like Station Kiosk Cafe.',
+      "It charged $75.20 for a $14.70 receipt (412% more).",
+      "It is 4 days from the receipt date.",
+      "The receipt says it was paid with a personal card, but this payment is on the company card.",
+    ]);
+  });
+
+  it("'Good' is refused as a sign-off, with what to write instead", () => {
+    const check = checkDecision(
+      month([chosen]),
+      {
+        subjectId: "R13",
+        change: { action: "sign_off_difference", after: { statementLineId: "L26" } },
+        reason: "Good",
+      },
+      REVIEWER,
+      config,
+    );
+    expect(message(check)).toBe(
+      'Give a reason for the difference: at least 8 characters, for example "tip added at the table".',
+    );
+  });
+
+  it("a substitute or 'not an expense' with 'Good' or 'Monthly' is refused too", () => {
+    const line = (action: "record_substitute" | "mark_not_expense", reason: string) =>
+      message(
+        checkDecision(
+          month(),
+          {
+            subjectId: "L44",
+            change:
+              action === "record_substitute"
+                ? { action, after: { category: "Other" } }
+                : { action, after: {} },
+            reason,
+          },
+          REVIEWER,
+          config,
+        ),
+      );
+    expect(line("record_substitute", "Good")).toBe(
+      "Give a reason for recording a substitute: at least 8 characters.",
+    );
+    expect(line("mark_not_expense", "Monthly")).toBe(
+      "Give a reason for marking it not an expense: at least 8 characters.",
+    );
+    expect(line("mark_not_expense", "Monthly card fee")).toBe("ok");
+  });
+
+  it("no automatic match in October carries a concern, so a warning means something", () => {
+    const flagged = month()
+      .receipts.filter((r) => r.state.status === "matched" && r.concerns.length > 0)
+      .map((r) => `${r.id}: ${r.concerns.join(" ")}`);
+    expect(flagged).toEqual([]);
+  });
+});
+
 describe("decision checks", () => {
   it("R-APR-1: a submitter's own approval is refused with the reason", () => {
     const r = month().receipts.find((x) => x.id === "R01");

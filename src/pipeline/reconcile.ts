@@ -4,12 +4,14 @@ import { findDuplicates } from "@/core/duplicates";
 import {
   applyChosenLines,
   type Candidate,
+  combinedPayment,
   isCredit,
   linesWithoutReceipt,
   type MatchOutcome,
   type MatchReceipt,
   MIN_CANDIDATE_SCORE,
   matchReceipts,
+  pairingConcerns,
 } from "@/core/matching";
 import { fromCents, toCents } from "@/core/money";
 import { checkIsReceipt } from "@/core/quality";
@@ -67,6 +69,8 @@ export interface ReceiptResult {
   /** Fields a person changed or confirmed. */
   corrected: CorrectableField[];
   enteredByHand: boolean;
+  /** R-MAT-6 (Day 4, C1): what does not fit between the receipt and its payment, if anything. */
+  concerns: string[];
   signOff: Stamp | null;
   approval: Stamp | null;
 }
@@ -545,6 +549,16 @@ function derive(snapshot: MonthSnapshot, decisions: readonly Decision[], config:
       outcome,
       corrected: [...(e?.fields.keys() ?? [])],
       enteredByHand: d.enteredByHand,
+      concerns:
+        line && chosen
+          ? pairingConcerns(
+              toMatchReceipt(d),
+              combinedPayment(
+                [line.id, ...(match?.extraLineIds ?? [])].flatMap((id) => lineById.get(id) ?? []),
+              ),
+              chosen,
+            )
+          : [],
       signOff,
       approval: e?.approval ?? null,
     };

@@ -347,6 +347,63 @@ export function applyChosenLines(
   };
 }
 
+const SOURCE_TEXT: Record<PaymentSource, string> = {
+  company_card: "the company card",
+  personal_card: "a personal card",
+  bank: "the bank account",
+  unknown: "an unknown source",
+};
+const ACCOUNT_TEXT: Record<StatementLine["account"], string> = {
+  company_card: "the company card",
+  personal_card: "a personal card",
+  bank: "the bank account",
+};
+
+/**
+ * R-MAT-6, Day 4 (C1): what does not fit between a receipt and the payment it is paired with,
+ * in plain words, shown before a person signs off or approves. In the builder's run a $14.70
+ * coffee was paired with a $75.20 petrol charge and signed off as "Good"; nothing on the
+ * screen said the two had nothing in common. Empty when the pairing looks right.
+ */
+export function pairingConcerns(
+  receipt: MatchReceipt,
+  line: StatementLine,
+  candidate: Candidate,
+): string[] {
+  const concerns: string[] = [];
+  if (candidate.score < MIN_CANDIDATE_SCORE)
+    concerns.push("It was not one of the suggested payments.");
+  if (receipt.vendor && vendorSimilarity(receipt.vendor, line.description) < 0.3) {
+    concerns.push(
+      `The payment is "${line.description}", which does not look like ${receipt.vendor}.`,
+    );
+  }
+  const amount = candidate.amount;
+  if (amount === null) {
+    concerns.push("The amounts could not be compared.");
+  } else if (amount.kind === "over_threshold" && amount.receiptAmount !== 0) {
+    const pct = Math.round((Math.abs(amount.difference) / Math.abs(amount.receiptAmount)) * 100);
+    const fmt = (v: number) =>
+      amount.comparedIn === "AUD" ? formatAud(v) : `${amount.comparedIn} ${Math.abs(v).toFixed(2)}`;
+    concerns.push(
+      `It charged ${fmt(amount.lineAmount)} for a ${fmt(amount.receiptAmount)} receipt (${pct}% ${amount.difference > 0 ? "more" : "less"}).`,
+    );
+  }
+  if (receipt.date) {
+    const days = daysApart(receipt.date, line.date);
+    if (days > 3) concerns.push(`It is ${days} days from the receipt date.`);
+  }
+  if (
+    receipt.paymentSource !== "unknown" &&
+    !accountMatchesSource(receipt.paymentSource, line.account)
+  ) {
+    concerns.push(
+      `The receipt says it was paid with ${SOURCE_TEXT[receipt.paymentSource]}, but this payment is on ${ACCOUNT_TEXT[line.account]}.`,
+    );
+  }
+  return concerns;
+}
+
 /** R-MAT-5: paid if and only if matched or amount_differs, with a statement line. */
 export function paymentStatus(
   status: MatchStatus,

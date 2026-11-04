@@ -93,10 +93,13 @@ describe("R-AMT amount-difference rules", () => {
     ).toBeNull();
   });
 
-  it("R-AMT-4: signing off needs a reason of at least 3 characters", () => {
+  it("R-AMT-4: signing off needs a specific reason (Day 4, C1: every sign-off said 'Good')", () => {
     expect(isValidSignOffReason("Tip added at the terminal")).toBe(true);
-    expect(isValidSignOffReason("ok!")).toBe(true);
-    expect(isValidSignOffReason("ok")).toBe(false);
+    expect(isValidSignOffReason("Bank fee")).toBe(true); // exactly 8 characters
+    expect(isValidSignOffReason("Good")).toBe(false);
+    expect(isValidSignOffReason("Looks good, ok")).toBe(false); // long, but only generic words
+    expect(isValidSignOffReason("Monthly")).toBe(false);
+    expect(isValidSignOffReason("ok!")).toBe(false);
     expect(isValidSignOffReason("   ")).toBe(false);
     expect(isValidSignOffReason(null)).toBe(false);
   });
