@@ -2,7 +2,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseCsv } from "./csv";
-import { parseStatementDate, readStatement, StatementFormatError } from "./read-statement";
+import {
+  parseStatementDate,
+  readStatement,
+  StatementFormatError,
+  slashOrder,
+} from "./read-statement";
 
 const ROOT = join(import.meta.dirname, "../../..");
 const read = (name: string) => readFileSync(join(ROOT, "fixtures/dataset", name), "utf8");
@@ -29,6 +34,14 @@ describe("statement column mapping", () => {
   it("format A reads into exactly the ground-truth lines (real CRLF bytes)", () => {
     const { format, lines } = readStatement(read("statement-format-a.csv"));
     expect(format).toMatch(/^Format A/);
+    expect(lines).toEqual(expected);
+  });
+
+  it("a US-style (month-first) export of the same month reads identically, and says so", () => {
+    const us = read("statement-format-a.csv").replace(/^(\d{2})\/(\d{2})\//gm, "$2/$1/");
+    expect(us).toContain("10/02/2026"); // 2 October, month first
+    const { format, lines } = readStatement(us);
+    expect(format).toContain("dates read month first");
     expect(lines).toEqual(expected);
   });
 
@@ -109,6 +122,26 @@ describe("statement upload validation (friendly errors)", () => {
     expect(parseStatementDate("31/02/2026", "dd/mm/yyyy")).toBeNull();
     expect(parseStatementDate("2 oct 2026", "dd Mon yyyy")).toBe("2026-10-02");
     expect(parseStatementDate("02/10/2026", "dd Mon yyyy")).toBeNull();
+  });
+
+  it("slash order: a number over 12 decides; otherwise the shorter period; a tie is day first", () => {
+    expect(slashOrder(["25/10/2026", "03/10/2026"])).toBe("day-first");
+    expect(slashOrder(["10/25/2026", "10/03/2026"])).toBe("month-first");
+    expect(slashOrder(["25/10/2026", "10/25/2026"])).toBe("mixed");
+    // Every date fits both ways: 2 to 9 October (month first) beats February to September.
+    expect(slashOrder(["10/02/2026", "10/05/2026", "10/09/2026"])).toBe("month-first");
+    // 1 to 12 October (day first) beats January to December.
+    expect(slashOrder(["01/10/2026", "12/10/2026"])).toBe("day-first");
+    expect(slashOrder(["05/05/2026"])).toBe("day-first");
+  });
+
+  it("a file mixing both orders is refused rather than read half wrong", () => {
+    const csv = [
+      HEADER_A,
+      "25/10/2026,Business Visa ...4821,A,-1.00,,",
+      "10/26/2026,Business Visa ...4821,B,-1.00,,",
+    ].join("\n");
+    expect(problemsOf(csv)[0]).toMatch(/day first .* month first/);
   });
 
   it("an ISO date reads in either format, and is still checked as a real date", () => {

@@ -70,23 +70,60 @@ function isRealDate(y: number, m: number, d: number): boolean {
   return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d;
 }
 
+/** How a slash date is read: 02/10/2026 is 2 October day first, 10 February month first. */
+export type SlashOrder = "day-first" | "month-first";
+
+const SLASH = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+
 /**
  * ISO date, or null when the text is not a real date in the format's style. An ISO date
  * (2026-10-02) is accepted in every format: it cannot be misread, and some banks export it
- * (Day 4, failure F3). The day-first and "02 Oct" styles stay specific to their format.
+ * (Day 4, failure F3). The slash and "02 Oct" styles stay specific to their format.
  */
-export function parseStatementDate(text: string, style: DateStyle): string | null {
+export function parseStatementDate(
+  text: string,
+  style: DateStyle,
+  order: SlashOrder = "day-first",
+): string | null {
   const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
   if (iso) return isRealDate(Number(iso[1]), Number(iso[2]), Number(iso[3])) ? text : null;
   const match =
-    style === "dd/mm/yyyy"
-      ? /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text)
-      : /^(\d{1,2}) ([A-Za-z]{3}) (\d{4})$/.exec(text);
+    style === "dd/mm/yyyy" ? SLASH.exec(text) : /^(\d{1,2}) ([A-Za-z]{3}) (\d{4})$/.exec(text);
   if (!match) return null;
-  const [, d, m, y] = match;
+  const [, first, second, y] = match;
+  const [d, m] =
+    style === "dd/mm/yyyy" && order === "month-first" ? [second, first] : [first, second];
   const month = style === "dd/mm/yyyy" ? Number(m) : MONTHS.indexOf(String(m).toLowerCase()) + 1;
   if (!isRealDate(Number(y), month, Number(d))) return null;
   return `${y}-${String(month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+}
+
+/**
+ * Day 4 (F3 residual risk): a US-style export writes 10/02/2026 for 2 October, which a
+ * day-first reader turns into 10 February without a word. The order is decided from the whole
+ * file: a first number over 12 proves day first, a second number over 12 proves month first,
+ * and both together cannot be read safely. When every date fits both ways, the reading that
+ * keeps the statement within the shorter period wins (a statement covers about a month), and
+ * day first (Australian banks) wins a tie.
+ */
+export function slashOrder(dates: readonly string[]): SlashOrder | "mixed" {
+  const pairs = dates.flatMap((t) => {
+    const m = SLASH.exec(t);
+    return m ? [{ first: Number(m[1]), second: Number(m[2]), text: t }] : [];
+  });
+  const dayFirstProof = pairs.some((p) => p.first > 12);
+  const monthFirstProof = pairs.some((p) => p.second > 12);
+  if (dayFirstProof && monthFirstProof) return "mixed";
+  if (dayFirstProof) return "day-first";
+  if (monthFirstProof) return "month-first";
+  const span = (order: SlashOrder) => {
+    const days = pairs.flatMap((p) => {
+      const iso = parseStatementDate(p.text, "dd/mm/yyyy", order);
+      return iso ? [Date.parse(iso) / 86_400_000] : [];
+    });
+    return days.length === 0 ? 0 : Math.max(...days) - Math.min(...days);
+  };
+  return span("month-first") < span("day-first") ? "month-first" : "day-first";
 }
 
 /** "1,234.50", "$12.40", "-12.40" → number; "" → null; anything else → NaN. */
@@ -164,17 +201,31 @@ export function readStatement(text: string): { format: string; lines: StatementL
   }
 
   const index = new Map(header.map((h, i) => [h.trim().toLowerCase(), i]));
+  const cellOf = (cells: string[], column: string) =>
+    cells[index.get(column.toLowerCase()) ?? -1]?.trim() ?? "";
   const problems: string[] = [];
   const lines: StatementLine[] = [];
 
+  const order = slashOrder(rows.map(({ cells }) => cellOf(cells, format.date.column)));
+  if (order === "mixed") {
+    throw new StatementFormatError([
+      "Some dates are written day first (25/10/2026) and others month first (10/25/2026), so the file cannot be read safely.",
+      "Export the statement again with one date format.",
+    ]);
+  }
+  const example =
+    format.date.style === "dd/mm/yyyy" && order === "month-first"
+      ? "10/02/2026"
+      : EXAMPLE[format.date.style];
+
   rows.forEach(({ cells, row: rowNumber }, i) => {
-    const get = (column: string) => cells[index.get(column.toLowerCase()) ?? -1]?.trim() ?? "";
+    const get = (column: string) => cellOf(cells, column);
     const rowProblems: string[] = [];
 
     const rawDate = get(format.date.column);
-    const date = parseStatementDate(rawDate, format.date.style);
+    const date = parseStatementDate(rawDate, format.date.style, order);
     if (!date) {
-      rowProblems.push(`the date "${rawDate}" is not a date like ${EXAMPLE[format.date.style]}`);
+      rowProblems.push(`the date "${rawDate}" is not a date like ${example}`);
     }
 
     let amountAud: number | null = null;
@@ -240,5 +291,10 @@ export function readStatement(text: string): { format: string; lines: StatementL
       "Fix these rows, then upload again.",
     ]);
   }
-  return { format: format.name, lines };
+  // The review page shows the format, so a month-first reading is never silent.
+  const name =
+    format.date.style === "dd/mm/yyyy" && order === "month-first"
+      ? `${format.name}, dates read month first (10/02/2026 = 2 October)`
+      : format.name;
+  return { format: name, lines };
 }
