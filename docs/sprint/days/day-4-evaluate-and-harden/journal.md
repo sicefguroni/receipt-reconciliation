@@ -97,6 +97,20 @@ Proxy only, straight after P1, on this build. Protocol and blank record in `feed
 
 ---
 
+## C1, the builder cold run, and what changed because of it
+
+**Measured.** Fresh clone, install 17.3 s, the month closed in about 8 minutes. Scored by script from the downloaded ledger: 37 of 40 receipts as the key expects; 3 wrong pairings chosen by the person, all signed off as "Good"; the ledger $106.66 over. Every automatic match was right.
+
+**What it means.** On Days 2–4 every safeguard was aimed at the model and the rules. C1 showed the human step can undo them in seconds: any free line could be paired and pushed through with a 4-letter reason. The builder did it, so a newcomer could too.
+
+**Changed** (candidate chose which): a pairing check that shows receipt and payment side by side and lists what does not fit; specific reasons everywhere; a "Saving…" state on every action; the queue as tabs; an in-app guide rendered from the README.
+
+**What went wrong.** Seeding while the server held the database (Windows lock again); JSX comments put inside `.map()` callbacks broke the guide file until they were changed to line comments; `sed` ate a regex's backslashes.
+
+**Verified.** 299/299 tests; 6 guardrail mutations caught; 15/15 browser checks, including C1's exact R13 → L26 pairing replayed through the UI.
+
+---
+
 ## Day 4 summary
 
 - Exit criterion "`EVALUATION.md` has full results (TC table, holdout and full, B0/B1, latency, cost, human touches)": **met**, except time to close, which needs a person.

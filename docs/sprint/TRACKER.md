@@ -9,6 +9,8 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
+**C1 done, P1 pending** (Day 4). The builder cold run closed the month in about 8 min (under the ≤ 10 min target) with 3 wrong pairings the person made and signed off as "Good" (ledger $106.66 over); every automatic match was right. Changes made in response: a pairing guardrail (candidate's ruling: warn and show both; specific reasons), loading indicators, the queue as tabs, and an in-app guide rendered from the README. `pnpm test` 299/299; browser 15/15. **Still open, human only:** P1 + feedback.
+
 **Day 4 follow-up done** (2026-11-04). Day 4 merged to `main` and pushed (fast-forward). The three open items are closed: month-first statement dates are detected from the whole file (new stress case S11, 11/11); **R-MAT-10** lets a person pay one receipt from several lines; the refund wording and the split were checked in a browser on a production build, 16/16, which led to two display fixes. `pnpm test` 290/290. **Still open, human only:** P1 + feedback (one sitting) and C1.
 
 **Day 4 blocks 1–4 done; human sessions pending** (2026-11-03). Branch `day-4-evaluate-and-harden` (local, not pushed). A 10-case stress set (`fixtures/stress/`, `pnpm eval:stress`) broke the system in 4 places, all in rules or data contracts, none in perception: refunds offered as payments, a chat screenshot told to "retake it closer", a valid statement with a title row rejected, and an FX outage that over-flagged paid receipts and contradicted the ledger in the summary. Six failure analyses with before/after numbers (`days/day-4-evaluate-and-harden/failures.md`), including the two Day 2 scoring findings, tuned on the tuning split only. **Stress 6/10 → 10/10; the 20-receipt B1 subset 10/11 → 11/11; the October month unchanged at 12/12, 0/33 (0/14 holdout), with no regression.** `docs/EVALUATION.md` has the full results. Live spend today about USD 0.09 from the run logs (upper bound), plus one probe call whose tokens were not logged (approved up to USD 1). **Still open, human:** P1 (naive proxy) + feedback questions in one sitting, and C1 (builder cold run); time to close is the one `03` target not measured. Next: those sessions, then Day 5.
@@ -53,7 +55,7 @@ Block-by-block detail: [`days/day-3-working-core/journal.md`](days/day-3-working
 - [x] Month-end pack: `Done` 2026-11-03. Paths: `src/pipeline/pack.ts`, `src/app/pack/[runId]/{page.tsx,ledger.csv,exceptions.csv}`. Validation: closed-month test (category and payment-source totals equal the ledger; no open exception rows); browser download of both CSVs with the substitute row and the sign-off reason.
 - [x] Run log and Runs page: `Done` 2026-11-03. Paths: `src/pipeline/run-log.ts` (`statement`, `run` stages; fixed error codes), `src/app/runs/**`. Validation: browser run shows a failed statement upload as `STATEMENT_FORMAT` and no receipt or statement text.
 - [x] README draft; run `v1-day3` live: `Done` 2026-11-03. Paths: `README.md`, `eval-results/v1-day3{,-replay}/`, `fixtures/recordings/**`, `docs/EVALUATION.md`. Validation: `pnpm eval -- --mode live --label v1-day3` 12/12, 0/33; `eval:compare -- v0-day2-live v1-day3` all same; replay with the key blanked identical.
-- [ ] First execution by the target user (human): `Blocked` 2026-11-03. No Accounting user exists for this sprint. Candidate's ruling: a naive proxy (admin or bookkeeping background, never seen the repo) plus a builder cold run, each labelled. Resume condition: run both sessions with `days/day-3-working-core/first-run-observations.md` and fill in its record.
+- [ ] First execution by the target user (human): `In Progress` Day 4. **C1 (builder) done:** about 8 min, 37/40 against the key, record and changes in `first-run-observations.md`. P1 (proxy) still to run. Was `Blocked` 2026-11-03. No Accounting user exists for this sprint. Candidate's ruling: a naive proxy (admin or bookkeeping background, never seen the repo) plus a builder cold run, each labelled. Resume condition: run both sessions with `days/day-3-working-core/first-run-observations.md` and fill in its record.
 
 ### Day 4: Evaluate, break, and harden
 
@@ -158,6 +160,11 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-04 | Statement slash-date order decided from the whole file (a number over 12 proves it; both proofs refused; otherwise the shorter period; day first on a tie), and a month-first reading named on the review page | Ask the person to pick the order on upload; keep day first only | No extra step for the common case, never a silent misread when the file holds evidence, and the reading is visible. Measured: the old reader got 15 of 18 dates wrong on an all-ambiguous excerpt | Yes |
 | 2026-11-04 | R-MAT-10 split payment as a person's decision (`split_payment`, the full set of lines, latest wins), never automatic; amounts compared on the sum | Automatic search for line combinations that add up | Automatic combination search would pair unrelated payments that happen to sum to a total, the kind of silent wrong match the system exists to prevent | Yes |
 | 2026-11-04 | The split form is a closed section under "Choose the payment", open only when the receipt is already split | Always visible | The browser screenshot showed 13 checkboxes under every receipt that needed a match; splits are rare | Yes |
+| Day 4 | **C1 guardrail: warn and show both, not block** | Block unlikely pairings; both | **Candidate's ruling.** The person keeps the last word, but cannot miss what does not fit or explain it with "Good" | Yes |
+| Day 4 | A reason must be specific everywhere one is asked: 8+ characters, not only generic words | 3+ characters (R-AMT-4 as written) | Every C1 reason was "Good" or "Monthly". One rule for all reasons, so a person learns it once | Yes |
+| Day 4 | The queue groups as tabs (six, with counts), server-rendered links, opening on the first group with work | Keep stacked sections; collapsible sections | **Candidate's request.** Design-system guidance (GOV.UK, Parliament, Carbon) fits tabs to parallel groups worked one at a time, at most six; links keep it server-rendered and bookmarkable | Yes |
+| Day 4 | One client component (`SubmitButton`) for pending state | Keep zero client JavaScript (Day 3 design) | C1: "it feels hanging". `useFormStatus` is the smallest change; with JavaScript off it is a plain submit button | Yes |
+| Day 4 | The in-app guide renders the README's user sections with a small renderer (React elements, no HTML injection) | Hand-written guide page; a markdown dependency | One text for both, so they cannot drift; the README uses only a small markdown subset; no new dependency | Yes |
 
 ## AI corrections log
 
@@ -200,6 +207,9 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | 2026-11-04 | A half-written shell command to measure S11 "before" (`git stash -u`, `git checkout f373625 -- src/adapters/statement`, `git stash pop`) | Run by mistake: it put the pre-fix reader into the working tree and staged it, undoing the committed fix locally | Agent saw the warning that 4 files had changed, checked `git status`, restored the files from `HEAD`, and confirmed the fix and the uncommitted work were intact. The before measurement was then done from a temporary copy of the old file | n/a (nothing committed) |
 | 2026-11-04 | Probe for S11: "post reader: 1 line with a wrong date" | The probe matched lines by description and amount; L24 is TC11's twin ($19.99 on adjacent days), so it compared against the wrong line | Agent re-checked position by position: 0 mismatches. The unit test (exact equality) had passed all along | n/a (scratch) |
 | 2026-11-04 | Browser check script | Three selector mistakes: text that also matched the row's hint, nested `<summary>` elements, and `getAttribute("open")` returning `""` (falsy) for an open row, so the script closed it | Agent fixed each in the script, not the app; the checks themselves (16) were unchanged | n/a (scratch) |
+| Day 4 | Ran `pnpm seed` while the server held the database | Seed failed (the known Windows lock); nothing deleted | Agent stopped the server first, then seeded | n/a |
+| Day 4 | Suppression comments in `guide/markdown.tsx` inserted as JSX comments inside `.map()` callbacks | Invalid syntax: lint reported 22 errors and the file would not compile | Agent read the file and changed them to line comments; lint clean | this commit |
+| Day 4 | A regex edited through `sed` | The shell dropped the backslashes (`[\s\S]` became `[sS]`), failing the guide test | Agent fixed it with the editor tool | this commit |
 
 ## Session history
 
@@ -273,6 +283,14 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: `pnpm test` 290/290; 11/11 mutations caught; typecheck, lint, build clean; stress 11/11 keyless; browser 16/16.
 - Remaining: P1 + feedback and C1 (human). The branch `day-4-open-items` is fast-forwarded to `main` and pushed.
 - Known risks: time to close still not measured; a one-line statement with an ambiguous date is read day first.
+
+### Day 4: C1 and the changes it led to
+
+- Work done: C1 recorded from the candidate's report and scored against the key from the downloaded ledger; pairing guardrail and specific reasons; loading indicators; queue tabs; in-app guide; relabelled the payment section for receipts with no payment.
+- Decisions: 5 rows, from "C1 guardrail: warn and show both" to "The in-app guide renders the README".
+- Validation: `pnpm test` 299/299; 6 guardrail mutations caught; typecheck, lint, build clean; scripted browser run on `next start`, 15/15.
+- Remaining: P1 + feedback (human).
+- Known risks: C1 is the builder; whether the guardrail changes what someone else does is for P1 to show.
 
 ### YYYY-MM-DD: Session title
 
