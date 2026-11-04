@@ -6,6 +6,7 @@ import type { StatementLine } from "@/core/schemas";
 import type { MonthResult, NoReceiptLine, ReceiptResult } from "@/pipeline/reconcile";
 import { review } from "../../actions";
 import { FIELD_LABELS, money } from "../../labels";
+import { SubmitButton } from "../../submit-button";
 
 // The actions under one queue row. Plain forms posting to one server action; the rules are
 // checked on the server (src/pipeline/decisions.ts), the page only offers what applies.
@@ -181,7 +182,7 @@ export function ReceiptPanel({
             totals.
           </p>
           <div className="row">
-            <button
+            <SubmitButton
               type="submit"
               name="action"
               value="confirm_duplicate"
@@ -189,13 +190,13 @@ export function ReceiptPanel({
               formNoValidate
             >
               Confirm duplicate
-            </button>
+            </SubmitButton>
           </div>
           <div className="row">
             <ReasonField id={`dup-${r.id}`} label="Or, why it is not a duplicate" />
-            <button type="submit" name="action" value="not_duplicate">
+            <SubmitButton type="submit" name="action" value="not_duplicate">
               Not a duplicate
-            </button>
+            </SubmitButton>
           </div>
         </form>
       ) : null}
@@ -209,9 +210,14 @@ export function ReceiptPanel({
           <h4>Sign off the difference</h4>
           <div className="row">
             <ReasonField id={`sign-${r.id}`} label="Reason for the difference" required />
-            <button type="submit" name="action" value="sign_off_difference" className="primary">
+            <SubmitButton
+              type="submit"
+              name="action"
+              value="sign_off_difference"
+              className="primary"
+            >
               Sign off difference
-            </button>
+            </SubmitButton>
           </div>
         </form>
       ) : null}
@@ -280,14 +286,14 @@ export function ReceiptPanel({
               </p>
             ) : null}
             <div className="row">
-              <button
+              <SubmitButton
                 type="submit"
                 name="action"
                 value="correct"
                 className={needsDetails ? "primary" : ""}
               >
                 Save details
-              </button>
+              </SubmitButton>
             </div>
           </form>
         </details>
@@ -295,7 +301,14 @@ export function ReceiptPanel({
 
       {canMatch ? (
         <details className="sub" open={needsMatch}>
-          <summary>{needsMatch ? "Choose the payment" : "Wrong payment? Choose another"}</summary>
+          <summary>
+            {/* Day 4 (C1): a reimbursement has no payment, so "Wrong payment?" invited changing one. */}
+            {needsMatch
+              ? "Choose the payment"
+              : paidBy.length === 0
+                ? "Not paid personally? Choose a payment"
+                : "Wrong payment? Choose another"}
+          </summary>
           <form action={review} className="act">
             <Hidden runId={runId} subjectId={r.id} />
             <fieldset>
@@ -345,14 +358,14 @@ export function ReceiptPanel({
                     : "Reason (needed to reimburse)"
                 }
               />
-              <button
+              <SubmitButton
                 type="submit"
                 name="action"
                 value="choose_match"
                 className={needsMatch ? "primary" : ""}
               >
                 Use this payment
-              </button>
+              </SubmitButton>
             </div>
           </form>
           {splitLines.length >= 2 ? (
@@ -382,9 +395,9 @@ export function ReceiptPanel({
                   ))}
                 </fieldset>
                 <div className="row">
-                  <button type="submit" name="action" value="split_payment">
+                  <SubmitButton type="submit" name="action" value="split_payment">
                     Use these payments together
-                  </button>
+                  </SubmitButton>
                 </div>
               </form>
             </details>
@@ -395,7 +408,7 @@ export function ReceiptPanel({
       <form action={review} className="act approve">
         <Hidden runId={runId} subjectId={r.id} />
         <div className="row">
-          <button
+          <SubmitButton
             type="submit"
             name="action"
             value="approve"
@@ -405,7 +418,7 @@ export function ReceiptPanel({
             title={approval.allowed ? undefined : approval.reason}
           >
             Approve
-          </button>
+          </SubmitButton>
           {approval.allowed ? (
             <span className="hint">
               {r.state.reimbursement
@@ -425,9 +438,9 @@ export function ReceiptPanel({
           <Hidden runId={runId} subjectId={r.id} />
           <div className="row">
             <ReasonField id={`rm-${r.id}`} label="Note for the submitter (optional)" />
-            <button type="submit" name="action" value="request_reupload">
+            <SubmitButton type="submit" name="action" value="request_reupload">
               Remove from this month
-            </button>
+            </SubmitButton>
           </div>
         </form>
       ) : null}
@@ -548,14 +561,14 @@ export function LinePanel({
                 ))}
               </select>
             </label>
-            <button
+            <SubmitButton
               type="submit"
               name="action"
               value="link_receipt"
               className={n.candidateFor.length > 0 ? "primary" : ""}
             >
               Link receipt
-            </button>
+            </SubmitButton>
           </div>
         </form>
       ) : null}
@@ -577,12 +590,12 @@ export function LinePanel({
           <ReasonField id={`line-${n.line.id}`} label="Reason" required />
         </div>
         <div className="row">
-          <button type="submit" name="action" value="record_substitute">
+          <SubmitButton type="submit" name="action" value="record_substitute">
             {credit ? "Record the credit" : "Record a substitute"}
-          </button>
-          <button type="submit" name="action" value="mark_not_expense">
+          </SubmitButton>
+          <SubmitButton type="submit" name="action" value="mark_not_expense">
             Not an expense
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </div>

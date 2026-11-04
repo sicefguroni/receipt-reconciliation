@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { PEOPLE } from "@/config/people";
 import { currentActor, switchActor } from "./actions";
+import { SubmitButton } from "./submit-button";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             <Link href="/">Months</Link>
             <Link href="/upload">Upload</Link>
             <Link href="/runs">Runs</Link>
+            <Link href="/guide">How to close a month</Link>
           </nav>
           {/* Simulated sign-in (03 non-goal: real authentication). Shows R-APR-1 in action. */}
           <form action={switchActor} className="actor">
@@ -39,7 +41,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 ))}
               </select>
             </label>
-            <button type="submit">Switch</button>
+            <SubmitButton type="submit" pendingText="Switching…">
+              Switch
+            </SubmitButton>
           </form>
         </header>
         <div id="content">{children}</div>

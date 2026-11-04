@@ -625,3 +625,109 @@ h2.spaced {
   margin: 0 0 0.4rem;
   padding-left: 1.2rem;
 }
+
+/* Day 4 (C1): a pressed button while its action runs. */
+button[aria-busy="true"] {
+  cursor: progress;
+}
+.spinner {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.45em;
+  vertical-align: -0.1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.6;
+  }
+}
+
+/* Day 4 (C1): queue groups as line tabs. The row scrolls inside itself on a phone, never the
+   page. Counts stay visible on every tab; the two blocking groups show theirs in red. */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--rule-strong);
+  margin: 1rem 0 0.5rem;
+  scrollbar-width: thin;
+}
+.tab {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0 0.85rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+.tab:hover {
+  color: var(--ink);
+}
+.tab.active {
+  color: var(--ink);
+  font-weight: 600;
+  border-bottom-color: var(--tick);
+}
+.tab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.tab-count {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85em;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--tick-wash);
+  color: var(--ink);
+}
+.tab.urgent .tab-count {
+  background: var(--query-wash);
+  color: var(--query);
+}
+
+/* Day 4 (C1): the in-app guide (the README's user sections). */
+.guide {
+  max-width: 52rem;
+}
+/* biome-ignore lint/style/noDescendingSpecificity: the guide and the review queue are different pages. */
+.guide h2 {
+  margin-top: 2rem;
+}
+.guide li {
+  margin: 0.25rem 0;
+}
+.table-wrap {
+  overflow-x: auto;
+}
+.guide table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95em;
+}
+.guide th,
+.guide td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.guide th {
+  border-bottom-color: var(--rule-strong);
+}

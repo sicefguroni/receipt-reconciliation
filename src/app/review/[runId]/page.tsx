@@ -6,6 +6,8 @@ import type { QueueItem } from "@/core/queue";
 import { getMonth, pipelineConfig } from "@/server/months";
 import { bulkApprove, currentActor } from "../../actions";
 import { lineNextStep, money, nextStep } from "../../labels";
+import { SubmitButton } from "../../submit-button";
+import { activeTab, TAB_LABELS, TABS, type Tab } from "../../tabs";
 import { day, LinePanel, ReceiptPanel } from "./panels";
 
 export const dynamic = "force-dynamic";
@@ -26,12 +28,17 @@ export default async function ReviewPage({
   searchParams,
 }: {
   params: Promise<{ runId: string }>;
-  searchParams: Promise<{ note?: string; error?: string; open?: string }>;
+  searchParams: Promise<{ note?: string; error?: string; open?: string; tab?: string }>;
 }) {
   const { runId } = await params;
-  const { note, error, open } = await searchParams;
+  const { note, error, open, tab: askedTab } = await searchParams;
   const month = getMonth(runId);
   if (!month) notFound();
+  const tab = activeTab(month, open, askedTab);
+  const countOf = (t: Tab) =>
+    t === "done"
+      ? month.done.length
+      : (month.queue.find((s) => String(s.group) === t)?.items.length ?? 0);
   const actor = await currentActor();
   const categories = pipelineConfig().categories.categories;
   const receipts = new Map(month.receipts.map((r) => [r.id, r]));
@@ -179,6 +186,22 @@ export default async function ReviewPage({
         </p>
       ) : null}
 
+      <nav className="tabs" aria-label="Review groups">
+        {TABS.map((t) => {
+          const count = countOf(t);
+          return (
+            <Link
+              key={t}
+              href={`/review/${encodeURIComponent(month.runId)}?tab=${t}`}
+              className={`tab${t === tab ? " active" : ""}${(t === "1" || t === "2") && count > 0 ? " urgent" : ""}`}
+              aria-current={t === tab ? "page" : undefined}
+            >
+              {TAB_LABELS[t]} <span className="tab-count">{count}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
       <div className="cols" aria-hidden="true">
         <span />
         <span>Item</span>
@@ -188,57 +211,61 @@ export default async function ReviewPage({
         <span>What to do</span>
       </div>
 
-      {month.queue.map((section) => (
-        <section
-          key={section.group}
-          className={`group g${section.group}`}
-          aria-labelledby={`g${section.group}`}
-        >
+      {month.queue
+        .filter((section) => String(section.group) === tab)
+        .map((section) => (
+          <section
+            key={section.group}
+            className={`group g${section.group}`}
+            aria-labelledby={`g${section.group}`}
+          >
+            <div className="group-head">
+              <h2 id={`g${section.group}`}>
+                {section.title}{" "}
+                <span className="count">
+                  {section.items.length} {section.items.length === 1 ? "item" : "items"}
+                </span>
+              </h2>
+              <span className="amt">{money(section.totalAud)}</span>
+            </div>
+            <p className="group-hint">
+              {section.items.length === 0 ? "Nothing here." : GROUP_HINTS[section.group]}
+            </p>
+            {section.group === 5 && bulkOk.length > 1 ? (
+              <form action={bulkApprove} className="bulk">
+                <input type="hidden" name="runId" value={month.runId} />
+                <input type="hidden" name="ids" value={bulkOk.map((r) => r.id).join(",")} />
+                <SubmitButton type="submit" className="primary" pendingText="Approving…">
+                  Approve all {bulkOk.length} clean matches ({money(bulkTotal)})
+                </SubmitButton>
+                <span className="hint">
+                  Only matched items with no flags.
+                  {bulkMine.length > 0
+                    ? ` ${bulkMine.length} you submitted are left for someone else to approve.`
+                    : ""}
+                </span>
+              </form>
+            ) : null}
+            {section.items.map((item) => row(item, false))}
+          </section>
+        ))}
+
+      {tab === "done" ? (
+        <section className="group done-group" aria-labelledby="g-done">
           <div className="group-head">
-            <h2 id={`g${section.group}`}>
-              {section.title}{" "}
-              <span className="count">
-                {section.items.length} {section.items.length === 1 ? "item" : "items"}
-              </span>
+            <h2 id="g-done">
+              Done <span className="count">{doneCount} items</span>
             </h2>
-            <span className="amt">{money(section.totalAud)}</span>
+            <span className="amt">{money(doneTotal)}</span>
           </div>
           <p className="group-hint">
-            {section.items.length === 0 ? "Nothing here." : GROUP_HINTS[section.group]}
+            {doneCount === 0
+              ? "Approved and resolved items collect here."
+              : "Approved, confirmed duplicates, removed, and resolved payments."}
           </p>
-          {section.group === 5 && bulkOk.length > 1 ? (
-            <form action={bulkApprove} className="bulk">
-              <input type="hidden" name="runId" value={month.runId} />
-              <input type="hidden" name="ids" value={bulkOk.map((r) => r.id).join(",")} />
-              <button type="submit" className="primary">
-                Approve all {bulkOk.length} clean matches ({money(bulkTotal)})
-              </button>
-              <span className="hint">
-                Only matched items with no flags.
-                {bulkMine.length > 0
-                  ? ` ${bulkMine.length} you submitted are left for someone else to approve.`
-                  : ""}
-              </span>
-            </form>
-          ) : null}
-          {section.items.map((item) => row(item, false))}
+          {month.done.map((item) => row(item, true))}
         </section>
-      ))}
-
-      <section className="group done-group" aria-labelledby="g-done">
-        <div className="group-head">
-          <h2 id="g-done">
-            Done <span className="count">{doneCount} items</span>
-          </h2>
-          <span className="amt">{money(doneTotal)}</span>
-        </div>
-        <p className="group-hint">
-          {doneCount === 0
-            ? "Approved and resolved items collect here."
-            : "Approved, confirmed duplicates, removed, and resolved payments."}
-        </p>
-        {month.done.map((item) => row(item, true))}
-      </section>
+      ) : null}
     </main>
   );
 }

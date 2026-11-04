@@ -1,6 +1,7 @@
 import { STATEMENT_FORMATS } from "@/adapters/statement/read-statement";
 import { PEOPLE } from "@/config/people";
 import { uploadMonth } from "../actions";
+import { SubmitButton } from "../submit-button";
 
 export default async function UploadPage({
   searchParams,
@@ -67,9 +68,9 @@ export default async function UploadPage({
           <input type="text" name="businessPurpose" maxLength={500} />
         </label>
         <div>
-          <button type="submit" className="primary">
+          <SubmitButton type="submit" className="primary" pendingText="Reading the receipts…">
             Read and match
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </main>

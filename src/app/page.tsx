@@ -3,6 +3,7 @@ import { getEnv } from "@/config/env";
 import { getMonth, listRuns } from "@/server/months";
 import { startSampleMonth } from "./actions";
 import { money } from "./labels";
+import { SubmitButton } from "./submit-button";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +42,8 @@ export default async function HomePage({
         <h2>October 2026 sample month</h2>
         <p>
           Staff have submitted 40 receipts for October. Upload the bank statement export (CSV) to
-          match them, or use the sample statement.
+          match them, or use the sample statement. New here? Read{" "}
+          <Link href="/guide">how to close a month</Link> first.
         </p>
         <form action={startSampleMonth} className="stack">
           <label>
@@ -49,9 +51,9 @@ export default async function HomePage({
             <input type="file" name="statement" accept=".csv,text/csv" />
           </label>
           <div>
-            <button type="submit" className="primary">
+            <SubmitButton type="submit" className="primary" pendingText="Matching the receipts…">
               Match October's receipts
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </section>

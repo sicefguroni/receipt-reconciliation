@@ -30,6 +30,7 @@ import {
   runAndStore,
   runSampleMonth,
 } from "@/server/months";
+import { tabOf } from "./tabs";
 
 // Server actions. Every form posts here; errors go back to the page as plain sentences, never
 // stacks. Each review action becomes one decision, checked against the month as it stands.
@@ -210,6 +211,9 @@ export async function review(form: FormData): Promise<void> {
   const action = text(form, "action");
   const reason = text(form, "reason");
   const actor = await currentActor();
+  // The tab the person was on, so an action that closes the item keeps them there.
+  const before = getMonth(runId);
+  const tab = (before && tabOf(before, subjectId)) || undefined;
 
   let changes: DecisionChange[] = [];
   let done = "";
@@ -322,13 +326,22 @@ export async function review(form: FormData): Promise<void> {
   }
   // After a step that usually leads to another (sign off, approve), keep the item open where
   // it now sits, so the person does not have to find it again in its new group.
-  const nextStepFollows = ["choose_match", "correct", "not_duplicate", "link_receipt"].includes(
-    action,
-  );
+  const nextStepFollows = [
+    "choose_match",
+    "split_payment",
+    "correct",
+    "not_duplicate",
+    "link_receipt",
+  ].includes(action);
   const target = action === "link_receipt" ? text(form, "receiptId") : subjectId;
   const stillOpen = getMonth(runId)?.receipts.find((r) => r.id === target)?.outcome === "open";
   redirect(
-    reviewPath(runId, nextStepFollows && stillOpen ? { note: done, open: target } : { note: done }),
+    reviewPath(
+      runId,
+      nextStepFollows && stillOpen
+        ? { note: done, open: target }
+        : { note: done, ...(tab ? { tab } : {}) },
+    ),
   );
 }
 
@@ -354,5 +367,7 @@ export async function bulkApprove(form: FormData): Promise<void> {
     );
     if (result.ok) approved += 1;
   }
-  redirect(reviewPath(runId, { note: `${approved} of ${requested.size} matches approved.` }));
+  redirect(
+    reviewPath(runId, { note: `${approved} of ${requested.size} matches approved.`, tab: "5" }),
+  );
 }
