@@ -1,4 +1,9 @@
-import { type CategoryResult, categoriseByRules } from "@/core/categories";
+import {
+  type CategoryResult,
+  categoriseByRules,
+  type LineCategorySuggestion,
+  suggestLineCategory,
+} from "@/core/categories";
 import { type Conversion, checkCurrency, convertToAud, summariseExcluded } from "@/core/currency";
 import { findDuplicates } from "@/core/duplicates";
 import {
@@ -89,6 +94,8 @@ export interface NoReceiptLine {
    * is linked rather than written off as "not an expense" (TC04's line is both).
    */
   candidateFor: string[];
+  /** R-CAT-6: the category this payment most likely belongs to, and why; null when unknown. */
+  suggestedCategory: LineCategorySuggestion | null;
 }
 
 export interface ExceptionLogRow {
@@ -578,6 +585,15 @@ function derive(snapshot: MonthSnapshot, decisions: readonly Decision[], config:
   ).map((line) => ({
     line,
     resolution: folded.lines.get(line.id) ?? null,
+    suggestedCategory: suggestLineCategory(
+      line.description,
+      receipts.map((r) => ({
+        id: r.id,
+        vendor: r.extraction?.vendor.value ?? null,
+        category: r.category?.category ?? null,
+      })),
+      config.categories.rules,
+    ),
     candidateFor: receipts
       .filter(
         (r) =>

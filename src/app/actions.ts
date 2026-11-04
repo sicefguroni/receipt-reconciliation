@@ -272,7 +272,15 @@ export async function review(form: FormData): Promise<void> {
       done = `${subjectId} linked to ${text(form, "receiptId")}.`;
       break;
     case "record_substitute":
-      changes = [{ action, after: { category: text(form, "category") } }];
+      changes = [
+        {
+          action,
+          after: {
+            category: text(form, "category"),
+            ...(form.get("overrideSuggestion") === "on" ? { overrideSuggestion: true } : {}),
+          },
+        },
+      ];
       done = `Substitute recorded for ${subjectId}.`;
       break;
     case "mark_not_expense":

@@ -1,4 +1,5 @@
 import { normaliseVendor } from "./duplicates";
+import { distinctiveSimilarity } from "./matching";
 import type { CategorySource, ExceptionCode } from "./schemas";
 
 // Category rules R-CAT-1 to R-CAT-5 (docs/sprint/05-business-rules.md).
@@ -117,4 +118,42 @@ export function addVendorRule(
   const keyword = normalise(vendor);
   if (!keyword) throw new Error("A vendor rule needs a vendor name.");
   return [{ keyword, category }, ...rules.filter((r) => normalise(r.keyword) !== keyword)];
+}
+
+export interface LineCategorySuggestion {
+  category: string;
+  /** Why, in plain words, for the person: "the description matches the rule \"taxi\"". */
+  why: string;
+}
+
+/**
+ * R-CAT-6 (Day 4, after both cold runs put substitutes in odd categories: a café under Rent,
+ * an app store under Repairs): the category a statement line with no receipt most likely
+ * belongs to. The rule table first, on the line's description; otherwise the category of this
+ * month's receipts from the same business (distinctive words, R-MAT-11), the most common one.
+ * Null when neither knows: then nothing can be checked.
+ */
+export function suggestLineCategory(
+  description: string,
+  receipts: readonly { id: string; vendor: string | null; category: string | null }[],
+  rules: readonly VendorRule[],
+): LineCategorySuggestion | null {
+  const rule = rules.find((r) => hits(description, r.keyword));
+  if (rule) {
+    return { category: rule.category, why: `the description matches the rule "${rule.keyword}"` };
+  }
+  const byCategory = new Map<string, string[]>();
+  for (const r of receipts) {
+    if (!r.vendor || !r.category || distinctiveSimilarity(r.vendor, description) < 0.6) continue;
+    byCategory.set(r.category, [...(byCategory.get(r.category) ?? []), r.id]);
+  }
+  const best = [...byCategory.entries()].sort(
+    (a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]),
+  )[0];
+  if (!best) return null;
+  const [category, ids] = best;
+  return {
+    category,
+    why: `${ids.join(", ")} from the same business ${ids.length > 1 ? "are" : "is"} ${category}`,
+  };
 }

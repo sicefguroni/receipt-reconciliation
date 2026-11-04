@@ -170,6 +170,17 @@ export function checkDecision(
       if (!config.categories.categories.includes(change.after.category)) {
         return fail("Choose a category for the substitute.");
       }
+      // R-CAT-6 (Day 4): both cold runs filed substitutes oddly (a café under Rent).
+      const suggested = listed.suggestedCategory;
+      if (
+        suggested &&
+        suggested.category !== change.after.category &&
+        !change.after.overrideSuggestion
+      ) {
+        return fail(
+          `This payment looks like ${suggested.category}: ${suggested.why}. Choose ${suggested.category}, or tick "Use my category instead" if ${change.after.category} is right.`,
+        );
+      }
     } else {
       const problem = needReason("for marking it not an expense");
       if (problem) return fail(problem);

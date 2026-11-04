@@ -268,6 +268,46 @@ describe("R-MAT-11: a pairing that is clearly someone else's payment is refused 
   });
 });
 
+describe("R-CAT-6: a substitute against the suggested category (Day 4, C1 and P1)", () => {
+  const record = (lineId: string, category: string, overrideSuggestion?: boolean) =>
+    message(
+      checkDecision(
+        month(),
+        {
+          subjectId: lineId,
+          change: {
+            action: "record_substitute",
+            after: { category, ...(overrideSuggestion ? { overrideSuggestion } : {}) },
+          },
+          reason: "Card statement only, receipt lost",
+        },
+        REVIEWER,
+        config,
+      ),
+    );
+
+  it("P1 filed the café payment under Rent: refused, saying why and what to do", () => {
+    expect(record("L36", "Rent & Workspace")).toBe(
+      'This payment looks like Meals & Entertainment: the description matches the rule "cafe". Choose Meals & Entertainment, or tick "Use my category instead" if Rent & Workspace is right.',
+    );
+  });
+
+  it("P1 filed the app store payment under Repairs: refused, from R15's category", () => {
+    expect(record("L24", "Repairs & Maintenance")).toMatch(
+      /^This payment looks like Software: R15 from the same business is Software./,
+    );
+  });
+
+  it("the suggested category, or an explicit override, goes through", () => {
+    expect(record("L36", "Meals & Entertainment")).toBe("ok");
+    expect(record("L36", "Rent & Workspace", true)).toBe("ok");
+  });
+
+  it("with no suggestion (a pharmacy), any category is the person's call", () => {
+    expect(record("L02", "Other")).toBe("ok");
+  });
+});
+
 describe("decision checks", () => {
   it("R-APR-1: a submitter's own approval is refused with the reason", () => {
     const r = month().receipts.find((x) => x.id === "R01");

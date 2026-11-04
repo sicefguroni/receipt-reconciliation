@@ -163,7 +163,8 @@ export const DecisionChange = z.discriminatedUnion("action", [
   z.object({ action: z.literal("link_receipt"), after: z.object({ receiptId: z.string() }) }),
   z.object({
     action: z.literal("record_substitute"),
-    after: z.object({ category: z.string().min(1) }),
+    // R-CAT-6: a category other than the suggested one needs the person's explicit say-so.
+    after: z.object({ category: z.string().min(1), overrideSuggestion: z.boolean().optional() }),
   }),
   z.object({ action: z.literal("mark_not_expense"), after: z.object({}) }),
 ]);

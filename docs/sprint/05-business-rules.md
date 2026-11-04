@@ -82,6 +82,7 @@ Default chart (configurable in `config/categories.json`):
 - **R-CAT-3** The model may never choose "Other". Only a human can. *(Evidence E3: "Other" became a dumping ground.)*
 - **R-CAT-4** When a human corrects a category, the UI offers "Always use this category for <vendor>", which appends to the rule table and is audited.
 - **R-CAT-5** Category names are displayed exactly as configured (no slug forms such as "ai cloud"). *(Evidence E6.)*
+- **R-CAT-6** *Added Day 4 (both cold runs filed substitutes oddly: a café under Rent or Office Supplies, an app store under Repairs or Meals).* A statement line with no receipt gets a **suggested category**: from the rule table on its description, otherwise the most common category of this month's receipts from the same business (distinctive words, R-MAT-11). The suggestion is preselected and its reason shown. Recording a substitute or credit in a **different** category needs the person to tick "Use my category instead"; without it the decision is refused with the suggestion and why. *Coverage on October:* 4 of the 9 receipt-less payments have a suggestion (the two app-store lines, the café, the taxi), which would have caught 4 of the 9 odd categories in the two runs. The other 5 (pharmacy, parking, courier, petrol, bookshop, card fee) cannot be checked until the rule table names those businesses: a policy call for the finance lead (`config/categories.json`).
 
 ## Approval (R-APR)
 

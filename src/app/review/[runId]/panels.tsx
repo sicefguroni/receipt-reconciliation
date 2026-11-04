@@ -577,7 +577,7 @@ export function LinePanel({
         <div className="row">
           <label className="field">
             {credit ? "Category it reduces" : "Category (for a substitute)"}
-            <select name="category" defaultValue="">
+            <select name="category" defaultValue={n.suggestedCategory?.category ?? ""}>
               <option value="">Choose</option>
               {categories.map((c) => (
                 <option key={c} value={c}>
@@ -588,6 +588,20 @@ export function LinePanel({
           </label>
           <ReasonField id={`line-${n.line.id}`} label="Reason" required />
         </div>
+        {n.suggestedCategory ? (
+          // R-CAT-6 (Day 4): both cold runs filed substitutes oddly; a suggestion, and a
+          // deliberate step to go against it.
+          <>
+            <p className="hint">
+              Suggested: <strong>{n.suggestedCategory.category}</strong>, because{" "}
+              {n.suggestedCategory.why}.
+            </p>
+            <label className="check">
+              <input type="checkbox" name="overrideSuggestion" /> Use my category instead of the
+              suggestion
+            </label>
+          </>
+        ) : null}
         <div className="row">
           <SubmitButton type="submit" name="action" value="record_substitute">
             {credit ? "Record the credit" : "Record a substitute"}

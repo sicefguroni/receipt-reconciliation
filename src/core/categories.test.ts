@@ -7,6 +7,7 @@ import {
   type CategoryConfig,
   categoriseByRules,
   modelChoices,
+  suggestLineCategory,
 } from "./categories";
 import { DEFAULT_CATEGORIES } from "./schemas";
 
@@ -124,5 +125,48 @@ describe("R-CAT category rules", () => {
   it("R-CAT-5: configured names are kept exactly as written (no slug forms)", () => {
     expect(config.categories).toEqual([...DEFAULT_CATEGORIES]);
     for (const rule of config.rules) expect(config.categories).toContain(rule.category);
+  });
+});
+
+describe("R-CAT-6 suggested category for a payment with no receipt (Day 4)", () => {
+  const rules = [
+    { keyword: "taxi", category: "Travel" },
+    { keyword: "cafe", category: "Meals & Entertainment" },
+  ];
+  const month = [
+    { id: "R15", vendor: "Sample App Store", category: "Software" },
+    { id: "R06", vendor: "Metro Taxi Co.", category: "Travel" },
+  ];
+
+  it("the rule table first, saying which rule", () => {
+    expect(suggestLineCategory("METRO TAXI CO SAMPLE CITY", month, rules)).toEqual({
+      category: "Travel",
+      why: 'the description matches the rule "taxi"',
+    });
+  });
+
+  it("otherwise this month's receipts from the same business", () => {
+    expect(suggestLineCategory("SAMPLE APP STORE SAMPLE CITY", month, rules)).toEqual({
+      category: "Software",
+      why: "R15 from the same business is Software",
+    });
+  });
+
+  it("a shared generic word is not the same business, so no suggestion", () => {
+    expect(suggestLineCategory("SAMPLE BOOKSHOP", month, rules)).toBeNull();
+  });
+
+  it("the most common category wins; a tie goes to the first by name", () => {
+    const twice = [
+      { id: "R1", vendor: "Hub Coworking", category: "Rent & Workspace" },
+      { id: "R2", vendor: "Hub Coworking", category: "Rent & Workspace" },
+      { id: "R3", vendor: "Hub Coworking", category: "Meals & Entertainment" },
+    ];
+    expect(suggestLineCategory("HUB COWORKING SAMPLE CITY", twice, [])?.category).toBe(
+      "Rent & Workspace",
+    );
+    expect(suggestLineCategory("HUB COWORKING", twice.slice(1), [])?.category).toBe(
+      "Meals & Entertainment",
+    );
   });
 });
