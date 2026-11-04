@@ -9,6 +9,8 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
+**Day 4 open items closed** (Day 4). "Same business" is judged on distinctive words, so two cafés are different vendors and all four wrong pairings from C1 and P1 are refused. Substitutes get a suggested category (R-CAT-6), preselected; going against it needs a tick; 4 of the 9 odd categories from the runs would be caught, the other 5 need rule-table entries (finance lead). The month-end pack uses the same light cards. `pnpm test` 321/321; browser 11/11. Next: Day 5.
+
 **Day 4 complete** (all three exit criteria met). P1 (naive proxy, business management, 1 year) closed the month in 9 min, assisted once, 39/40, ledger $10.00 over; its one miss was again a person's pairing, made with the pairing check on screen. Feedback recorded word for word, and every point acted on or answered: R-MAT-11 refuses clear mismatches, filler reasons refused, only real candidates suggested, tabs switch on the page (inputs kept, about 60 ms), always-light card layout. `pnpm test` 307/307; browser 12/12. Next: Day 5.
 
 **C1 done, P1 pending** (Day 4). The builder cold run closed the month in about 8 min (under the ≤ 10 min target) with 3 wrong pairings the person made and signed off as "Good" (ledger $106.66 over); every automatic match was right. Changes made in response: a pairing guardrail (candidate's ruling: warn and show both; specific reasons), loading indicators, the queue as tabs, and an in-app guide rendered from the README. `pnpm test` 299/299; browser 15/15. **Still open, human only:** P1 + feedback.
@@ -69,6 +71,8 @@ Block-by-block detail: [`days/day-4-evaluate-and-harden/journal.md`](days/day-4-
 - [x] User feedback session and changes (human): `Done` Day 4, **proxy feedback**. Paths: `days/day-4-evaluate-and-harden/feedback-session.md` (answers word for word; five feedback → change pairs), `src/core/{matching,reasons}.ts`, `src/pipeline/{decisions,reconcile}.ts`, `src/app/review/[runId]/{page,panels,queue-tabs}.tsx`, `src/app/globals.css`, `05` (R-MAT-11, R-AMT-4). Validation: `pnpm test` 307/307; 7 mutations of R-MAT-11 and the reason rule caught; browser 12/12 on `next start`.
 
 - [x] Day 4 follow-up: refund wording in a browser, month-first statement dates, split payment: `Done` 2026-11-04. Paths: `src/adapters/statement/read-statement{,.test}.ts`, `src/core/{matching,schemas}.ts`, `src/core/matching.test.ts`, `src/pipeline/{reconcile,decisions,pack}.ts`, `src/pipeline/decisions.test.ts`, `src/app/{actions,labels}.ts`, `src/app/review/[runId]/panels.tsx`, `scripts/{generate-stress,eval-stress}.ts`, `fixtures/stress/statement-{us-dates,october-split-and-refund}.csv`, `eval-results/v2-day4-followup-stress/`, `05` (R-MAT-10), `README.md`. Validation: `pnpm test` 24 files, 290 passed; 11 single mutations (dates 4, split 7), all caught; typecheck, lint, build clean; stress 11/11 keyless; scripted browser run on `next start`, 16/16 checks.
+
+- [x] Day 4 open items: common vendor words, substitute categories, month-end pack look: `Done` Day 4. Paths: `src/core/{matching,categories}.ts` and tests, `src/core/schemas.ts`, `src/pipeline/{reconcile,decisions}.ts`, `src/pipeline/decisions.test.ts`, `src/app/actions.ts`, `src/app/review/[runId]/panels.tsx`, `src/app/pack/[runId]/page.tsx`, `src/app/globals.css`, `05` (R-MAT-11, R-CAT-6). Validation: `pnpm test` 321/321; 11 mutations caught (vendor words 6, suggestions 5); typecheck, lint, build clean; scripted browser run on `next start`, 11/11.
 
 ### Day 5: Hand off and present
 
@@ -172,6 +176,9 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | Day 4 | **Tabs switch on the page** (all groups rendered once, show/hide), still `?tab=` links | Save drafts in the browser; warn before leaving | **Candidate's ruling.** Keeps typed input and makes switching instant; works without JavaScript | Yes |
 | Day 4 | **Always light, groups as cards** | Light palette only; a full design pass | **Candidate's ruling.** Answers P1 directly while keeping the layout and wording, so the two runs stay comparable | Yes |
 | Day 4 | Exclude `.claude/` (local Claude Code settings) from Biome | Reformat the file | It is the candidate's untracked local settings, not project code | Yes |
+| Day 4 | "Same business" judged on distinctive words (generic business, place, and placeholder words ignored) for R-MAT-11 and the pairing check only | Change scoring too; keep whole-word overlap | Two cafés share "cafe", and the synthetic names share "Sample": two of the four observed wrong pairings slipped through on that. Scoring untouched, so automatic matching cannot move | Yes |
+| Day 4 | R-CAT-6: suggest a substitute's category from the rule table, else from this month's receipts from the same business; a different category needs an explicit tick | Block any category other than the suggestion; add rules for pharmacy, parking, courier, petrol, bookshop | The person may know better, so an override stays possible but deliberate. New rules are category policy, the finance lead's call, and fitting them to the lines seen in C1/P1 would tune to the test | Yes |
+| Day 4 | Month-end pack in the same light cards and tables as the review queue | Leave the pack as plain tables | **Candidate's request** ("apply the UI improvements in the month-end pack as well") | Yes |
 
 ## AI corrections log
 
@@ -222,6 +229,7 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | Day 4 | Inline `node -e` scripts and `sed` with `$` and backslashes | Failed or silently mangled the text three times today, against the agent's own saved memory | Agent switched to script files and the editor tool; a reusable `mutate.cjs` helper for mutation runs | n/a |
 | Day 4 | A docs script using JavaScript `replace` with text as the replacement | The text contained `$` followed by a backtick, which `replace` reads as "everything before the match": the journal and the TRACKER were pasted into themselves (journal 120 → 245 lines) | Agent noticed a repeated section, compared line counts with the last commit, restored the six uncommitted files, and re-ran with function replacements (literal text); committed files checked and unaffected | n/a (caught before commit) |
 | Day 4 | First R-MAT-11 test fixture | Used "SAMPLE PETROL" against "Sample Café": the shared word "sample" counts as alike, so the rule correctly did not fire. Also exposed a real limit, now in `05` | Agent used a vendor with no shared word and recorded the limit | `b1887e2` |
+| Day 4 | Browser check: "pack dates stay on one line" measured cell height | A table cell is as tall as its row, so 11 cells "wrapped" that had not | Agent counted the text's line boxes instead: 0 wrapped | n/a (scratch) |
 
 ## Session history
 
@@ -311,6 +319,14 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: `pnpm test` 307/307; 7 mutations caught; typecheck, lint, build clean; scripted browser run on `next start`, 12/12.
 - Remaining: Day 5 (final live run, handoff documents, demo).
 - Known risks: the guardrail changes are untested on a person; two businesses that share a common word are not refused by R-MAT-11; the substitutes in both runs had odd categories (pharmacy under Other, a cafe under Rent), which nothing checks.
+
+### Day 4: open items after P1
+
+- Work done: distinctive-word vendor comparison for R-MAT-11 and the pairing check; R-CAT-6 suggested categories for payments with no receipt, with a deliberate override; month-end pack as cards with stat tiles; shared table style.
+- Decisions: 3 rows, from "Same business judged on distinctive words" to "Month-end pack in the same light cards".
+- Validation: `pnpm test` 321/321; 11 mutations caught; typecheck, lint, build clean; browser 11/11.
+- Remaining: Day 5. For the finance lead: rule-table entries for the payment types that still get no suggestion.
+- Known risks: generic-word list is hand-made; a distinctive word shared by two different businesses would still count as alike.
 
 ### YYYY-MM-DD: Session title
 

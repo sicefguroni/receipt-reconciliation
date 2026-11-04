@@ -125,6 +125,18 @@ Proxy only, straight after P1, on this build. Protocol and blank record in `feed
 
 ---
 
+## Open items after P1
+
+**Common words.** "Same business" is now decided on distinctive words only: café, hotel, taxi, the city, and the data's "Sample" do not count. Two cafés are different vendors, and all four wrong pairings from the two runs are refused (two slipped through before on "Sample"). Scoring is untouched, so automatic matching cannot move; the 12 test cases and the October month are unchanged.
+
+**Substitute categories.** Each payment with no receipt gets a suggested category (the rule table, else this month's receipts from the same business), preselected with its reason; filing it elsewhere needs a tick. It would have caught 4 of the 9 odd categories in the two runs. The other 5 (pharmacy, parking, courier, petrol, bookshop, card fee) have no rule and no receipt to learn from: adding rules is the finance lead's call, not something to fit to the lines the runs happened to show.
+
+**Pack.** The same light cards as the queue, with four stat tiles; a substitute filed against its suggestion is marked.
+
+**Verified.** 321/321 tests; 11 mutations caught; 11/11 browser checks.
+
+---
+
 ## Day 4 summary
 
 - Exit criterion "`EVALUATION.md` has full results (TC table, holdout and full, B0/B1, latency, cost, human touches)": **met**, except time to close, which needs a person.
