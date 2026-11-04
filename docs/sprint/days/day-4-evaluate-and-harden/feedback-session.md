@@ -31,19 +31,28 @@ Then, only if they did not come up on their own (mark each answer as **prompted*
 
 ## Record (proxy feedback)
 
-- Date:
-- Commit:
-- Runner: same person as P1 (background as recorded there; no names)
-- Length of the conversation (mm:ss):
+*Recorded from the observer's (candidate's) report, word for word where quoted; nothing added. Proxy feedback, not the Accounting user.*
 
-| # | Question | What they said (paraphrased; exact words in quotes) | Screen / item they pointed at |
+- Date: Day 4
+- Commit: `db8579c`
+- Runner: same person as P1 (business management, 1 year; no names)
+- Length of the conversation (mm:ss): not recorded
+
+| # | Question | What they said (exact words in quotes) | Screen / item they pointed at |
 |---|---|---|---|
-| 1 | Trusted | | |
-| 2 | Did not trust | | |
-| 3 | Confusing | | |
-| 4 | Would stop them next month | | |
-| 5 | No-receipt lines (prompted?) | | |
-| 6 | Match reasons (prompted?) | | |
+| 1 | Trusted | "the matching" | not recorded |
+| 2 | Did not trust | "nothing" | — |
+| 3 | Confusing | "nothing so far, it might be cause of the UI of the tables and the detail card of each row. we should stick also to the standard light colors and modern tables/card for them because currently it looks like the UI is just separated with breaklines or lines" | the queue rows and the open row's detail |
+| 4 | Would stop them next month | "might be if the the loading and rendering times are slow, like rendering content per tab. im good if it's standardly quick enough." | the tabs |
+| 5 | No-receipt lines (prompted?) | not recorded | — |
+| 6 | Match reasons (prompted?) | not recorded | — |
+
+**Other comments** (exact words):
+
+- "i notice when i switch when tabs, my inputs are erased"
+- "UI should just be standard light"
+
+**Read alongside the scoring** (P1 record): the proxy said they trusted the matching and distrusted nothing; their one wrong decision was a pairing they made themselves (R20 with a $10.00 card fee), which the system had flagged on screen.
 
 ## Feedback → change pairs
 

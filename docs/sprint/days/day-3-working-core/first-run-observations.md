@@ -43,25 +43,30 @@ From `fixtures/dataset/ground-truth.json`. Use it to note wrong decisions afterw
 
 ## Record: P1 (naive proxy)
 
-- Date:
-- Commit:
-- Runner's background (role, years doing expenses or bookkeeping; no names):
-- Assisted? (no / yes at mm:ss, what was said):
-- **Time to close:** mm:ss — or *not finished* and why
-- Items done at the end (from the progress bar): __ of __
-- Wrong decisions against the key above:
+*Recorded from the observer's (candidate's) report; nothing added. Proxy evidence, not the Accounting user.*
+
+- Date: Day 4
+- Commit: `db8579c` (`main` at the time; nothing pushed after it, checked with `git ls-remote origin main`)
+- Runner's background (role, years doing expenses or bookkeeping; no names): business management, 1 year
+- Assisted? **Yes.** The minute and what was said were not recorded.
+- **Time to close: 9 min**
+- Items done at the end: every item resolved, by the downloaded ledger (40 receipts approved or confirmed duplicates; all 9 statement lines with no receipt resolved). The progress-bar reading was not recorded.
+- Wrong decisions against the key (scored by script from the downloaded `ledger-2026-10 (1).csv`): **39 of 40 receipts as the key expects. 1 wrong:** R20 ($268.00 hotel, no payment on the statement) paired with L44, MONTHLY CARD FEE $10.00, and signed off as "This is good". Receipts in the ledger total $5,401.25 against $5,391.25 in the ground truth (**$10.00 over**).
+  - On this build the pairing check lists what does not fit for that pairing (not a suggested payment; the vendor does not match; $10.00 for a $268.00 receipt, 96% less). It was shown and the person went ahead. "This is good" passed the reason rule (12 characters, and "this" is not on the generic-word list).
+  - Not in the key, noted: substitutes recorded with reasons "proceed with this", "Done with this", "done with this", "This has been purchased", "This is a purchased sample", all of which passed the reason rule; categories include L02 pharmacy under Other, L19 courier under Utilities, L24 app store under Repairs & Maintenance, and L36 cafe under Rent & Workspace. L44 (a card fee) was used as R20's payment instead of being resolved on its own.
+  - Right where C1 went wrong: R13 reimbursed at $14.70; R15 paired with L22.
 
 | mm:ss | What happened (hesitation, question, error read, wrong turn) | Screen / item | Severity: blocker / slowed / cosmetic |
 |---|---|---|---|
-| | | | |
+| not recorded | No timed notes were kept. Reported afterwards: "when i switch when tabs, my inputs are erased" | Review queue tabs | slowed (inputs lost) |
 
 **Blockers** (anything that would stop them closing the month alone):
 
-1.
+1. None reported; the month was closed with help at one point (when and what was not recorded).
 
-**Their words at the end** (exact quotes; ask "What would stop you using this next month?"):
+**Their words at the end** (exact quotes; asked "What would stop you using it next month?"):
 
--
+- "might be if the the loading and rendering times are slow, like rendering content per tab. im good if it's standardly quick enough."
 
 ## Record: C1 (builder cold run)
 
@@ -107,6 +112,9 @@ From `fixtures/dataset/ground-truth.json`. Use it to note wrong decisions afterw
 
 | Measure | B0 (estimate) | B1 (candidate, ChatGPT) | C1 (candidate, system) | P1 (proxy, system) |
 |---|---|---|---|---|
-| Time to close, 40 receipts | 20–40 min (labelled estimate) | about 11 min 10 s (extrapolated from 20 receipts) | **about 8 min** (builder; knows every screen) | |
-| Wrong matches | not measured | 3/19 **3 of 40** receipts, all paired by the person and signed off as "Good" (R13, R15, R20); automatic matches 0 wrong. Ledger $106.66 over the ground truth | |
-| Assisted? | n/a | n/a | n/a | |
+| Time to close, 40 receipts | 20–40 min (labelled estimate) | about 11 min 10 s (extrapolated from 20 receipts) | **about 8 min** (builder; knows every screen) | **9 min** (proxy, assisted once) |
+| Wrong matches | not measured | 3/19 **3 of 40** receipts, all paired by the person and signed off as "Good" (R13, R15, R20); automatic matches 0 wrong. Ledger $106.66 over the ground truth | **1 of 40** (R20 paired with a $10.00 card fee, signed off "This is good"); automatic matches 0 wrong. Ledger $10.00 over | |
+| Assisted? | n/a | n/a | n/a | **yes** (once; when and what not recorded) |
+| Build | — | — | `4b537cd` (before the pairing check) | `db8579c` (with it) |
+
+C1 and P1 differ in person, build, and help, so the drop from $106.66 to $10.00 over cannot be credited to the pairing check. What both show: the remaining wrong decisions are **people pairing a receipt with an unrelated payment and signing it off**, and in P1 that happened with the pairing check on screen.
