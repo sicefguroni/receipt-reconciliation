@@ -134,9 +134,11 @@ export function ReceiptPanel({
     (open.includes("AMBIGUOUS_MATCH") ||
       open.includes("NO_PAYMENT_FOUND") ||
       open.includes("AMOUNT_DIFFERS_OVER_THRESHOLD"));
-  // Ranked candidates first (R-MAT-2), then any other free line in the month.
+  // Real candidates first (R-MAT-2: a score of 40 or more), then any other free line in the
+  // month. Day 4 (P1): weak lines used to be offered here too, marked only "Weak match", so a
+  // $268 hotel's first option was a $10 card fee, and P1 took it. They are now in the list below.
   const candidates = (r.match?.candidates ?? []).filter(
-    (c) => c.statementLineId !== r.match?.statementLineId,
+    (c) => c.statementLineId !== r.match?.statementLineId && c.score >= MIN_CANDIDATE_SCORE,
   );
   const otherLines = month.freeLines.filter(
     (l) =>
@@ -320,10 +322,7 @@ export function ReceiptPanel({
                     <input type="radio" name="line" value={c.statementLineId} />
                     <span>
                       <strong>{l ? lineLabel(l) : c.statementLineId}</strong>
-                      <span className="hint">
-                        {" "}
-                        {c.reasons.join(", ")}.{c.score < MIN_CANDIDATE_SCORE ? " Weak match." : ""}
-                      </span>
+                      <span className="hint"> {c.reasons.join(", ")}.</span>
                     </span>
                   </label>
                 );

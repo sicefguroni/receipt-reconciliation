@@ -7,8 +7,9 @@ import { getMonth, pipelineConfig } from "@/server/months";
 import { bulkApprove, currentActor } from "../../actions";
 import { lineNextStep, money, nextStep } from "../../labels";
 import { SubmitButton } from "../../submit-button";
-import { activeTab, TAB_LABELS, TABS, type Tab } from "../../tabs";
+import { activeTab, TABS, type Tab } from "../../tabs";
 import { day, LinePanel, ReceiptPanel } from "./panels";
+import { QueueTabs } from "./queue-tabs";
 
 export const dynamic = "force-dynamic";
 
@@ -119,6 +120,18 @@ export default async function ReviewPage({
     );
   };
 
+  // The column headings sit inside each group's card, as the table's header row.
+  const cols = (
+    <div className="cols" aria-hidden="true">
+      <span />
+      <span>Item</span>
+      <span>Vendor or payment</span>
+      <span>Date</span>
+      <span className="amt">AUD</span>
+      <span>What to do</span>
+    </div>
+  );
+
   const doneTotal = month.done.reduce((s, i) => s + Math.round((i.amountAud ?? 0) * 100), 0) / 100;
 
   return (
@@ -186,86 +199,70 @@ export default async function ReviewPage({
         </p>
       ) : null}
 
-      <nav className="tabs" aria-label="Review groups">
-        {TABS.map((t) => {
-          const count = countOf(t);
-          return (
-            <Link
-              key={t}
-              href={`/review/${encodeURIComponent(month.runId)}?tab=${t}`}
-              className={`tab${t === tab ? " active" : ""}${(t === "1" || t === "2") && count > 0 ? " urgent" : ""}`}
-              aria-current={t === tab ? "page" : undefined}
-            >
-              {TAB_LABELS[t]} <span className="tab-count">{count}</span>
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className="cols" aria-hidden="true">
-        <span />
-        <span>Item</span>
-        <span>Vendor or payment</span>
-        <span>Date</span>
-        <span className="amt">AUD</span>
-        <span>What to do</span>
-      </div>
-
-      {month.queue
-        .filter((section) => String(section.group) === tab)
-        .map((section) => (
-          <section
-            key={section.group}
-            className={`group g${section.group}`}
-            aria-labelledby={`g${section.group}`}
-          >
-            <div className="group-head">
-              <h2 id={`g${section.group}`}>
-                {section.title}{" "}
-                <span className="count">
-                  {section.items.length} {section.items.length === 1 ? "item" : "items"}
-                </span>
-              </h2>
-              <span className="amt">{money(section.totalAud)}</span>
-            </div>
-            <p className="group-hint">
-              {section.items.length === 0 ? "Nothing here." : GROUP_HINTS[section.group]}
-            </p>
-            {section.group === 5 && bulkOk.length > 1 ? (
-              <form action={bulkApprove} className="bulk">
-                <input type="hidden" name="runId" value={month.runId} />
-                <input type="hidden" name="ids" value={bulkOk.map((r) => r.id).join(",")} />
-                <SubmitButton type="submit" className="primary" pendingText="Approving…">
-                  Approve all {bulkOk.length} clean matches ({money(bulkTotal)})
-                </SubmitButton>
-                <span className="hint">
-                  Only matched items with no flags.
-                  {bulkMine.length > 0
-                    ? ` ${bulkMine.length} you submitted are left for someone else to approve.`
-                    : ""}
-                </span>
-              </form>
-            ) : null}
-            {section.items.map((item) => row(item, false))}
-          </section>
-        ))}
-
-      {tab === "done" ? (
-        <section className="group done-group" aria-labelledby="g-done">
-          <div className="group-head">
-            <h2 id="g-done">
-              Done <span className="count">{doneCount} items</span>
-            </h2>
-            <span className="amt">{money(doneTotal)}</span>
-          </div>
-          <p className="group-hint">
-            {doneCount === 0
-              ? "Approved and resolved items collect here."
-              : "Approved, confirmed duplicates, removed, and resolved payments."}
-          </p>
-          {month.done.map((item) => row(item, true))}
-        </section>
-      ) : null}
+      <QueueTabs
+        runId={month.runId}
+        tabs={TABS.map((id) => ({ id, count: countOf(id) }))}
+        initial={tab}
+        panels={{
+          ...Object.fromEntries(
+            month.queue.map((section) => [
+              String(section.group),
+              <section
+                key={section.group}
+                className={`group g${section.group}`}
+                aria-labelledby={`g${section.group}`}
+              >
+                <div className="group-head">
+                  <h2 id={`g${section.group}`}>
+                    {section.title}{" "}
+                    <span className="count">
+                      {section.items.length} {section.items.length === 1 ? "item" : "items"}
+                    </span>
+                  </h2>
+                  <span className="amt">{money(section.totalAud)}</span>
+                </div>
+                <p className="group-hint">
+                  {section.items.length === 0 ? "Nothing here." : GROUP_HINTS[section.group]}
+                </p>
+                {section.group === 5 && bulkOk.length > 1 ? (
+                  <form action={bulkApprove} className="bulk">
+                    <input type="hidden" name="runId" value={month.runId} />
+                    <input type="hidden" name="ids" value={bulkOk.map((r) => r.id).join(",")} />
+                    <SubmitButton type="submit" className="primary" pendingText="Approving…">
+                      Approve all {bulkOk.length} clean matches ({money(bulkTotal)})
+                    </SubmitButton>
+                    <span className="hint">
+                      Only matched items with no flags.
+                      {bulkMine.length > 0
+                        ? ` ${bulkMine.length} you submitted are left for someone else to approve.`
+                        : ""}
+                    </span>
+                  </form>
+                ) : null}
+                {section.items.length > 0 ? cols : null}
+                {section.items.map((item) => row(item, false))}
+              </section>,
+            ]),
+          ),
+          done: (
+            <section className="group done-group" aria-labelledby="g-done">
+              <div className="group-head">
+                <h2 id="g-done">
+                  Done <span className="count">{doneCount} items</span>
+                </h2>
+                <span className="amt">{money(doneTotal)}</span>
+              </div>
+              <p className="group-hint">
+                {doneCount === 0
+                  ? "Approved and resolved items collect here."
+                  : "Approved, confirmed duplicates, removed, and resolved payments."}
+              </p>
+              {month.done.length > 0 ? cols : null}
+              {month.done.map((item) => row(item, true))}
+            </section>
+          ),
+        }}
+      />
     </main>
   );
 }

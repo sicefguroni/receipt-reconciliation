@@ -1,42 +1,28 @@
 /* A ruled ledger: pale ruled paper, green-black ink, an auditor's green tick for what is done
    and red ink only for what blocks. Amounts sit in one right-aligned column of tabular figures,
    so totals line up down the whole queue. */
+/* Day 4 (P1): a standard light interface, always. Neutral greys, white cards, and the same three
+   signal colours as before: green for done, red only for what blocks, amber for "check this". */
 :root {
-  --paper: #f5f7f3;
-  --sheet: #fbfcfa;
-  --ink: #1e2a23;
-  --ink-soft: #55635a;
-  --rule: #cbd8ce;
-  --rule-strong: #9fb3a5;
+  --paper: #f4f6f8;
+  --sheet: #ffffff;
+  --ink: #1f2933;
+  --ink-soft: #5f6b76;
+  --rule: #e4e8ec;
+  --rule-strong: #c9d1d8;
   --tick: #2e6a4d;
-  --tick-wash: #e3efe7;
-  --query: #a8321f;
-  --query-wash: #fbe9e5;
+  --tick-wash: #ebf5ef;
+  --query: #b42318;
+  --query-wash: #fdeceb;
   --check: #7a5300;
-  --check-wash: #fff3d1;
+  --check-wash: #fff6dc;
   --focus: #1d5fb8;
-  --radius: 4px;
+  --radius: 6px;
+  --card-radius: 10px;
+  --card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.04);
+  --inset: #f8fafb;
   --amt-col: 9.5rem;
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #141a16;
-    --sheet: #1a211c;
-    --ink: #e4ebe5;
-    --ink-soft: #a3b2a7;
-    --rule: #2f3b33;
-    --rule-strong: #4b5c50;
-    --tick: #7cc29d;
-    --tick-wash: #1f3328;
-    --query: #f08f7c;
-    --query-wash: #3a211c;
-    --check: #f0c463;
-    --check-wash: #352a12;
-    --focus: #7fb0f5;
-    color-scheme: dark;
-  }
 }
 
 * {
@@ -265,23 +251,30 @@ input[type="radio"] {
 }
 .cols {
   font-size: 0.82rem;
+  font-weight: 600;
   color: var(--ink-soft);
-  padding: 0 0.75rem 0.35rem;
-  border-bottom: 2px solid var(--rule-strong);
+  padding: 0.5rem 1rem;
+  background: var(--inset);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
 }
 .amt {
   text-align: right;
 }
 .group {
-  margin-top: 1.6rem;
+  margin-top: 0.75rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
 }
 .group-head {
   display: grid;
   grid-template-columns: 1fr var(--amt-col) minmax(14rem, 2.2fr);
   gap: 0 0.9rem;
   align-items: baseline;
-  padding: 0 0.75rem 0.25rem;
-  border-bottom: 1px solid var(--rule-strong);
+  padding: 0.85rem 1rem 0.35rem;
 }
 .ledger .group-head {
   grid-template-columns: var(--ledger-cols);
@@ -299,7 +292,7 @@ input[type="radio"] {
   margin-left: 0.3rem;
 }
 .group-hint {
-  margin: 0.35rem 0.75rem 0.5rem;
+  margin: 0 1rem 0.75rem;
   font-size: 0.88rem;
   color: var(--ink-soft);
 }
@@ -310,17 +303,17 @@ input[type="radio"] {
 .item > summary {
   list-style: none;
   cursor: pointer;
-  padding: 0.55rem 0.75rem;
+  padding: 0.7rem 1rem;
 }
 .item > summary::-webkit-details-marker {
   display: none;
 }
 .item > summary:hover {
-  background: var(--tick-wash);
+  background: var(--inset);
 }
 .item[open] > summary {
   background: var(--tick-wash);
-  border-bottom: 1px dashed var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
 }
 .id {
   color: var(--ink-soft);
@@ -462,6 +455,7 @@ input[type="radio"] {
   align-items: center;
 }
 details.sub {
+  background: var(--sheet);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   padding: 0.5rem 0.7rem;
@@ -730,4 +724,16 @@ button[aria-busy="true"] {
 }
 .guide th {
   border-bottom-color: var(--rule-strong);
+}
+
+/* Day 4 (P1): each group is a card, its column headings the table's header row; an open row's
+   detail sits in a shaded inset. */
+.group .bulk {
+  margin: 0 1rem 0.85rem;
+}
+.item:last-child {
+  border-bottom: none;
+}
+.item[open] > .panel {
+  background: var(--inset);
 }
