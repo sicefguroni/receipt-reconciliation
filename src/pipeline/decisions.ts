@@ -221,6 +221,25 @@ export function checkDecision(
       }
       return record(change, { statementLineId: r.match.statementLineId, status: r.state.status });
     }
+    case "split_payment": {
+      // R-MAT-10: one receipt paid by several lines (a deposit and a balance, for example).
+      if (r.match === null) {
+        return fail(
+          "Fix the receipt's details first: it has to be readable before it can be matched.",
+        );
+      }
+      const ids = change.after.statementLineIds;
+      if (new Set(ids).size !== ids.length) return fail("Choose each payment only once.");
+      for (const lineId of ids) {
+        const problem = lineAvailable(month, lineId, r.id);
+        if (problem) return fail(problem);
+      }
+      return record(change, {
+        statementLineId: r.match.statementLineId,
+        extraLineIds: r.match.extraLineIds ?? [],
+        status: r.state.status,
+      });
+    }
     case "sign_off_difference": {
       if (!r.openExceptions.includes("AMOUNT_DIFFERS_OVER_THRESHOLD")) {
         return fail("There is no amount difference to sign off on this receipt.");

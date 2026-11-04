@@ -1,9 +1,10 @@
 import { type AmountComparison, type AmountPolicy, compareAmounts } from "./amounts";
 import { normaliseVendor } from "./duplicates";
+import { fromCents, toCents } from "./money";
 import { accountMatchesSource } from "./required";
 import type { ExceptionCode, MatchStatus, PaymentSource, StatementLine } from "./schemas";
 
-// Matching rules R-MAT-1 to R-MAT-7 (docs/sprint/05-business-rules.md).
+// Matching rules R-MAT-1 to R-MAT-10 (docs/sprint/05-business-rules.md).
 
 /** R-MAT-1 thresholds are tuned on Day 4 (tuning split only), so they are always passed in. */
 export interface MatchPolicy extends AmountPolicy {
@@ -40,6 +41,8 @@ export interface MatchOutcome {
   exceptions: ExceptionCode[];
   /** R-MAT-3: a personal-card receipt with no line is offered as a reimbursement. */
   reimbursement: boolean;
+  /** R-MAT-10: further lines a person said also paid this receipt (a split payment). */
+  extraLineIds?: string[];
 }
 
 const WINDOW_DAYS = 5; // "same month, plus 5 days either side"
@@ -292,6 +295,55 @@ export function applyChosenLine(
     candidates: [candidate],
     exceptions: over ? ["AMOUNT_DIFFERS_OVER_THRESHOLD"] : [],
     reimbursement: false,
+  };
+}
+
+/**
+ * R-MAT-10: one payment made of several lines (a deposit and a balance, for example). Amounts
+ * add up; the original amount adds up only when every line shows it in the same currency, so
+ * R-CUR-4 still compares a foreign receipt in its own currency. Date, description, and account
+ * are the first line's.
+ */
+export function combinedPayment(lines: readonly StatementLine[]): StatementLine {
+  const [first, ...rest] = lines;
+  if (!first) throw new Error("A split payment needs at least one line.");
+  const cents = lines.reduce((sum, l) => sum + toCents(l.amountAud), 0);
+  const currency = first.originalAmount?.currency;
+  const sameForeign =
+    currency !== undefined && rest.every((l) => l.originalAmount?.currency === currency);
+  return {
+    ...first,
+    amountAud: fromCents(cents),
+    originalAmount: sameForeign
+      ? {
+          amount: fromCents(lines.reduce((s, l) => s + toCents(l.originalAmount?.amount ?? 0), 0)),
+          currency,
+        }
+      : undefined,
+  };
+}
+
+/**
+ * R-MAT-10: a person's choice of several lines for one receipt. The amount rules (R-AMT)
+ * apply to their sum, so a split that adds up is a plain match, and one that does not is an
+ * amount difference to sign off. The first line is the one the match is reported against.
+ */
+export function applyChosenLines(
+  receipt: MatchReceipt,
+  lines: readonly StatementLine[],
+  policy: AmountPolicy,
+): MatchOutcome {
+  const [first] = lines;
+  if (!first) throw new Error("Choose at least one line.");
+  if (lines.length === 1) return applyChosenLine(receipt, first, policy);
+  const outcome = applyChosenLine(receipt, combinedPayment(lines), policy);
+  const [candidate] = outcome.candidates;
+  return {
+    ...outcome,
+    candidates: candidate
+      ? [{ ...candidate, reasons: [`paid in ${lines.length} payments`, ...candidate.reasons] }]
+      : [],
+    extraLineIds: lines.slice(1).map((l) => l.id),
   };
 }
 

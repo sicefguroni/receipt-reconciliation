@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   applyChosenLine,
+  applyChosenLines,
+  combinedPayment,
   inMatchWindow,
   linesWithoutReceipt,
   type MatchPolicy,
@@ -144,6 +146,43 @@ describe("R-MAT-8 credits are never a receipt's payment", () => {
     expect(outcome?.statementLineId).toBe("L1");
     expect(outcome?.candidates.map((c) => c.statementLineId)).toEqual(["L1"]);
     expect(linesWithoutReceipt([purchase, refund], ["L1"]).map((l) => l.id)).toEqual(["L2"]);
+  });
+});
+
+describe("R-MAT-10 split payments", () => {
+  const deposit = line({ id: "L1", amountAud: 10 });
+  const balance = line({ id: "L2", date: "2026-10-03", amountAud: 8.5 });
+
+  it("a split that adds up is a plain match, reported against the first line", () => {
+    const outcome = applyChosenLines(receipt(), [deposit, balance], policy);
+    expect(outcome.status).toBe("matched");
+    expect(outcome.statementLineId).toBe("L1");
+    expect(outcome.extraLineIds).toEqual(["L2"]);
+    expect(outcome.candidates[0]?.reasons[0]).toBe("paid in 2 payments");
+    expect(outcome.exceptions).toEqual([]);
+  });
+
+  it("the amount rules apply to the sum: 12% short is an amount difference to sign off", () => {
+    const outcome = applyChosenLines(receipt({ total: 21 }), [deposit, balance], policy);
+    expect(outcome.status).toBe("amount_differs");
+    expect(outcome.exceptions).toEqual(["AMOUNT_DIFFERS_OVER_THRESHOLD"]);
+  });
+
+  it("adds the original amounts only when every line shows the same currency", () => {
+    const usd = (id: string, amount: number) =>
+      line({ id, amountAud: amount * 1.5, originalAmount: { amount, currency: "USD" } });
+    expect(combinedPayment([usd("L1", 20), usd("L2", 9.5)]).originalAmount).toEqual({
+      amount: 29.5,
+      currency: "USD",
+    });
+    expect(combinedPayment([usd("L1", 20), deposit]).originalAmount).toBeUndefined();
+    expect(combinedPayment([deposit, balance]).amountAud).toBe(18.5);
+  });
+
+  it("one line is exactly a single choice", () => {
+    expect(applyChosenLines(receipt(), [line()], policy)).toEqual(
+      applyChosenLine(receipt(), line(), policy),
+    );
   });
 });
 

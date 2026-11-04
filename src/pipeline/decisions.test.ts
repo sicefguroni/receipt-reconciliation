@@ -75,6 +75,78 @@ describe("R-MAT-8: a refund on the statement", () => {
   });
 });
 
+describe("R-MAT-10: one receipt paid in two payments (stress S06)", () => {
+  // October with R01's $18.50 charged as $10.00 and $8.50, plus a refund line.
+  const split = (decisions = [] as ReturnType<typeof decision>[]) =>
+    reconcileMonth(
+      {
+        ...snapshot,
+        statementLines: snapshot.statementLines.flatMap((l) =>
+          l.id === "L03"
+            ? [
+                { ...l, id: "L03a", amountAud: 10 },
+                { ...l, id: "L03b", amountAud: 8.5 },
+                { ...l, id: "L03r", amountAud: -3 },
+              ]
+            : [l],
+        ),
+      },
+      decisions,
+      config,
+    );
+  const splitR01 = decision("R01", {
+    action: "split_payment",
+    after: { statementLineIds: ["L03a", "L03b"] },
+  });
+  const r01 = (m: ReturnType<typeof split>) => m.receipts.find((r) => r.id === "R01");
+
+  it("neither part is matched automatically; the split pays the receipt at the sum", () => {
+    expect(r01(split())?.state.status).not.toBe("matched");
+    const m = split([splitR01]);
+    expect(r01(m)?.state.status).toBe("matched");
+    expect(r01(m)?.state.ledgerAmountAud).toBe(18.5);
+    expect(m.noReceipt.map((n) => n.line.id)).not.toContain("L03a");
+    expect(m.noReceipt.map((n) => n.line.id)).not.toContain("L03b");
+    expect(m.totals.ledgerAud).toBe(month().totals.ledgerAud);
+  });
+
+  it("approval keeps the split", () => {
+    const approve = decision("R01", {
+      action: "approve",
+      after: { statementLineId: "L03a", reimbursement: false },
+    });
+    const m = split([splitR01, approve]);
+    expect(r01(m)?.outcome).toBe("approved");
+    expect(r01(m)?.state.ledgerAmountAud).toBe(18.5);
+    expect(r01(m)?.match?.extraLineIds).toEqual(["L03b"]);
+  });
+
+  it("a later claim on one of its lines undoes the whole split (R-MAT-4)", () => {
+    const steal = decision("R15", { action: "choose_match", after: { statementLineId: "L03b" } });
+    const m = split([splitR01, steal]);
+    expect(r01(m)?.match?.extraLineIds ?? []).toEqual([]);
+    expect(r01(m)?.state.status).not.toBe("matched");
+  });
+
+  it("is refused with a credit, or the same line twice", () => {
+    const check = (ids: string[]) =>
+      message(
+        checkDecision(
+          split(),
+          {
+            subjectId: "R01",
+            change: { action: "split_payment", after: { statementLineIds: ids } },
+          },
+          REVIEWER,
+          config,
+        ),
+      );
+    expect(check(["L03a", "L03b"])).toBe("ok");
+    expect(check(["L03a", "L03r"])).toMatch(/refund or credit/);
+    expect(check(["L03a", "L03a"])).toBe("Choose each payment only once.");
+  });
+});
+
 describe("decision checks", () => {
   it("R-APR-1: a submitter's own approval is refused with the reason", () => {
     const r = month().receipts.find((x) => x.id === "R01");

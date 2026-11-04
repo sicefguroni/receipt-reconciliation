@@ -144,6 +144,12 @@ export const DecisionChange = z.discriminatedUnion("action", [
     action: z.literal("choose_match"),
     after: z.object({ statementLineId: z.string().nullable() }),
   }),
+  // R-MAT-10: one receipt paid by several lines; the first is the one reported. Replaces any
+  // earlier choice for the receipt, like choose_match.
+  z.object({
+    action: z.literal("split_payment"),
+    after: z.object({ statementLineIds: z.array(z.string()).min(2) }),
+  }),
   // R-AMT-4: signs off the difference against this line only; needs a reason.
   z.object({
     action: z.literal("sign_off_difference"),

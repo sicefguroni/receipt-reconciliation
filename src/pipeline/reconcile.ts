@@ -2,7 +2,7 @@ import { type CategoryResult, categoriseByRules } from "@/core/categories";
 import { type Conversion, checkCurrency, convertToAud, summariseExcluded } from "@/core/currency";
 import { findDuplicates } from "@/core/duplicates";
 import {
-  applyChosenLine,
+  applyChosenLines,
   type Candidate,
   isCredit,
   linesWithoutReceipt,
@@ -138,8 +138,11 @@ interface Correction {
 /** Each receipt's decisions folded in order: the latest of each kind wins. */
 interface ReceiptEffects {
   fields: Map<CorrectableField, Correction>;
-  /** A human match: a line, or null for "reimburse, no statement line". `seq` orders conflicts. */
-  pin: { lineId: string | null; seq: number } | null;
+  /**
+   * A human match: a line, or null for "reimburse, no statement line"; plus further lines for a
+   * split payment (R-MAT-10). `seq` orders conflicts.
+   */
+  pin: { lineId: string | null; extraLineIds: string[]; seq: number } | null;
   signOff: { lineId: string; stamp: Stamp } | null;
   duplicate: { duplicate: boolean; stamp: Stamp } | null;
   removed: Stamp | null;
@@ -178,14 +181,21 @@ function foldDecisions(decisions: readonly Decision[]) {
         effectsOf(d.subjectId).fields.set(d.after.field, { value: d.after.value, stamp });
         break;
       case "choose_match":
-        effectsOf(d.subjectId).pin = { lineId: d.after.statementLineId, seq };
+        effectsOf(d.subjectId).pin = { lineId: d.after.statementLineId, extraLineIds: [], seq };
         break;
+      case "split_payment": {
+        const [first, ...extra] = d.after.statementLineIds;
+        effectsOf(d.subjectId).pin = { lineId: first ?? null, extraLineIds: extra, seq };
+        break;
+      }
       case "approve": {
         // An approved item keeps the match it was approved with.
         const e = effectsOf(d.subjectId);
         e.approval = stamp;
         if (d.after.statementLineId !== null || d.after.reimbursement) {
-          e.pin = { lineId: d.after.statementLineId, seq };
+          // A split keeps its other lines: approval records the first, which is unchanged.
+          const extraLineIds = e.pin?.lineId === d.after.statementLineId ? e.pin.extraLineIds : [];
+          e.pin = { lineId: d.after.statementLineId, extraLineIds, seq };
         }
         break;
       }
@@ -200,7 +210,7 @@ function foldDecisions(decisions: readonly Decision[]) {
         break;
       case "link_receipt":
         // R-MAT-7 from the line's side: the same as choosing this line for the receipt.
-        effectsOf(d.after.receiptId).pin = { lineId: d.subjectId, seq };
+        effectsOf(d.after.receiptId).pin = { lineId: d.subjectId, extraLineIds: [], seq };
         effectsOf(d.after.receiptId).decisions.push(d);
         lines.set(d.subjectId, null);
         break;
@@ -217,15 +227,19 @@ function foldDecisions(decisions: readonly Decision[]) {
 
   // R-MAT-4: one line, one receipt. If two people's choices claim a line, the later one wins
   // and the earlier receipt goes back to automatic matching.
+  // Every line of a split counts, and losing any one of them undoes the whole split.
+  const pinned = (e: ReceiptEffects) =>
+    e.pin?.lineId ? [e.pin.lineId, ...e.pin.extraLineIds] : [];
   const owner = new Map<string, { receiptId: string; seq: number }>();
   for (const [id, e] of receipts) {
-    if (!e.pin?.lineId) continue;
-    const current = owner.get(e.pin.lineId);
-    if (!current || current.seq < e.pin.seq)
-      owner.set(e.pin.lineId, { receiptId: id, seq: e.pin.seq });
+    for (const lineId of pinned(e)) {
+      const current = owner.get(lineId);
+      const seq = e.pin?.seq ?? -1;
+      if (!current || current.seq < seq) owner.set(lineId, { receiptId: id, seq });
+    }
   }
   for (const [id, e] of receipts) {
-    if (e.pin?.lineId && owner.get(e.pin.lineId)?.receiptId !== id) e.pin = null;
+    if (pinned(e).some((lineId) => owner.get(lineId)?.receiptId !== id)) e.pin = null;
   }
   return { receipts, lines };
 }
@@ -430,12 +444,21 @@ function derive(snapshot: MonthSnapshot, decisions: readonly Decision[], config:
   for (const d of matchable) {
     const pin = d.effects?.pin;
     if (!pin) continue;
-    const line = pin.lineId ? lineById.get(pin.lineId) : undefined;
     if (pin.lineId === null) {
       outcomes.set(d.read.intake.id, { receiptId: d.read.intake.id, ...REIMBURSE });
-    } else if (line && !resolvedLines.has(line.id)) {
-      outcomes.set(d.read.intake.id, applyChosenLine(toMatchReceipt(d), line, config.matchPolicy));
-      taken.add(line.id);
+      continue;
+    }
+    // One line, or every line of a split (R-MAT-10); all must still be on the statement and free.
+    const lines = [pin.lineId, ...pin.extraLineIds].flatMap((id) => {
+      const l = lineById.get(id);
+      return l && !resolvedLines.has(l.id) ? [l] : [];
+    });
+    if (lines.length === 1 + pin.extraLineIds.length) {
+      outcomes.set(
+        d.read.intake.id,
+        applyChosenLines(toMatchReceipt(d), lines, config.matchPolicy),
+      );
+      for (const l of lines) taken.add(l.id);
     }
   }
   const auto = matchReceipts(
@@ -468,7 +491,15 @@ function derive(snapshot: MonthSnapshot, decisions: readonly Decision[], config:
         ...(duplicate ? ["DUPLICATE" as const] : []),
       ],
       match,
-      matchedLineAmountAud: line?.amountAud ?? null,
+      // The AUD charged: the line's, or every split line's added up (R-MAT-10).
+      matchedLineAmountAud: line
+        ? fromCents(
+            [line.id, ...(match?.extraLineIds ?? [])].reduce(
+              (sum, lineId) => sum + toCents(lineById.get(lineId)?.amountAud ?? 0),
+              0,
+            ),
+          )
+        : null,
       receiptAmountAud:
         d.conversion && d.conversion.status !== "unavailable" ? d.conversion.amountAud : null,
       // A removed receipt is out of the totals the same way an unconfirmed duplicate is.
@@ -520,7 +551,9 @@ function derive(snapshot: MonthSnapshot, decisions: readonly Decision[], config:
   });
 
   const matchedLineIds = receipts.flatMap((r) =>
-    r.match?.statementLineId && r.outcome !== "removed" ? [r.match.statementLineId] : [],
+    r.match?.statementLineId && r.outcome !== "removed"
+      ? [r.match.statementLineId, ...(r.match.extraLineIds ?? [])]
+      : [],
   );
   const noReceipt: NoReceiptLine[] = linesWithoutReceipt(
     snapshot.statementLines,

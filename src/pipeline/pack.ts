@@ -82,7 +82,10 @@ export function ledgerCsv(result: MonthResult): string {
       r.difference
         ? `${r.difference.amount > 0 ? "+" : ""}${r.difference.amount.toFixed(2)} ${r.difference.currency}`
         : "",
-      r.match?.statementLineId,
+      // A split payment lists every line it was paid by (R-MAT-10).
+      r.match?.statementLineId
+        ? [r.match.statementLineId, ...(r.match.extraLineIds ?? [])].join(" + ")
+        : "",
       r.state.status,
       r.state.paymentStatus,
       r.state.excludedFromTotals ? "no" : "yes",

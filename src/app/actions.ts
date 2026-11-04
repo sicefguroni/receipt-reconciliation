@@ -231,6 +231,22 @@ export async function review(form: FormData): Promise<void> {
           : `${subjectId} matched to ${choice}.`;
       break;
     }
+    case "split_payment": {
+      const ids = form
+        .getAll("splitLine")
+        .filter((v): v is string => typeof v === "string" && v !== "");
+      if (ids.length < 2) {
+        redirect(
+          reviewPath(runId, {
+            error: "Tick at least two payments that together paid this receipt.",
+            open: subjectId,
+          }),
+        );
+      }
+      changes = [{ action, after: { statementLineIds: ids } }];
+      done = `${subjectId} matched to ${ids.join(" + ")}.`;
+      break;
+    }
     case "sign_off_difference":
       changes = [{ action, after: { statementLineId: text(form, "lineId") } }];
       done = `Difference on ${subjectId} signed off.`;

@@ -95,6 +95,18 @@ export function ReceiptPanel({
       inMatchWindow(l.date, month.monthKey) && !candidates.some((c) => c.statementLineId === l.id),
   );
   const intake = open.includes("UNREADABLE") || open.includes("NOT_A_RECEIPT");
+  // R-MAT-10: the lines this receipt is paid by now, then every other line it could take.
+  const paidBy = r.match?.statementLineId
+    ? [r.match.statementLineId, ...(r.match.extraLineIds ?? [])]
+    : [];
+  const splitLines = [
+    ...paidBy.flatMap((id) => allLines.get(id) ?? []),
+    ...candidates.flatMap((c) => {
+      const l = allLines.get(c.statementLineId);
+      return l && month.freeLines.some((f) => f.id === l.id) ? [l] : [];
+    }),
+    ...otherLines,
+  ].filter((l, i, all) => all.findIndex((x) => x.id === l.id) === i);
 
   if (r.outcome !== "open") {
     return (
@@ -294,6 +306,37 @@ export function ReceiptPanel({
               </button>
             </div>
           </form>
+          {splitLines.length >= 2 ? (
+            <form action={review} className="act">
+              <Hidden runId={runId} subjectId={r.id} />
+              <h4>Paid in more than one payment?</h4>
+              <p className="hint">
+                For a deposit and a balance, for example. Tick every payment for this receipt; their
+                total is compared with the receipt.
+              </p>
+              <fieldset>
+                <legend className="sr-only">Payments that together paid {r.id}</legend>
+                {splitLines.map((l) => (
+                  <label key={l.id} className="choice">
+                    <input
+                      type="checkbox"
+                      name="splitLine"
+                      value={l.id}
+                      defaultChecked={paidBy.includes(l.id)}
+                    />
+                    <span>
+                      <strong>{lineLabel(l)}</strong>
+                    </span>
+                  </label>
+                ))}
+              </fieldset>
+              <div className="row">
+                <button type="submit" name="action" value="split_payment">
+                  Use these payments together
+                </button>
+              </div>
+            </form>
+          ) : null}
         </details>
       ) : null}
 
@@ -382,7 +425,8 @@ function Facts({ r, runId }: { r: ReceiptResult; runId: string }) {
         <div>
           <dt>Payment</dt>
           <dd>
-            {r.match.statementLineId}: {r.match.candidates[0]?.reasons.join(", ")}
+            {[r.match.statementLineId, ...(r.match.extraLineIds ?? [])].join(" + ")}:{" "}
+            {r.match.candidates[0]?.reasons.join(", ")}
           </dd>
         </div>
       ) : null}
