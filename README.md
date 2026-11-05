@@ -31,6 +31,8 @@ The progress bar shows how many items are done. When it reaches the end, the pac
 
 **Reasons.** Whenever a reason is asked for, say what happened ("tip added at the table", "deposit paid at booking"). "Good", "ok", or "approved" is not accepted.
 
+**Dropdowns.** Category, payment, and submitter menus use the same styled picker. Use the arrow keys, Home/End, or type an option's name to navigate; Enter selects, and Escape closes without changing the value. Payment choices are selectable cards, with supporting information below each choice.
+
 **Check this pairing.** If you pair a receipt with a payment that does not fit (a different vendor, a much larger or smaller amount, days apart, or a different account), the receipt shows both side by side and lists what does not fit. Go ahead only if you can say why it is right. A payment that is clearly someone else's (another business, more than half off, and not one of the suggested payments) is refused, with what to do instead.
 
 **Acting as.** The selector in the top bar chooses who you are. Nobody can approve a receipt they submitted: the **Approve** button stays visible but greyed out, with the reason next to it.

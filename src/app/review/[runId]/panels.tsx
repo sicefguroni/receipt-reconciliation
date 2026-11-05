@@ -6,6 +6,7 @@ import type { StatementLine } from "@/core/schemas";
 import type { MonthResult, NoReceiptLine, ReceiptResult } from "@/pipeline/reconcile";
 import { review } from "../../actions";
 import { FIELD_LABELS, money } from "../../labels";
+import { PAYMENT_OPTIONS, Select } from "../../select";
 import { SubmitButton } from "../../submit-button";
 
 // The actions under one queue row. Plain forms posting to one server action; the rules are
@@ -260,28 +261,27 @@ export function ReceiptPanel({
                   maxLength={500}
                 />
               </label>
-              <label className="field">
+              <div className="field">
                 Paid with
-                <select name="paymentSource" defaultValue={r.paymentSource}>
-                  <option value="company_card">Company card</option>
-                  <option value="personal_card">Personal card</option>
-                  <option value="bank">Bank account</option>
-                  <option value="unknown">Not known yet</option>
-                </select>
-              </label>
-              <label className={`field${open.includes("UNKNOWN_CATEGORY") ? " flagged" : ""}`}>
+                <Select
+                  name="paymentSource"
+                  label="Paid with"
+                  defaultValue={r.paymentSource}
+                  options={PAYMENT_OPTIONS}
+                />
+              </div>
+              <div className={`field${open.includes("UNKNOWN_CATEGORY") ? " flagged" : ""}`}>
                 Category
-                <select name="category" defaultValue={r.category?.category ?? ""}>
-                  <option value="" disabled>
-                    Choose a category
-                  </option>
-                  {categories.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <Select
+                  name="category"
+                  label="Category"
+                  defaultValue={r.category?.category ?? ""}
+                  options={[
+                    { value: "", label: "Choose a category", disabled: true },
+                    ...categories.map((c) => ({ value: c, label: c })),
+                  ]}
+                />
+              </div>
               <label className="check wide">
                 <input type="checkbox" name="alwaysForVendor" /> Always use this category for{" "}
                 {e?.vendor.value ?? "this vendor"}
@@ -341,17 +341,17 @@ export function ReceiptPanel({
                 </span>
               </label>
               {otherLines.length > 0 ? (
-                <label className="field">
+                <div className="field">
                   Or another statement line
-                  <select name="otherLine" defaultValue="">
-                    <option value="">None</option>
-                    {otherLines.map((l) => (
-                      <option key={l.id} value={l.id}>
-                        {lineLabel(l)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                  <Select
+                    name="otherLine"
+                    label="Another statement line"
+                    options={[
+                      { value: "", label: "None" },
+                      ...otherLines.map((l) => ({ value: l.id, label: lineLabel(l) })),
+                    ]}
+                  />
+                </div>
               ) : null}
             </fieldset>
             <div className="row">
@@ -412,7 +412,7 @@ export function ReceiptPanel({
 
       <form action={review} className="act approve">
         <Hidden runId={runId} subjectId={r.id} />
-        <div className="row">
+        <div className="row approval-row">
           <SubmitButton
             type="submit"
             name="action"
@@ -551,21 +551,22 @@ export function LinePanel({
           <Hidden runId={runId} subjectId={n.line.id} />
           <h4>Link a receipt</h4>
           <div className="row">
-            <label className="field grow">
+            <div className="field grow">
               Receipt
-              <select name="receiptId" defaultValue={n.candidateFor[0] ?? ""} required>
-                <option value="" disabled>
-                  Choose a receipt
-                </option>
-                {linkable.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.id}, {r.extraction?.vendor.value ?? "unknown vendor"},{" "}
-                    {money(r.extraction?.total.value, r.extraction?.currency.value ?? "AUD")}
-                    {n.candidateFor.includes(r.id) ? " (possible match)" : ""}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <Select
+                name="receiptId"
+                label="Receipt"
+                defaultValue={n.candidateFor[0] ?? ""}
+                required
+                options={[
+                  { value: "", label: "Choose a receipt", disabled: true },
+                  ...linkable.map((r) => ({
+                    value: r.id,
+                    label: `${r.id}, ${r.extraction?.vendor.value ?? "unknown vendor"}, ${money(r.extraction?.total.value, r.extraction?.currency.value ?? "AUD")}${n.candidateFor.includes(r.id) ? " (possible match)" : ""}`,
+                  })),
+                ]}
+              />
+            </div>
             <SubmitButton
               type="submit"
               name="action"
@@ -581,17 +582,18 @@ export function LinePanel({
         <Hidden runId={runId} subjectId={n.line.id} />
         <h4>{credit ? "Refund or credit" : "No receipt"}</h4>
         <div className="row">
-          <label className="field">
+          <div className="field">
             {credit ? "Category it reduces" : "Category (for a substitute)"}
-            <select name="category" defaultValue={n.suggestedCategory?.category ?? ""}>
-              <option value="">Choose</option>
-              {categories.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </label>
+            <Select
+              name="category"
+              label={credit ? "Category it reduces" : "Category for a substitute"}
+              defaultValue={n.suggestedCategory?.category ?? ""}
+              options={[
+                { value: "", label: "Choose a category" },
+                ...categories.map((c) => ({ value: c, label: c })),
+              ]}
+            />
+          </div>
           <ReasonField id={`line-${n.line.id}`} label="Reason" required />
         </div>
         {n.suggestedCategory ? (

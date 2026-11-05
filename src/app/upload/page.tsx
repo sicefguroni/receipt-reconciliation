@@ -2,6 +2,7 @@ import { FileText, ReceiptText, Sparkles, UploadCloud } from "lucide-react";
 import { STATEMENT_FORMATS } from "@/adapters/statement/read-statement";
 import { PEOPLE } from "@/config/people";
 import { uploadMonth } from "../actions";
+import { PAYMENT_OPTIONS, Select } from "../select";
 import { SubmitButton } from "../submit-button";
 import { PageHeader, StatusBadge } from "../ui";
 
@@ -73,25 +74,24 @@ export default async function UploadPage({
             Month
             <input type="month" name="monthKey" defaultValue="2026-10" required />
           </label>
-          <label className="field">
+          <div className="field">
             Submitted by
-            <select name="submitterId" defaultValue="staff-a">
-              {PEOPLE.map((person) => (
-                <option key={person.id} value={person.id}>
-                  {person.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="field">
+            <Select
+              name="submitterId"
+              label="Submitted by"
+              defaultValue="staff-a"
+              options={PEOPLE.map((person) => ({ value: person.id, label: person.label }))}
+            />
+          </div>
+          <div className="field">
             Paid with
-            <select name="paymentSource" defaultValue="company_card">
-              <option value="company_card">Company card</option>
-              <option value="personal_card">Personal card</option>
-              <option value="bank">Bank account</option>
-              <option value="unknown">Not known yet</option>
-            </select>
-          </label>
+            <Select
+              name="paymentSource"
+              label="Paid with"
+              defaultValue="company_card"
+              options={PAYMENT_OPTIONS}
+            />
+          </div>
           <label className="field span-2">
             Business purpose
             <input
