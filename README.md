@@ -18,14 +18,14 @@ You need [Node.js 22 or newer](https://nodejs.org) and pnpm (run `npm install -g
 
 ## Close a month
 
-1. **Start the month.** On the first page, under *October 2026 sample month*, choose your bank's statement export (CSV) and press **Match October's receipts**. Or press it without a file to use the sample statement. To read your own receipts instead, use **Upload** (this needs live mode; see below).
+1. **Start the month.** On the first page, under *October 2026 sample month*, choose your bank's statement export (CSV) and press **Match sample month**. Or press it without a file to use the sample statement. To read your own receipts instead, use **Upload** (this needs live mode; see below).
 2. **Work down the review queue.** Items are grouped worst first, one group per tab across the top; each tab shows how many items are in it, and the page opens on the first group with work. Click a row to open it; each row says, in one sentence, what to do. Every group shows its total.
    1. *Blocking intake problems*: unreadable files, files that are not receipts, duplicates.
    2. *Amount differences*: the charge differs from the receipt by more than policy allows.
    3. *Missing information*: a purpose to add, details to check, a category to choose.
    4. *Approvals needing a match decision*: choose a payment, approve a reimbursement, or deal with a payment that has no receipt.
    5. *Matches ready to approve*: check and approve, one at a time or with **Approve all clean matches**.
-3. **Open the month-end pack.** The **Month-end pack** button (top right of the queue) shows totals by category and by payment source, what was left out and why, and how each payment with no receipt was resolved. Download the ledger and the exceptions log from there.
+3. **Open the month-end pack.** The **Month-end pack** button on the review page shows totals by category and by payment source, what was left out and why, and how each payment with no receipt was resolved. Download the ledger and the exceptions log from there.
 
 The progress bar shows how many items are done. When it reaches the end, the pack says *Every item is resolved*.
 
