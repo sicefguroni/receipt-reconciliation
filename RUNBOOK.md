@@ -79,7 +79,7 @@ Live evaluation always records. Model failures are recorded too (by code only), 
 | `STATEMENT_FORMAT` | statement | The CSV could not be read; the person saw every bad row |
 | `RECORDING_MISSING` | run | Replay was asked for a receipt that was never recorded |
 
-## The five most likely problems
+## The most likely problems
 
 | Symptom | Cause | Fix |
 |---|---|---|
@@ -87,6 +87,7 @@ Live evaluation always records. Model failures are recorded too (by code only), 
 | "This app is in replay mode…" (`RECORDING_MISSING`) | Replay cannot read new receipts | Switch to live mode with a key, or use the sample month |
 | Every replay request misses after a code change | A prompt, schema, model, or effort changed, so the request keys changed | Re-record live (about USD 0.45 for the month), commit the recordings |
 | Foreign receipts show "No exchange rate available" (`FX_API_ERROR`) | The rate service was down and nothing was cached | Start the month again when it is back; receipts paid at the bank's AUD charge are not affected |
+| `pnpm test` stops with `ERR_PACKAGE_IMPORT_NOT_DEFINED` (`#module-sync-enabled`) | The repository was cloned under `AppData\Local\Temp`; Vitest cannot start there (seen on Day 5; the same commit passes 321/321 in an ordinary folder) | Clone into an ordinary folder, such as `Documents` |
 | `pnpm seed` fails with `EPERM` (Windows) | A server still holds `data/app.db` | Stop it (check port 3000 for a leftover `next` process), then seed again |
 
 ## Adding a category or vendor rule

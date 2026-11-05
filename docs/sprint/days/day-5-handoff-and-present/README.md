@@ -46,3 +46,11 @@ Saved elsewhere (paths fixed by the final layout in `08`):
 Track task status in [`TRACKER.md`](../../TRACKER.md) under "Day 5".
 
 ## Notes
+
+**Fresh-clone check (Day 5, commit `5537833`).** Cloned into an ordinary folder, followed the README literally with no API key: `pnpm install` 12 s; `.env.example` copied unchanged (replay mode, empty key); `pnpm seed` loaded the month; `pnpm test` 26 files, **321 passed**; `pnpm eval -- --mode replay --label final` 12/12, 0/33, every metric identical to the committed live `final` (only mode, time, and commit differ); `pnpm eval:stress` 11/11; `pnpm lint` clean; `pnpm dev` served the home, review, and guide pages in replay mode. A first clone under `AppData\Local\Temp` installed, seeded, and evaluated fine, but Vitest could not start there (`ERR_PACKAGE_IMPORT_NOT_DEFINED`); the identical install in an ordinary folder passed, so this is the location, not the repository. Recorded in the RUNBOOK's problems table. Both clones deleted.
+
+**Secrets scan.** `.env` was never committed and is ignored. No key-like string (`sk-ant`, `sk-proj-`, `sk-` + 20 characters, a non-empty `OPENAI_API_KEY=`) in any version of any file; the only matches are documentation placeholders. `.env.example` covers all 18 variables the app reads and has no secret values.
+
+**Generic confidentiality scan** (all tracked text files and every commit message): no email address in files; in commit messages only the AI co-author line; every commit authored under one personal address; web domains only `localhost`, the public FX service, and `nodejs.org`; every phone number in the fictional 555 range; all 22 ABN-shaped numbers **fail the official ABN checksum**, so none can be a real business. **Names scan:** run by the candidate privately (the employer, product, people, and client names are not written anywhere in this repository); result recorded in the `08` checklist.
+
+**Demo:** the timed script against the real screens is in [`demo-script.md`](demo-script.md).

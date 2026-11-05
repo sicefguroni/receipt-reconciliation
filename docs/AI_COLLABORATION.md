@@ -1,6 +1,6 @@
 # AI collaboration
 
-How AI was used to build this system, how its work was checked, where it was wrong, and which decisions stayed with me. The running record is the **AI corrections log** in [`sprint/TRACKER.md`](sprint/TRACKER.md) (48 entries, written as each mistake happened, not reconstructed); the decisions are in its **decision log**.
+How AI was used to build this system, how its work was checked, where it was wrong, and which decisions stayed with me. The running record is the **AI corrections log** in [`sprint/TRACKER.md`](sprint/TRACKER.md) (47 entries, written as each mistake happened, not reconstructed); the decisions are in its **decision log**.
 
 ## Tools and roles
 

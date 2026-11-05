@@ -9,6 +9,8 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
+**Day 5: everything but the human items is done** (2026-11-05). `final` live run frozen (12/12; 0/33 wrong auto-matches, 0/14 holdout; touches 10/40; p50 2.0 s, p95 5.0 s; at most USD 0.45), replay identical. All handoff documents written; fresh-clone check passed with no key; secrets and generic confidentiality scans clean. **Open, candidate only:** the names scan, recording the demo, then the link in the README, the last `08` boxes, and the `v1.0.0` tag.
+
 **Day 4 open items closed** (Day 4). "Same business" is judged on distinctive words, so two cafés are different vendors and all four wrong pairings from C1 and P1 are refused. Substitutes get a suggested category (R-CAT-6), preselected; going against it needs a tick; 4 of the 9 odd categories from the runs would be caught, the other 5 need rule-table entries (finance lead). The month-end pack uses the same light cards. `pnpm test` 321/321; browser 11/11. Next: Day 5.
 
 **Day 4 complete** (all three exit criteria met). P1 (naive proxy, business management, 1 year) closed the month in 9 min, assisted once, 39/40, ledger $10.00 over; its one miss was again a person's pairing, made with the pairing check on screen. Feedback recorded word for word, and every point acted on or answered: R-MAT-11 refuses clear mismatches, filler reasons refused, only real candidates suggested, tabs switch on the page (inputs kept, about 60 ms), always-light card layout. `pnpm test` 307/307; browser 12/12. Next: Day 5.
@@ -76,11 +78,11 @@ Block-by-block detail: [`days/day-4-evaluate-and-harden/journal.md`](days/day-4-
 
 ### Day 5: Hand off and present
 
-- [ ] `final` live run
-- [ ] README, RUNBOOK, ARCHITECTURE, EVALUATION final; fresh-clone check
-- [ ] CASE_STUDY, AI_COLLABORATION, NEXT_ITERATION
-- [ ] Demo recorded (human)
-- [ ] Final checklist in `08` complete
+- [x] `final` live run: `Done` 2026-11-05. Paths: `eval-results/{final,final-replay,final-subset20,final-stress}/`, `fixtures/recordings/**`. Validation: live 12/12, 0/33 (0/14 holdout); keyless replay identical; subset 11/11; stress 11/11. One regression flagged and explained (touches 9 → 10: R18's currency confidence 0.99 → 0.77 between identical live runs; holdout, so not tuned). Spend about USD 0.45 (approved up to USD 1).
+- [x] README, RUNBOOK, ARCHITECTURE, EVALUATION final; fresh-clone check: `Done` 2026-11-05. Paths: `README.md` (screenshots in `docs/images/`, doc links, demo link placeholder), `RUNBOOK.md`, `docs/ARCHITECTURE.md`, `docs/EVALUATION.md`. Validation: fresh clone in an ordinary folder, no key: install, seed, 321/321, `final` replay identical, stress 11/11, dev server serving (details in the Day 5 notes).
+- [x] CASE_STUDY, AI_COLLABORATION, NEXT_ITERATION: `Done` 2026-11-05. Paths: `docs/{CASE_STUDY,AI_COLLABORATION,NEXT_ITERATION}.md`. Validation: every number checked against `eval-results/`, the code, or the cold-run records before committing (four drafted claims corrected, see the AI corrections log).
+- [ ] Demo recorded (human): `In Progress` 2026-11-05. Script: `days/day-5-handoff-and-present/demo-script.md`. Resume condition: the candidate records and shares the link.
+- [ ] Final checklist in `08` complete: `In Progress` 2026-11-05. 6 of 9 boxes ticked with evidence; open: the names scan and the demo video (both the candidate's), and the final TRACKER entry, written after them.
 
 ## Decision log
 
@@ -179,6 +181,11 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | Day 4 | "Same business" judged on distinctive words (generic business, place, and placeholder words ignored) for R-MAT-11 and the pairing check only | Change scoring too; keep whole-word overlap | Two cafés share "cafe", and the synthetic names share "Sample": two of the four observed wrong pairings slipped through on that. Scoring untouched, so automatic matching cannot move | Yes |
 | Day 4 | R-CAT-6: suggest a substitute's category from the rule table, else from this month's receipts from the same business; a different category needs an explicit tick | Block any category other than the suggestion; add rules for pharmacy, parking, courier, petrol, bookshop | The person may know better, so an override stays possible but deliberate. New rules are category policy, the finance lead's call, and fitting them to the lines seen in C1/P1 would tune to the test | Yes |
 | Day 4 | Month-end pack in the same light cards and tables as the review queue | Leave the pack as plain tables | **Candidate's request** ("apply the UI improvements in the month-end pack as well") | Yes |
+| 2026-11-05 | **Final run live, up to USD 1** | Replay only | **Candidate approved.** The protocol requires live for `final` so latency and cost are real | n/a |
+| 2026-11-05 | Keep the 0.8 confidence threshold although `final` shows one more human touch | Lower it so R18 passes | R18 is holdout; tuning on it would void the holdout claim. The extra touch is safe | Yes |
+| 2026-11-05 | **Confidentiality names scan run by the candidate privately**; the agent ran the generic scan | Give the agent the names | **Candidate's ruling.** The names never enter the conversation or the repository | n/a |
+| 2026-11-05 | **Release as an annotated tag `v1.0.0`**, pushed, no GitHub Release page | Tag + release page; no tag | **Candidate's ruling** | Yes |
+| 2026-11-05 | Screenshots taken against a separate, freshly seeded database (`DATABASE_PATH` override) | Screenshot the working database | The working database held a dozen test months from browser checks; a README should show the month a newcomer sees | n/a |
 
 ## AI corrections log
 
@@ -230,6 +237,9 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 | Day 4 | A docs script using JavaScript `replace` with text as the replacement | The text contained `$` followed by a backtick, which `replace` reads as "everything before the match": the journal and the TRACKER were pasted into themselves (journal 120 → 245 lines) | Agent noticed a repeated section, compared line counts with the last commit, restored the six uncommitted files, and re-ran with function replacements (literal text); committed files checked and unaffected | n/a (caught before commit) |
 | Day 4 | First R-MAT-11 test fixture | Used "SAMPLE PETROL" against "Sample Café": the shared word "sample" counts as alike, so the rule correctly did not fire. Also exposed a real limit, now in `05` | Agent used a vendor with no shared word and recorded the limit | `b1887e2` |
 | Day 4 | Browser check: "pack dates stay on one line" measured cell height | A table cell is as tall as its row, so 11 cells "wrapped" that had not | Agent counted the text's line boxes instead: 0 wrapped | n/a (scratch) |
+| 2026-11-05 | `ARCHITECTURE.md` draft: "11 decision actions", "four guardrails", "the 8 stress receipts are recorded" | Written from memory; the code gave 10 actions, the table five guardrails, and 7 recordings (S01 never reaches the model) | Agent counted each in the code before committing. Fifth appearance of the copy-from-output lesson | `438637f` |
+| 2026-11-05 | `CASE_STUDY.md` draft: "mutation checks were caught every time" | Overclaim: several survived at first and needed new tests | Agent reworded it to what happened before committing | `5537833` |
+| 2026-11-05 | The pairing check's heading | Read "1 things do not fit" (no singular); found in a README screenshot, not by any test | Agent fixed the wording and re-took the screenshots | `5537833` |
 
 ## Session history
 
@@ -327,6 +337,14 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: `pnpm test` 321/321; 11 mutations caught; typecheck, lint, build clean; browser 11/11.
 - Remaining: Day 5. For the finance lead: rule-table entries for the payment types that still get no suggestion.
 - Known risks: generic-word list is hand-made; a distinctive word shared by two different businesses would still count as alike.
+
+### 2026-11-05: Day 5, hand off and present
+
+- Work done: `final` live run and replay; ARCHITECTURE and EVALUATION final; RUNBOOK, CASE_STUDY, AI_COLLABORATION, NEXT_ITERATION written; README screenshots and links; fresh-clone check; secrets and generic confidentiality scans; demo script.
+- Decisions: 5 rows on 2026-11-05, from "Final run live" to "Screenshots taken against a separate database".
+- Validation: `pnpm test` 321/321 here and in a fresh clone; `final` 12/12, 0/33, replay identical; stress 11/11; lint and typecheck clean.
+- Remaining (candidate): the names scan; recording the demo; then the README link, the last two `08` boxes, and the `v1.0.0` tag.
+- Known risks: the guardrails built after P1 are untested on a person; every measurement is on one synthetic month.
 
 ### YYYY-MM-DD: Session title
 
