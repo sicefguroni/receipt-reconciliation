@@ -81,6 +81,7 @@ Block-by-block detail: [`days/day-4-evaluate-and-harden/journal.md`](days/day-4-
 - [x] `final` live run: `Done` 2026-11-05. Paths: `eval-results/{final,final-replay,final-subset20,final-stress}/`, `fixtures/recordings/**`. Validation: live 12/12, 0/33 (0/14 holdout); keyless replay identical; subset 11/11; stress 11/11. One regression flagged and explained (touches 9 → 10: R18's currency confidence 0.99 → 0.77 between identical live runs; holdout, so not tuned). Spend about USD 0.45 (approved up to USD 1).
 - [x] README, RUNBOOK, ARCHITECTURE, EVALUATION final; fresh-clone check: `Done` 2026-11-05. Paths: `README.md` (screenshots in `docs/images/`, doc links, demo link placeholder), `RUNBOOK.md`, `docs/ARCHITECTURE.md`, `docs/EVALUATION.md`. Validation: fresh clone in an ordinary folder, no key: install, seed, 321/321, `final` replay identical, stress 11/11, dev server serving (details in the Day 5 notes).
 - [x] CASE_STUDY, AI_COLLABORATION, NEXT_ITERATION: `Done` 2026-11-05. Paths: `docs/{CASE_STUDY,AI_COLLABORATION,NEXT_ITERATION}.md`. Validation: every number checked against `eval-results/`, the code, or the cold-run records before committing (four drafted claims corrected, see the AI corrections log).
+- [x] Full UI component audit and redesign: `Done` 2026-11-05. Paths: `src/app/{actor-switcher,app-nav,ui}.tsx`, `src/app/globals.css`, the home/upload/review/pack/runs/guide pages, `scripts/ui-audit.mjs`, `package.json`, `pnpm-lock.yaml`. Replaced primitive navigation, native actor select, page headings, status text, uploads, forms, progress, queue tabs/rows, run summaries, and export actions with a consistent responsive component system using Lucide icons. Validation: `pnpm ui:audit` passed 12/12 route/viewport checks, desktop/mobile actor-menu open and server-action switching, and desktop/mobile queue-row expansion; `pnpm test` 26 files, 321 tests passed; `pnpm build`, typecheck, and lint passed.
 - [ ] Demo recorded (human): `In Progress` 2026-11-05. Script: `days/day-5-handoff-and-present/demo-script.md`. Resume condition: the candidate records and shares the link.
 - [ ] Final checklist in `08` complete: `In Progress` 2026-11-05. 6 of 9 boxes ticked with evidence; open: the names scan and the demo video (both the candidate's), and the final TRACKER entry, written after them.
 
@@ -193,6 +194,7 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 
 | Date | What AI produced | What was wrong | What was done | Commit |
 |---|---|---|---|---|
+| 2026-11-05 | A PowerShell screenshot command assigned an HTTP response to `$home` | PowerShell variable names are case-insensitive, so this attempted to overwrite the protected `$HOME` variable and the review-page path was not discovered | Agent read the error, changed the variable to `$pageResponse`, reran the correct review screenshot, and recorded the mistake here | n/a (scratch) |
 | 2026-11-02 | Plan to scaffold in a separate new repository, following `HANDOFF.md` | This folder already is the new repository | **Human correction.** Scaffolded here; `HANDOFF.md` kept out of git through `.git/info/exclude` | `3b159db` |
 | 2026-11-02 | Installed the latest `better-sqlite3` (13.0.3) | No Windows + Node 24 prebuilt binary; install needs Visual Studio, which breaks 3-step setup for a Windows reviewer | Agent checked release assets and pinned 12.11.1 | `3b159db` |
 | 2026-11-02 | Ran `biome format` over the whole repo | It re-padded the tables in `CLAUDE.md` (whitespace only) | Agent excluded `*.md` from Biome | `3b159db` |
@@ -345,6 +347,14 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: `pnpm test` 321/321 here and in a fresh clone; `final` 12/12, 0/33, replay identical; stress 11/11; lint and typecheck clean.
 - Remaining (candidate): the names scan; recording the demo; then the README link, the last two `08` boxes, and the `v1.0.0` tag.
 - Known risks: the guardrails built after P1 are untested on a person; every measurement is on one synthetic month.
+
+### 2026-11-05: UI consistency and responsive polish
+
+- Work done: replaced the primitive shell and page patterns with an active icon navigation, custom accessible actor switcher (avatars, role context, selected state, keyboard controls, automatic server-action switching), shared page headers and status badges, dashboard metrics, a sample-month launch card, designed upload zones and two-step form, modern run cards, queue progress and segmented tabs, expandable row affordances, guide surface, pack exports, and diagnostic tables. Added Lucide React and a reusable Playwright UI audit.
+- Decisions: kept the dense ledger rows and horizontally scrollable tables because accounting work needs all financial columns; mapped review and pack routes back to the Months navigation state; used primary indigo for actions and kept green/red/amber exclusively for outcome meaning.
+- Validation: `pnpm ui:audit` passed 12/12 checks across `/`, `/upload`, `/runs`, `/guide`, one review queue, and its pack at 1440 px and 390 px; the audit opened the actor menu, verified all six options and one selected option, submitted a switch to Staff A, and expanded a queue row at both sizes. Every route returned 200 with one H1, one active nav item, no document overflow, no undersized controls, and no captured console errors. `pnpm test` 321/321; production build, typecheck, and lint passed; the open actor menu was inspected in a desktop screenshot.
+- Remaining: no UI work from this block. Candidate-only Day 5 items remain unchanged: names scan, demo recording/link, final checklist, and tag.
+- Known risks: wide data tables intentionally scroll inside their container on phones; the modernised styles have automated and builder visual checks, but no new target-user session.
 
 ### YYYY-MM-DD: Session title
 

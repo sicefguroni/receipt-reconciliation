@@ -12,7 +12,7 @@ This split comes from the Accounting user's acceptance-test evidence: the errors
 
 ```mermaid
 flowchart TB
-  subgraph UI["Next.js app (src/app): server-rendered forms, one client component"]
+  subgraph UI["Next.js app (src/app): server-rendered forms, four small client components"]
     U0["/  start a month"] --> U2["/review/[runId]<br/>queue as tabs, R-QUE order"] --> U3["/pack/[runId]<br/>summary + ledger.csv + exceptions.csv"]
     U1["/upload  own receipts"] --> U2
     U4["/runs  run log"]
@@ -101,7 +101,7 @@ Money is compared in integer cents, so "over 10%" and "above $0.01" are exact.
 | Category fallback | Same model, only when no keyword rule hits | One access check; a minority of receipts (10 of 40 in the Day 2 count) |
 | FX rates | Frankfurter (ECB reference rates), no key | Public, historical, free; no weekend rates, so R-CUR-2 looks back up to 7 days |
 | Storage | SQLite file (`better-sqlite3` + Drizzle) | Zero setup and local; one reviewer does not need multi-user concurrency |
-| UI | Next.js App Router, server actions; one client component (`QueueTabs`) and a pending-state button | Works as plain forms; the client code keeps typed input when switching tabs and shows "Saving…" |
+| UI | Next.js App Router, server actions; four small client components: the queue tabs, the pending-state button, the navigation, and the actor switcher (Lucide icons) | Works as plain forms; the client code keeps typed input when switching tabs and shows "Saving…" |
 
 **Measured (`final`, Day 5, live, 40 receipts):** 91,425 input and 4,214 output tokens, at most USD 0.45 for the month (USD 0.0112 per receipt; price in `config/pricing.json`). Model time p50 2.0 s, p95 5.0 s per receipt.
 

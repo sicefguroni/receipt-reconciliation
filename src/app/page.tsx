@@ -1,9 +1,20 @@
+import {
+  ArrowRight,
+  CalendarCheck2,
+  CircleCheckBig,
+  Clock3,
+  FileSpreadsheet,
+  Play,
+  ReceiptText,
+  WalletCards,
+} from "lucide-react";
 import Link from "next/link";
 import { getEnv } from "@/config/env";
 import { getMonth, listRuns } from "@/server/months";
 import { startSampleMonth } from "./actions";
 import { money } from "./labels";
 import { SubmitButton } from "./submit-button";
+import { PageHeader, StatusBadge } from "./ui";
 
 export const dynamic = "force-dynamic";
 
@@ -22,15 +33,60 @@ export default async function HomePage({
 }) {
   const { error } = await searchParams;
   const env = getEnv();
-  const runs = listRuns().map((r) => ({ ...r, month: getMonth(r.id) }));
+  const runs = listRuns().map((run) => ({ ...run, month: getMonth(run.id) }));
+  const ready = runs.filter((run) => run.month?.closed).length;
+  const active = runs.filter((run) => run.month && !run.month.closed).length;
+  const latest = runs[0]?.month;
+
   return (
-    <main>
-      <h1>Close a month</h1>
-      <p className="muted">
-        {env.MODE === "replay"
-          ? "Replay mode: receipts are read from recorded answers, so no API key is needed. Only the sample receipts can be read."
-          : "Live mode: receipts are sent to the OpenAI API to be read."}
-      </p>
+    <main className="wide dashboard">
+      <PageHeader
+        eyebrow="Month-end workspace"
+        title="Close a month"
+        icon={<CalendarCheck2 aria-hidden="true" size={24} />}
+        description={
+          <>
+            Match receipts to statement lines, resolve exceptions, and export a clean ledger.
+            <span className="mode-line">
+              <StatusBadge tone={env.MODE === "replay" ? "info" : "success"}>
+                {env.MODE === "replay" ? "Replay mode" : "Live mode"}
+              </StatusBadge>
+              {env.MODE === "replay"
+                ? "Recorded answers · no API key required"
+                : "Receipts are read with the configured model"}
+            </span>
+          </>
+        }
+        actions={
+          <Link href="/upload" className="button primary icon-button">
+            <ReceiptText aria-hidden="true" size={17} /> New upload
+          </Link>
+        }
+      />
+
+      <dl className="overview-stats">
+        <div>
+          <span className="stat-icon info">
+            <Clock3 aria-hidden="true" size={18} />
+          </span>
+          <dt>In review</dt>
+          <dd>{active}</dd>
+        </div>
+        <div>
+          <span className="stat-icon success">
+            <CircleCheckBig aria-hidden="true" size={18} />
+          </span>
+          <dt>Ready to close</dt>
+          <dd>{ready}</dd>
+        </div>
+        <div>
+          <span className="stat-icon neutral">
+            <WalletCards aria-hidden="true" size={18} />
+          </span>
+          <dt>Latest ledger</dt>
+          <dd>{money(latest?.totals.ledgerAud)}</dd>
+        </div>
+      </dl>
 
       {error ? (
         <p role="alert" className="error">
@@ -38,35 +94,51 @@ export default async function HomePage({
         </p>
       ) : null}
 
-      <section className="notice">
-        <h2>October 2026 sample month</h2>
-        <p>
-          Staff have submitted 40 receipts for October. Upload the bank statement export (CSV) to
-          match them, or use the sample statement. New here? Read{" "}
-          <Link href="/guide">how to close a month</Link> first.
-        </p>
-        <form action={startSampleMonth} className="stack">
-          <label>
-            Statement export (CSV, optional)
+      <section className="feature-card">
+        <div className="feature-copy">
+          <span className="feature-icon">
+            <FileSpreadsheet aria-hidden="true" size={25} />
+          </span>
+          <StatusBadge tone="info">Sample workspace</StatusBadge>
+          <h2>October 2026 sample month</h2>
+          <p>
+            Reconcile 40 submitted receipts against the sample bank statement, then work through the
+            exception queue.
+          </p>
+          <Link href="/guide" className="text-link">
+            See how the workflow works <ArrowRight aria-hidden="true" size={15} />
+          </Link>
+        </div>
+        <form action={startSampleMonth} className="feature-action">
+          <label className="file-field compact">
+            <span>Use your own statement</span>
+            <small>CSV · optional</small>
             <input type="file" name="statement" accept=".csv,text/csv" />
           </label>
-          <div>
-            <SubmitButton type="submit" className="primary" pendingText="Matching the receipts…">
-              Match October's receipts
-            </SubmitButton>
-          </div>
+          <SubmitButton
+            type="submit"
+            className="primary icon-button"
+            pendingText="Matching the receipts…"
+          >
+            <Play aria-hidden="true" size={16} fill="currentColor" /> Match sample month
+          </SubmitButton>
         </form>
       </section>
 
-      <p>
-        Have your own receipts? <Link href="/upload">Upload receipts and a statement</Link>.
-      </p>
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">Recent activity</p>
+          <h2>Months</h2>
+        </div>
+        <Link href="/upload" className="text-link">
+          Upload a new month <ArrowRight aria-hidden="true" size={15} />
+        </Link>
+      </div>
 
-      <h2>Months in progress</h2>
       {runs.length === 0 ? (
-        <p className="muted">No months yet. Start with October above.</p>
+        <p className="empty-state">No months yet. Start with the sample workspace above.</p>
       ) : (
-        <div className="table-wrap">
+        <div className="table-card table-wrap">
           <table>
             <thead>
               <tr>
@@ -78,27 +150,29 @@ export default async function HomePage({
               </tr>
             </thead>
             <tbody>
-              {runs.map((r) => {
-                const m = r.month;
-                const total = m ? m.receipts.length + m.noReceipt.length : 0;
+              {runs.map((run) => {
+                const month = run.month;
+                const total = month ? month.receipts.length + month.noReceipt.length : 0;
                 return (
-                  <tr key={r.id}>
-                    <td>
-                      {m ? (
-                        <Link href={`/review/${r.id}`}>{monthName(r.monthKey)}</Link>
+                  <tr key={run.id}>
+                    <td className="primary-cell">
+                      {month ? (
+                        <Link href={`/review/${run.id}`}>{monthName(run.monthKey)}</Link>
                       ) : (
-                        monthName(r.monthKey)
+                        monthName(run.monthKey)
                       )}
                     </td>
-                    <td>{new Date(r.finishedAt).toLocaleString("en-AU")}</td>
-                    <td className="num">{m ? `${m.done.length} of ${total}` : "—"}</td>
-                    <td className="num">{money(m?.totals.ledgerAud)}</td>
+                    <td>{new Date(run.finishedAt).toLocaleString("en-AU")}</td>
+                    <td className="num">{month ? `${month.done.length} of ${total}` : "—"}</td>
+                    <td className="num">{money(month?.totals.ledgerAud)}</td>
                     <td>
-                      {!m
-                        ? "Made by an older version; start the month again"
-                        : m.closed
-                          ? "Ready to close"
-                          : "In review"}
+                      {!month ? (
+                        <StatusBadge tone="warning">Older version</StatusBadge>
+                      ) : month.closed ? (
+                        <StatusBadge tone="success">Ready to close</StatusBadge>
+                      ) : (
+                        <StatusBadge tone="info">In review</StatusBadge>
+                      )}
                     </td>
                   </tr>
                 );

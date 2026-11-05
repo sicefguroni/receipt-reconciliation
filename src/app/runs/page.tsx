@@ -1,11 +1,9 @@
+import { Activity, ArrowRight, CircleCheck, CircleX, ListTree } from "lucide-react";
 import Link from "next/link";
 import { runSummaries } from "@/server/months";
+import { PageHeader, StatusBadge } from "../ui";
 
 export const dynamic = "force-dynamic";
-
-// The Runs page (Day 3 block 4): per run, per pipeline stage, how many items went through
-// cleanly, were retried, fell back to a person, or failed, with time, tokens, and error codes.
-// The log holds ids, numbers, and codes only, never receipt contents.
 
 const STAGE_NAMES: Record<string, string> = {
   statement: "Read the statement",
@@ -27,30 +25,29 @@ export default function RunsPage() {
   const runs = runSummaries();
   return (
     <main className="wide">
-      <h1>Runs</h1>
-      <p className="muted">
-        Each time a month is read, every step is logged here. “Fallback” means the step could not
-        finish on its own and the item went to the review queue for a person. “Error” stopped the
-        run; nothing was saved for it.
-      </p>
-      {runs.length === 0 ? <p>No runs yet.</p> : null}
+      <PageHeader
+        eyebrow="System activity"
+        title="Processing runs"
+        icon={<Activity aria-hidden="true" size={24} />}
+        description="Inspect every reconciliation pipeline, including retries, human fallbacks, model usage, and errors."
+      />
+      {runs.length === 0 ? <p className="empty-state">No processing runs yet.</p> : null}
       {runs.map((run) => {
         const stages = [...run.stages].sort(
           (a, b) => STAGE_ORDER.indexOf(a.stage) - STAGE_ORDER.indexOf(b.stage),
         );
         return (
-          <section key={run.runId} className="group">
+          <section key={run.runId} className="group run-card">
             <div className="group-head">
-              <h2>
-                {run.monthKey ?? "Failed run"}{" "}
-                <span className="count">
-                  {new Date(run.at).toLocaleString("en-AU")}
-                  {run.mode ? `, ${run.mode} mode` : ""}
-                </span>
-              </h2>
-              <span className={run.failed ? "status-error" : "status-ok"}>
+              <div>
+                <p className="eyebrow">{run.mode ? `${run.mode} mode` : "Run"}</p>
+                <h2>{run.monthKey ?? "Failed run"}</h2>
+                <span className="count run-meta">{new Date(run.at).toLocaleString("en-AU")}</span>
+              </div>
+              <StatusBadge tone={run.failed ? "danger" : "success"}>
+                {run.failed ? <CircleX size={14} /> : <CircleCheck size={14} />}
                 {run.failed ? "Failed" : "Completed"}
-              </span>
+              </StatusBadge>
             </div>
             <div className="table-wrap">
               <table>
@@ -67,22 +64,24 @@ export default function RunsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {stages.map((s) => (
-                    <tr key={s.stage}>
-                      <td>{STAGE_NAMES[s.stage] ?? s.stage}</td>
-                      <td className="num">{s.ok}</td>
-                      <td className={`num${s.retry ? " status-retry" : ""}`}>{s.retry}</td>
-                      <td className={`num${s.fallback ? " status-fallback" : ""}`}>{s.fallback}</td>
-                      <td className={`num${s.error ? " status-error" : ""}`}>{s.error}</td>
-                      <td className="num">{seconds(s.totalMs)}</td>
+                  {stages.map((stage) => (
+                    <tr key={stage.stage}>
+                      <td className="primary-cell">{STAGE_NAMES[stage.stage] ?? stage.stage}</td>
+                      <td className="num">{stage.ok}</td>
+                      <td className={`num${stage.retry ? " status-retry" : ""}`}>{stage.retry}</td>
+                      <td className={`num${stage.fallback ? " status-fallback" : ""}`}>
+                        {stage.fallback}
+                      </td>
+                      <td className={`num${stage.error ? " status-error" : ""}`}>{stage.error}</td>
+                      <td className="num">{seconds(stage.totalMs)}</td>
                       <td className="num">
-                        {s.inputTokens || s.outputTokens
-                          ? `${s.inputTokens.toLocaleString("en-AU")} / ${s.outputTokens.toLocaleString("en-AU")}`
+                        {stage.inputTokens || stage.outputTokens
+                          ? `${stage.inputTokens.toLocaleString("en-AU")} / ${stage.outputTokens.toLocaleString("en-AU")}`
                           : "—"}
                       </td>
                       <td>
-                        {Object.entries(s.errorCodes)
-                          .map(([code, n]) => `${code} ×${n}`)
+                        {Object.entries(stage.errorCodes)
+                          .map(([code, count]) => `${code} ×${count}`)
                           .join(", ") || "—"}
                       </td>
                     </tr>
@@ -90,12 +89,16 @@ export default function RunsPage() {
                 </tbody>
               </table>
             </div>
-            <p className="row">
-              <Link href={`/runs/${run.runId}`}>Every log row for this run</Link>
+            <div className="run-actions">
+              <Link href={`/runs/${run.runId}`} className="button icon-button">
+                <ListTree aria-hidden="true" size={15} /> View run log
+              </Link>
               {run.monthKey && !run.failed ? (
-                <Link href={`/review/${run.runId}`}>Review queue</Link>
+                <Link href={`/review/${run.runId}`} className="text-link">
+                  Open review queue <ArrowRight aria-hidden="true" size={15} />
+                </Link>
               ) : null}
-            </p>
+            </div>
           </section>
         );
       })}

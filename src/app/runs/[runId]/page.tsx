@@ -1,6 +1,8 @@
+import { ArrowLeft, ListTree } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { runLogRows } from "@/server/months";
+import { PageHeader } from "../../ui";
 
 export const dynamic = "force-dynamic";
 
@@ -12,12 +14,22 @@ export default async function RunLogPage({ params }: { params: Promise<{ runId: 
   if (rows.length === 0) notFound();
   return (
     <main className="wide">
-      <p>
-        <Link href="/runs">Back to Runs</Link>
-      </p>
-      <h1>Run log</h1>
-      <p className="muted">Run {runId}. One row per receipt per step.</p>
-      <div className="table-wrap">
+      <PageHeader
+        eyebrow="Diagnostics"
+        title="Run log"
+        icon={<ListTree aria-hidden="true" size={24} />}
+        description={
+          <>
+            Run <code>{runId}</code>. One row per receipt per processing step.
+          </>
+        }
+        actions={
+          <Link href="/runs" className="button icon-button">
+            <ArrowLeft aria-hidden="true" size={16} /> All runs
+          </Link>
+        }
+      />
+      <div className="table-card table-wrap">
         <table>
           <thead>
             <tr>

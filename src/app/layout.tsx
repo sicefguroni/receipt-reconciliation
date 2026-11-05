@@ -1,9 +1,10 @@
+import { ReceiptText } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { PEOPLE } from "@/config/people";
-import { currentActor, switchActor } from "./actions";
-import { SubmitButton } from "./submit-button";
+import { currentActor } from "./actions";
+import { ActorSwitcher } from "./actor-switcher";
+import { AppNav } from "./app-nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,30 +22,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         </a>
         <header className="site">
           <Link href="/" className="brand">
-            Receipt reconciliation
+            <span className="brand-mark">
+              <ReceiptText aria-hidden="true" size={19} strokeWidth={2.2} />
+            </span>
+            <span>
+              Receipt reconciliation
+              <small>Finance workspace</small>
+            </span>
           </Link>
-          <nav aria-label="Main">
-            <Link href="/">Months</Link>
-            <Link href="/upload">Upload</Link>
-            <Link href="/runs">Runs</Link>
-            <Link href="/guide">How to close a month</Link>
-          </nav>
+          <AppNav />
           {/* Simulated sign-in (03 non-goal: real authentication). Shows R-APR-1 in action. */}
-          <form action={switchActor} className="actor">
-            <label>
-              Acting as{" "}
-              <select name="actor" defaultValue={actor}>
-                {PEOPLE.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <SubmitButton type="submit" pendingText="Switching…">
-              Switch
-            </SubmitButton>
-          </form>
+          <ActorSwitcher current={actor} />
         </header>
         <div id="content">{children}</div>
       </body>

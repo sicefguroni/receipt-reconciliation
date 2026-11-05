@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { BookOpenText } from "lucide-react";
+import { PageHeader } from "../ui";
 import { pickSections, renderMarkdown } from "./markdown";
 
 // Day 4 (C1): the guide inside the app. It is the README's user sections, read at request
@@ -19,9 +21,15 @@ export default function GuidePage() {
   const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
   return (
     <main className="guide">
-      <h1>How to close a month</h1>
-      <p className="muted">The same guide as the README that comes with this app.</p>
-      {renderMarkdown(pickSections(readme, GUIDE_SECTIONS))}
+      <PageHeader
+        eyebrow="Accounting guide"
+        title="How to close a month"
+        icon={<BookOpenText aria-hidden="true" size={24} />}
+        description="A practical reference for matching, resolving exceptions, approving, and exporting the final pack."
+      />
+      <article className="guide-card">
+        {renderMarkdown(pickSections(readme, GUIDE_SECTIONS))}
+      </article>
     </main>
   );
 }

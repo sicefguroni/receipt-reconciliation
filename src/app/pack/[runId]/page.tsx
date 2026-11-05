@@ -1,3 +1,4 @@
+import { ArrowLeft, Download, PackageCheck } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -6,6 +7,7 @@ import { packSummary, type Total } from "@/pipeline/pack";
 import { getMonth } from "@/server/months";
 import { FLAG_LABELS, money } from "../../labels";
 import { day } from "../../review/[runId]/panels";
+import { PageHeader } from "../../ui";
 
 export const dynamic = "force-dynamic";
 
@@ -71,10 +73,17 @@ export default async function PackPage({ params }: { params: Promise<{ runId: st
 
   return (
     <main className="wide pack">
-      <p>
-        <Link href={`/review/${runId}`}>Back to the review queue</Link>
-      </p>
-      <h1>Month-end pack: {name}</h1>
+      <PageHeader
+        eyebrow="Export and close"
+        title={`Month-end pack: ${name}`}
+        icon={<PackageCheck aria-hidden="true" size={24} />}
+        description="Review totals, exclusions, and statement exceptions before exporting the final ledger."
+        actions={
+          <Link href={`/review/${runId}`} className="button icon-button">
+            <ArrowLeft aria-hidden="true" size={16} /> Review queue
+          </Link>
+        }
+      />
       {month.closed ? (
         <p className="notice">Every item is resolved. The month is ready to close.</p>
       ) : (
@@ -104,11 +113,11 @@ export default async function PackPage({ params }: { params: Promise<{ runId: st
       </dl>
 
       <p className="row">
-        <a className="button primary" href={`/pack/${runId}/ledger.csv`} download>
-          Download ledger (CSV)
+        <a className="button primary icon-button" href={`/pack/${runId}/ledger.csv`} download>
+          <Download aria-hidden="true" size={16} /> Download ledger
         </a>
-        <a className="button" href={`/pack/${runId}/exceptions.csv`} download>
-          Download exceptions log (CSV)
+        <a className="button icon-button" href={`/pack/${runId}/exceptions.csv`} download>
+          <Download aria-hidden="true" size={16} /> Exceptions log
         </a>
       </p>
 

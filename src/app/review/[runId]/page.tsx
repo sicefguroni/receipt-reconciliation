@@ -1,3 +1,4 @@
+import { CalendarRange, PackageCheck } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { personLabel } from "@/config/people";
@@ -8,6 +9,7 @@ import { bulkApprove, currentActor } from "../../actions";
 import { lineNextStep, money, nextStep } from "../../labels";
 import { SubmitButton } from "../../submit-button";
 import { activeTab, TABS, type Tab } from "../../tabs";
+import { PageHeader, StatusBadge } from "../../ui";
 import { day, LinePanel, ReceiptPanel } from "./panels";
 import { QueueTabs } from "./queue-tabs";
 
@@ -136,32 +138,33 @@ export default async function ReviewPage({
 
   return (
     <main className="ledger">
-      <header className="month-head">
-        <div>
-          <h1>
-            Review{" "}
-            {new Date(`${month.monthKey}-01T00:00:00Z`).toLocaleDateString("en-AU", {
-              month: "long",
-              year: "numeric",
-              timeZone: "UTC",
-            })}
-          </h1>
-          <p className="muted">
+      <PageHeader
+        eyebrow="Review queue"
+        title={`Review ${new Date(`${month.monthKey}-01T00:00:00Z`).toLocaleDateString("en-AU", {
+          month: "long",
+          year: "numeric",
+          timeZone: "UTC",
+        })}`}
+        icon={<CalendarRange aria-hidden="true" size={24} />}
+        description={
+          <>
             {month.receipts.length} receipts and {month.statementLines.length} statement lines
             {month.statementFormat ? `, read as ${month.statementFormat}` : ""}. Acting as{" "}
             {personLabel(actor)}.{" "}
-            {month.mode === "replay" ? "Replay mode (recorded model answers)." : "Live mode."}
-          </p>
-        </div>
-        <nav className="pack-links" aria-label="Month-end pack">
+            <StatusBadge tone={month.mode === "replay" ? "info" : "success"}>
+              {month.mode === "replay" ? "Replay mode" : "Live mode"}
+            </StatusBadge>
+          </>
+        }
+        actions={
           <Link
             href={`/pack/${month.runId}`}
-            className={month.closed ? "button primary" : "button"}
+            className={`${month.closed ? "button primary" : "button"} icon-button`}
           >
-            Month-end pack
+            <PackageCheck aria-hidden="true" size={17} /> Month-end pack
           </Link>
-        </nav>
-      </header>
+        }
+      />
 
       <section className="progress" aria-label="Progress">
         <div

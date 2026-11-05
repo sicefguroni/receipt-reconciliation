@@ -14,6 +14,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
+    "ui:audit": "node scripts/ui-audit.mjs",
     "lint": "biome check .",
     "format": "biome check --write .",
     "db:generate": "drizzle-kit generate",
@@ -48,6 +49,7 @@
   "dependencies": {
     "better-sqlite3": "12.11.1",
     "drizzle-orm": "^0.45.4",
+    "lucide-react": "^1.68.0",
     "next": "^16.4.3",
     "openai": "^7.47.0",
     "react": "^19.3.1",
