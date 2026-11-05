@@ -41,7 +41,7 @@ Saved elsewhere (paths fixed by the final layout in `08`):
 
 ## Exit criteria
 
-- [ ] Every box in the `08` final checklist is ticked or explicitly marked not done with a reason
+- [x] Every box in the `08` final checklist is ticked or explicitly marked not done with a reason (9 of 9 ticked, Day 5)
 
 Track task status in [`TRACKER.md`](../../TRACKER.md) under "Day 5".
 
@@ -51,6 +51,8 @@ Track task status in [`TRACKER.md`](../../TRACKER.md) under "Day 5".
 
 **Secrets scan.** `.env` was never committed and is ignored. No key-like string (`sk-ant`, `sk-proj-`, `sk-` + 20 characters, a non-empty `OPENAI_API_KEY=`) in any version of any file; the only matches are documentation placeholders. `.env.example` covers all 18 variables the app reads and has no secret values.
 
-**Generic confidentiality scan** (all tracked text files and every commit message): no email address in files; in commit messages only the AI co-author line; every commit authored under one personal address; web domains only `localhost`, the public FX service, and `nodejs.org`; every phone number in the fictional 555 range; all 22 ABN-shaped numbers **fail the official ABN checksum**, so none can be a real business. **Names scan:** run by the candidate privately (the employer, product, people, and client names are not written anywhere in this repository); result recorded in the `08` checklist.
+**Generic confidentiality scan** (all tracked text files and every commit message): no email address in files; in commit messages only the AI co-author line; every commit authored under one personal address; web domains only `localhost`, the public FX service, and `nodejs.org`; every phone number in the fictional 555 range; all 22 ABN-shaped numbers **fail the official ABN checksum**, so none can be a real business. **Names scan:** run by the candidate privately (the employer, product, people, and client names are not written anywhere in this repository): no hits reported. Recorded in the `08` checklist.
+
+**Release check (Day 5, commit `a1f3829`, the candidate's form restyle with a custom picker).** Typecheck, lint, 321/321 tests, and build clean; a scripted browser run on a production build drove the new picker the way a person does: R04 → L16 from the payment cards, the picker sets the form value, P1's R20 → $10 card fee refused, the café payment's category suggestion preselected, filing it elsewhere refused, then recorded with the override tick (6/6). README screenshot 3 re-taken on the restyled forms.
 
 **Demo:** the timed script against the real screens is in [`demo-script.md`](demo-script.md).

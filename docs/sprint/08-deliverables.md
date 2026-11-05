@@ -83,9 +83,9 @@ Use this framing for the confidential origin: *"This system comes from a real fi
 - [x] Fresh clone: three-step setup works with **no API key** (replay mode). *Day 5: install 12 s, seed, dev server; see the Day 5 notes.*
 - [x] `pnpm test` and `pnpm eval -- --mode replay --label final` pass in the fresh clone. *321/321; 12/12 and every metric identical to the live `final`.*
 - [x] `.env.example` has every variable and no secrets; `git log -p | grep -i "sk-ant"` returns nothing. *All 18 variables; no key-like string in any version of any file (OpenAI patterns checked too).*
-- [ ] Confidentiality scan: no employer, product, person, or client names and no real figures in code, data, docs, commits, or video. *Generic scan clean (Day 5 notes). **Open:** the names scan (run privately by the candidate) and the video.*
+- [x] Confidentiality scan: no employer, product, person, or client names and no real figures in code, data, docs, commits, or video. *Generic scan clean (Day 5 notes). Names scan run privately by the candidate over every file, every past version, and all commit messages: no hits reported ("I don't think I found any"). The video was recorded by the candidate on the synthetic sample month; its content was not reviewed by the agent.*
 - [x] TC01–TC12 results with pass/fail; ≥ 3 failure analyses; before/after regression; B0/B1/final comparison. *`EVALUATION.md`; six analyses in `failures.md`; B0 is a labelled estimate.*
 - [x] Quality, speed (p50/p95), cost, and human-touch metrics reported, with the run label and date. *`final`, 2026-11-05.*
 - [x] README, RUNBOOK, ARCHITECTURE, EVALUATION, CASE_STUDY, AI_COLLABORATION, NEXT_ITERATION present
-- [ ] Demo video recorded (five minutes or less) and linked in the README. ***Open:** recorded by the candidate from `days/day-5-handoff-and-present/demo-script.md`.*
-- [ ] `TRACKER.md` final session entry written
+- [x] Demo video recorded (five minutes or less) and linked in the README. *Recorded by the candidate from `days/day-5-handoff-and-present/demo-script.md`; linked at the top of the README.*
+- [x] `TRACKER.md` final session entry written

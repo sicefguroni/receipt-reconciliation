@@ -2,7 +2,7 @@
 
 This app matches a month of staff receipts to the company's card and bank statement, then shows you only the items that need a person. When every item is resolved, it gives you the month-end pack: a ledger file, an exceptions log, and a summary.
 
-**Demo (5 minutes):** DEMO_LINK_TO_ADD
+**Demo (5 minutes):** [watch the recording](https://drive.google.com/file/d/1xujHA2PZWDcfBwnBHMyR_suerbbglgxP/view?usp=sharing)
 
 For whoever runs the app: [`RUNBOOK.md`](RUNBOOK.md). How it works: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Measured results: [`docs/EVALUATION.md`](docs/EVALUATION.md). The story: [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md). All data in this repository is synthetic.
 

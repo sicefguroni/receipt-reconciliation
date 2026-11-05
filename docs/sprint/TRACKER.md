@@ -9,6 +9,8 @@ Read this at the start of every session and update it at the end. This tracker r
 
 ## Current status
 
+**Sprint closed** (2026-11-05). All five days' exit criteria met; every box in the `08` final checklist ticked; demo recorded and linked; released as `v1.0.0`.
+
 **Day 5: everything but the human items is done** (2026-11-05). `final` live run frozen (12/12; 0/33 wrong auto-matches, 0/14 holdout; touches 10/40; p50 2.0 s, p95 5.0 s; at most USD 0.45), replay identical. All handoff documents written; fresh-clone check passed with no key; secrets and generic confidentiality scans clean. **Open, candidate only:** the names scan, recording the demo, then the link in the README, the last `08` boxes, and the `v1.0.0` tag.
 
 **Day 4 open items closed** (Day 4). "Same business" is judged on distinctive words, so two cafés are different vendors and all four wrong pairings from C1 and P1 are refused. Substitutes get a suggested category (R-CAT-6), preselected; going against it needs a tick; 4 of the 9 odd categories from the runs would be caught, the other 5 need rule-table entries (finance lead). The month-end pack uses the same light cards. `pnpm test` 321/321; browser 11/11. Next: Day 5.
@@ -82,8 +84,8 @@ Block-by-block detail: [`days/day-4-evaluate-and-harden/journal.md`](days/day-4-
 - [x] README, RUNBOOK, ARCHITECTURE, EVALUATION final; fresh-clone check: `Done` 2026-11-05. Paths: `README.md` (screenshots in `docs/images/`, doc links, demo link placeholder), `RUNBOOK.md`, `docs/ARCHITECTURE.md`, `docs/EVALUATION.md`. Validation: fresh clone in an ordinary folder, no key: install, seed, 321/321, `final` replay identical, stress 11/11, dev server serving (details in the Day 5 notes).
 - [x] CASE_STUDY, AI_COLLABORATION, NEXT_ITERATION: `Done` 2026-11-05. Paths: `docs/{CASE_STUDY,AI_COLLABORATION,NEXT_ITERATION}.md`. Validation: every number checked against `eval-results/`, the code, or the cold-run records before committing (four drafted claims corrected, see the AI corrections log).
 - [x] Full UI component audit and redesign: `Done` 2026-11-05. Paths: `src/app/{actor-switcher,app-nav,ui}.tsx`, `src/app/globals.css`, the home/upload/review/pack/runs/guide pages, `scripts/ui-audit.mjs`, `package.json`, `pnpm-lock.yaml`. Replaced primitive navigation, native actor select, page headings, status text, uploads, forms, progress, queue tabs/rows, run summaries, and export actions with a consistent responsive component system using Lucide icons. Validation: `pnpm ui:audit` passed 12/12 route/viewport checks, desktop/mobile actor-menu open and server-action switching, and desktop/mobile queue-row expansion; `pnpm test` 26 files, 321 tests passed; `pnpm build`, typecheck, and lint passed.
-- [ ] Demo recorded (human): `In Progress` 2026-11-05. Script: `days/day-5-handoff-and-present/demo-script.md`. Resume condition: the candidate records and shares the link.
-- [ ] Final checklist in `08` complete: `In Progress` 2026-11-05. 6 of 9 boxes ticked with evidence; open: the names scan and the demo video (both the candidate's), and the final TRACKER entry, written after them.
+- [x] Demo recorded (human): `Done` 2026-11-05. Recorded by the candidate from `days/day-5-handoff-and-present/demo-script.md`; linked in `README.md`.
+- [x] Final checklist in `08` complete: `Done` 2026-11-05. 9 of 9 boxes ticked with evidence. The names scan was run privately by the candidate (no hits reported); the video's content was not reviewed by the agent. Released as tag `v1.0.0`.
 
 ## Decision log
 
@@ -187,6 +189,7 @@ Record decisions made under ambiguity. These feed the case study and the "Owners
 | 2026-11-05 | **Confidentiality names scan run by the candidate privately**; the agent ran the generic scan | Give the agent the names | **Candidate's ruling.** The names never enter the conversation or the repository | n/a |
 | 2026-11-05 | **Release as an annotated tag `v1.0.0`**, pushed, no GitHub Release page | Tag + release page; no tag | **Candidate's ruling** | Yes |
 | 2026-11-05 | Screenshots taken against a separate, freshly seeded database (`DATABASE_PATH` override) | Screenshot the working database | The working database held a dozen test months from browser checks; a README should show the month a newcomer sees | n/a |
+| 2026-11-05 | Release `v1.0.0` on the candidate's last commit (`a1f3829`, form restyle) after a browser check of the flows it touched | Tag the commit before it; tag without checking | The tag is what a reviewer clones; the new picker sits on the decision forms the guardrails depend on (6/6 passed) | Yes |
 
 ## AI corrections log
 
@@ -355,6 +358,14 @@ Keep a running list for `AI_COLLABORATION.md`. Do not reconstruct it at the end.
 - Validation: `pnpm ui:audit` passed 12/12 checks across `/`, `/upload`, `/runs`, `/guide`, one review queue, and its pack at 1440 px and 390 px; the audit opened the actor menu, verified all six options and one selected option, submitted a switch to Staff A, and expanded a queue row at both sizes. Every route returned 200 with one H1, one active nav item, no document overflow, no undersized controls, and no captured console errors. `pnpm test` 321/321; production build, typecheck, and lint passed; the open actor menu was inspected in a desktop screenshot.
 - Remaining: no UI work from this block. Candidate-only Day 5 items remain unchanged: names scan, demo recording/link, final checklist, and tag.
 - Known risks: wide data tables intentionally scroll inside their container on phones; the modernised styles have automated and builder visual checks, but no new target-user session.
+
+### 2026-11-05: Sprint close
+
+- Work done: the candidate's UI redesign and form restyle committed and checked (typecheck, lint, 321/321, build; picker flows 6/6 in a browser); README screenshots and button names updated for the new UI; demo linked; names scan recorded as the candidate reported it; `08` checklist 9/9; tagged `v1.0.0`.
+- Decisions: 1 row, "Release v1.0.0 on the candidate's last commit".
+- Validation: as above; `final` evaluation unchanged (the UI changes do not touch the pipeline or the rules).
+- Remaining: none for the sprint. Next is `docs/NEXT_ITERATION.md`, starting with the Accounting user closing one real month.
+- Known risks: the most important limitation stands: one synthetic month, closed by the builder and one proxy; the guardrails built after P1 are untested on a person.
 
 ### YYYY-MM-DD: Session title
 
