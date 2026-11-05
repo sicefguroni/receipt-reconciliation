@@ -1,0 +1,346 @@
+{
+  "label": "final-replay",
+  "mode": "replay",
+  "ranAt": "2026-11-05T03:14:04.131Z",
+  "commit": "b72b858",
+  "model": "gpt-5.6-sol",
+  "reasoningEffort": "low",
+  "policy": {
+    "pctThreshold": 10,
+    "audThreshold": 100,
+    "minScore": 75,
+    "minMargin": 20,
+    "maxDaysApart": 7
+  },
+  "receipts": 40,
+  "fullSet": true,
+  "testCasesRun": [
+    "TC01",
+    "TC02",
+    "TC03",
+    "TC04",
+    "TC05",
+    "TC06",
+    "TC07",
+    "TC08",
+    "TC09",
+    "TC10",
+    "TC11",
+    "TC12"
+  ],
+  "metrics": {
+    "all": {
+      "extractionTotal": {
+        "hit": 40,
+        "of": 40,
+        "rate": 1
+      },
+      "extractionCurrency": {
+        "hit": 40,
+        "of": 40,
+        "rate": 1
+      },
+      "extractionDate": {
+        "hit": 40,
+        "of": 40,
+        "rate": 1
+      },
+      "extractionVendor": {
+        "hit": 38,
+        "of": 40,
+        "rate": 0.95
+      },
+      "categoryAccuracy": {
+        "hit": 40,
+        "of": 40,
+        "rate": 1
+      },
+      "matchRecallTop1": {
+        "hit": 35,
+        "of": 35,
+        "rate": 1
+      },
+      "wrongAutoMatchRate": {
+        "hit": 0,
+        "of": 33,
+        "rate": 0
+      },
+      "headlineExceptionRecall": {
+        "hit": 5,
+        "of": 5,
+        "rate": 1
+      },
+      "exceptionRecall": {
+        "AMBIGUOUS_MATCH": {
+          "hit": 0,
+          "of": 1,
+          "rate": 0
+        },
+        "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        },
+        "DUPLICATE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        },
+        "MISSING_PURPOSE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        },
+        "NO_PAYMENT_FOUND": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        }
+      },
+      "exceptionPrecision": {
+        "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        },
+        "DUPLICATE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        },
+        "LOW_CONFIDENCE_FIELD": {
+          "hit": 0,
+          "of": 1,
+          "rate": 0
+        },
+        "MISSING_PURPOSE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        },
+        "NO_PAYMENT_FOUND": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        }
+      },
+      "humanTouches": {
+        "hit": 10,
+        "of": 40,
+        "rate": 0.25
+      },
+      "noReceiptLineRecall": {
+        "hit": 9,
+        "of": 9,
+        "rate": 1
+      }
+    },
+    "holdout": {
+      "extractionTotal": {
+        "hit": 16,
+        "of": 16,
+        "rate": 1
+      },
+      "extractionCurrency": {
+        "hit": 16,
+        "of": 16,
+        "rate": 1
+      },
+      "extractionDate": {
+        "hit": 16,
+        "of": 16,
+        "rate": 1
+      },
+      "extractionVendor": {
+        "hit": 16,
+        "of": 16,
+        "rate": 1
+      },
+      "categoryAccuracy": {
+        "hit": 16,
+        "of": 16,
+        "rate": 1
+      },
+      "matchRecallTop1": {
+        "hit": 15,
+        "of": 15,
+        "rate": 1
+      },
+      "wrongAutoMatchRate": {
+        "hit": 0,
+        "of": 14,
+        "rate": 0
+      },
+      "headlineExceptionRecall": {
+        "hit": 3,
+        "of": 3,
+        "rate": 1
+      },
+      "exceptionRecall": {
+        "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        },
+        "MISSING_PURPOSE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        },
+        "NO_PAYMENT_FOUND": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        }
+      },
+      "exceptionPrecision": {
+        "AMOUNT_DIFFERS_OVER_THRESHOLD": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        },
+        "LOW_CONFIDENCE_FIELD": {
+          "hit": 0,
+          "of": 1,
+          "rate": 0
+        },
+        "MISSING_PURPOSE": {
+          "hit": 2,
+          "of": 2,
+          "rate": 1
+        },
+        "NO_PAYMENT_FOUND": {
+          "hit": 1,
+          "of": 1,
+          "rate": 1
+        }
+      },
+      "humanTouches": {
+        "hit": 5,
+        "of": 16,
+        "rate": 0.3125
+      },
+      "noReceiptLineRecall": null
+    }
+  },
+  "testCases": [
+    {
+      "testCase": "TC01",
+      "receipts": [
+        "R01"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC02",
+      "receipts": [
+        "R02"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC03",
+      "receipts": [
+        "R03"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC04",
+      "receipts": [
+        "R04"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC05",
+      "receipts": [
+        "R05"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC06",
+      "receipts": [
+        "R06",
+        "R07"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC07",
+      "receipts": [
+        "R08",
+        "R09",
+        "R10"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC08",
+      "receipts": [
+        "R11"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC09",
+      "receipts": [
+        "R12"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC10",
+      "receipts": [
+        "R13",
+        "R14"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC11",
+      "receipts": [
+        "R15"
+      ],
+      "pass": true,
+      "failures": []
+    },
+    {
+      "testCase": "TC12",
+      "receipts": [
+        "R16",
+        "R17",
+        "R18",
+        "R19"
+      ],
+      "pass": true,
+      "failures": []
+    }
+  ],
+  "measuredFrom": "the recorded live run",
+  "latencyMsPerReceipt": {
+    "p50": 1963,
+    "p95": 5031
+  },
+  "tokens": {
+    "input": 91425,
+    "output": 4227
+  },
+  "cost": {
+    "upperBound": 0.4502,
+    "perReceipt": 0.0113,
+    "currency": "USD",
+    "basis": "4/M input, 20/M output; OpenAI API Pricing page, as reported by the candidate, 2026-11-03"
+  }
+}

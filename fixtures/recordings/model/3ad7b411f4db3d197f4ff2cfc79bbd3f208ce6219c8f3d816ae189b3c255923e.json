@@ -3,7 +3,7 @@
   "task": "categorise",
   "model": "gpt-5.6-sol",
   "promptVersion": "categorise-v1",
-  "recordedAt": "2026-11-03T07:17:33.827Z",
+  "recordedAt": "2026-11-05T03:12:59.746Z",
   "parts": [
     {
       "text": "Vendor: Demo Cloud Pty Ltd\nItems: Cloud compute (September usage), object storage, and data transfer\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
@@ -14,6 +14,6 @@
     "modelId": "gpt-5.6-sol",
     "inputTokens": 214,
     "outputTokens": 38,
-    "latencyMs": 1141
+    "latencyMs": 1882
   }
 }

@@ -3,7 +3,7 @@
   "task": "categorise",
   "model": "gpt-5.6-sol",
   "promptVersion": "categorise-v1",
-  "recordedAt": "2026-11-03T07:17:34.412Z",
+  "recordedAt": "2026-11-05T03:12:58.023Z",
   "parts": [
     {
       "text": "Vendor: Sample App Store\nItems: Pro subscription: monthly\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
@@ -14,6 +14,6 @@
     "modelId": "gpt-5.6-sol",
     "inputTokens": 205,
     "outputTokens": 32,
-    "latencyMs": 1945
+    "latencyMs": 1121
   }
 }

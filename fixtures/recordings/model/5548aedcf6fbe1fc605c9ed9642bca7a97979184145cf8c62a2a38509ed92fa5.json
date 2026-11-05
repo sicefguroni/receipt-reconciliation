@@ -3,17 +3,17 @@
   "task": "categorise",
   "model": "gpt-5.6-sol",
   "promptVersion": "categorise-v1",
-  "recordedAt": "2026-11-03T07:17:45.997Z",
+  "recordedAt": "2026-11-05T03:13:10.215Z",
   "parts": [
     {
       "text": "Vendor: Nimbus Compute Inc.\nItems: GPU inference credits\nAllowed categories: Advertising & Marketing; AI & Cloud; Software; Rent & Workspace; Equipment; Office Supplies; Travel; Meals & Entertainment; Repairs & Maintenance; Utilities"
     }
   ],
   "response": {
-    "text": "{\"category\":\"AI & Cloud\",\"confidence\":0.99,\"reason\":\"GPU inference credits are cloud computing resources used for AI workloads.\"}",
+    "text": "{\"category\":\"AI & Cloud\",\"confidence\":0.99,\"reason\":\"GPU inference credits are cloud-based AI computing services.\"}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 204,
-    "outputTokens": 36,
-    "latencyMs": 1219
+    "outputTokens": 34,
+    "latencyMs": 1296
   }
 }

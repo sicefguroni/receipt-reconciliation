@@ -1,0 +1,41 @@
+receipt_id,test_cases,split,expected_status,status,expected_line,auto_line,top_candidate,expected_exceptions,exceptions,expected_category,category,total_ok,currency_ok,date_ok,vendor_ok
+R01,TC01,holdout,matched,matched,L03,L03,L03,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R02,TC02,holdout,matched,matched,L08,L08,L08,,,AI & Cloud,AI & Cloud,true,true,true,true
+R03,TC03,tuning,matched,matched,L09,L09,L09,,,Software,Software,true,true,true,true
+R04,TC04,holdout,ambiguous,ambiguous,L16,,L16,AMBIGUOUS_MATCH,AMBIGUOUS_MATCH,Repairs & Maintenance,Repairs & Maintenance,true,true,true,true
+R05,TC05,tuning,matched,matched,L15,L15,L15,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R06,TC06,holdout,matched,matched,L18,L18,L18,MISSING_PURPOSE,MISSING_PURPOSE,Travel,Travel,true,true,true,true
+R07,TC06,holdout,matched,matched,L23,L23,L23,MISSING_PURPOSE,MISSING_PURPOSE,Office Supplies,Office Supplies,true,true,true,true
+R08,TC07,tuning,matched,matched,L25,L25,L25,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R09,TC07,tuning,unmatched,unmatched,,,,DUPLICATE,DUPLICATE,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R10,TC07,tuning,unmatched,unmatched,,,,DUPLICATE,DUPLICATE,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R11,TC08,holdout,matched,matched,L27,L27,L27,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R12,TC09,tuning,matched,matched,L05,L05,L05,,,Travel,Travel,true,true,true,true
+R13,TC10,tuning,unmatched,unmatched,,,L32,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R14,TC10,tuning,unmatched,unmatched,,,L32,,,Travel,Travel,true,true,true,true
+R15,TC11,tuning,ambiguous,ambiguous,L22,,L22,AMBIGUOUS_MATCH,AMBIGUOUS_MATCH,Software,Software,true,true,true,true
+R16,TC12,tuning,matched,matched,L11,L11,L11,,,Advertising & Marketing,Advertising & Marketing,true,true,true,false
+R17,TC12,holdout,matched,matched,L06,L06,L06,,,AI & Cloud,AI & Cloud,true,true,true,true
+R18,TC12,holdout,matched,matched,L29,L29,L29,,LOW_CONFIDENCE_FIELD,Rent & Workspace,Rent & Workspace,true,true,true,true
+R19,TC12,holdout,matched,matched,L34,L34,L34,,,Equipment,Equipment,true,true,true,true
+R20,,holdout,unmatched,unmatched,,,L44,NO_PAYMENT_FOUND,NO_PAYMENT_FOUND,Travel,Travel,true,true,true,true
+R21,,holdout,matched,matched,L04,L04,L04,,,Software,Software,true,true,true,true
+R22,,tuning,matched,matched,L28,L28,L28,,,Software,Software,true,true,true,true
+R23,,tuning,matched,matched,L01,L01,L01,,,Software,Software,true,true,true,true
+R24,,holdout,matched,matched,L14,L14,L14,,,Utilities,Utilities,true,true,true,true
+R25,,tuning,matched,matched,L35,L35,L35,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R26,,tuning,matched,matched,L38,L38,L38,,,Travel,Travel,true,true,true,true
+R27,,tuning,matched,matched,L39,L39,L39,,,Travel,Travel,true,true,true,true
+R28,,tuning,matched,matched,L37,L37,L37,,,Travel,Travel,true,true,true,true
+R29,,holdout,matched,matched,L17,L17,L17,,,Office Supplies,Office Supplies,true,true,true,true
+R30,,tuning,matched,matched,L41,L41,L41,,,Advertising & Marketing,Advertising & Marketing,true,true,true,false
+R31,,tuning,matched,matched,L30,L30,L30,,,AI & Cloud,AI & Cloud,true,true,true,true
+R32,,tuning,matched,matched,L42,L42,L42,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R33,,tuning,matched,matched,L13,L13,L13,,,Rent & Workspace,Rent & Workspace,true,true,true,true
+R34,,tuning,matched,matched,L43,L43,L43,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R35,,tuning,matched,matched,L10,L10,L10,,,Office Supplies,Office Supplies,true,true,true,true
+R36,,tuning,matched,matched,L33,L33,L33,,,Repairs & Maintenance,Repairs & Maintenance,true,true,true,true
+R37,,holdout,matched,matched,L21,L21,L21,,,Utilities,Utilities,true,true,true,true
+R38,,tuning,matched,matched,L07,L07,L07,,,Meals & Entertainment,Meals & Entertainment,true,true,true,true
+R39,,holdout,matched,matched,L20,L20,L20,,,Software,Software,true,true,true,true
+R40,,holdout,matched,matched,L31,L31,L31,,,Travel,Travel,true,true,true,true

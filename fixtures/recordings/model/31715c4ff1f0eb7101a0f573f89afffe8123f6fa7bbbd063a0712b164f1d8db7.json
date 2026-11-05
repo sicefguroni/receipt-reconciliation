@@ -3,7 +3,7 @@
   "task": "extract",
   "model": "gpt-5.6-sol",
   "promptVersion": "extract-v1",
-  "recordedAt": "2026-11-03T07:17:26.663Z",
+  "recordedAt": "2026-11-05T03:12:51.306Z",
   "parts": [
     {
       "text": "File: R05.jpg"
@@ -13,10 +13,10 @@
     }
   ],
   "response": {
-    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"HARBOUR LANE CAFE\",\"confidence\":1},\"date\":{\"value\":\"2026-10-09\",\"confidence\":1},\"total\":{\"value\":42,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":3.82,\"confidence\":1},\"summary\":{\"value\":\"Lunch special x2; long black x2\",\"confidence\":1}}",
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"HARBOUR LANE CAFE\",\"confidence\":1},\"date\":{\"value\":\"2026-10-09\",\"confidence\":1},\"total\":{\"value\":42,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":0.99},\"tax\":{\"value\":3.82,\"confidence\":1},\"summary\":{\"value\":\"2 lunch specials; 2 long blacks\",\"confidence\":1}}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 1866,
-    "outputTokens": 97,
-    "latencyMs": 4178
+    "outputTokens": 96,
+    "latencyMs": 1528
   }
 }

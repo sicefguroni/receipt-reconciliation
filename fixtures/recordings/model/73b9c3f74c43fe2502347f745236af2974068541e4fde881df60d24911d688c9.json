@@ -3,7 +3,7 @@
   "task": "extract",
   "model": "gpt-5.6-sol",
   "promptVersion": "extract-v1",
-  "recordedAt": "2026-11-03T07:17:27.701Z",
+  "recordedAt": "2026-11-05T03:12:54.136Z",
   "parts": [
     {
       "text": "File: R08.pdf"
@@ -13,10 +13,10 @@
     }
   ],
   "response": {
-    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Bayside Catering Co.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-15\",\"confidence\":1},\"total\":{\"value\":312,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":28.36,\"confidence\":1},\"summary\":{\"value\":\"Working lunch platter (12 people); juice and sparkling water\",\"confidence\":1}}",
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Bayside Catering Co.\",\"confidence\":1},\"date\":{\"value\":\"2026-10-15\",\"confidence\":1},\"total\":{\"value\":312,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":28.36,\"confidence\":1},\"summary\":{\"value\":\"Working lunch platter for 12 people; juice and sparkling water\",\"confidence\":1}}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 3707,
-    "outputTokens": 95,
-    "latencyMs": 3063
+    "outputTokens": 96,
+    "latencyMs": 2524
   }
 }

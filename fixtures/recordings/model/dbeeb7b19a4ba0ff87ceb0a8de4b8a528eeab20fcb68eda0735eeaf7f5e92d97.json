@@ -3,7 +3,7 @@
   "task": "extract",
   "model": "gpt-5.6-sol",
   "promptVersion": "extract-v1",
-  "recordedAt": "2026-11-03T07:17:36.562Z",
+  "recordedAt": "2026-11-05T03:12:59.599Z",
   "parts": [
     {
       "text": "File: R19.jpg"
@@ -13,10 +13,10 @@
     }
   ],
   "response": {
-    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Ironbark Hardware\",\"confidence\":1},\"date\":{\"value\":\"2026-10-22\",\"confidence\":1},\"total\":{\"value\":429,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":39,\"confidence\":1},\"summary\":{\"value\":\"1 ergonomic office chair, mesh back\",\"confidence\":1}}",
+    "text": "{\"isReceipt\":true,\"vendor\":{\"value\":\"Ironbark Hardware\",\"confidence\":1},\"date\":{\"value\":\"2026-10-22\",\"confidence\":1},\"total\":{\"value\":429,\"confidence\":1},\"currency\":{\"value\":\"AUD\",\"confidence\":1},\"tax\":{\"value\":39,\"confidence\":1},\"summary\":{\"value\":\"1 × ergonomic office chair, mesh back\",\"confidence\":1}}",
     "modelId": "gpt-5.6-sol",
     "inputTokens": 1604,
-    "outputTokens": 88,
-    "latencyMs": 2731
+    "outputTokens": 89,
+    "latencyMs": 1567
   }
 }
