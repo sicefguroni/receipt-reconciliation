@@ -2,7 +2,9 @@
 
 This app matches a month of staff receipts to the company's card and bank statement, then shows you only the items that need a person. When every item is resolved, it gives you the month-end pack: a ledger file, an exceptions log, and a summary.
 
-*Draft, Day 3 (2026-11-03), updated Day 4. Screenshots and the operator's guide (RUNBOOK) come later in the sprint.*
+**Demo (5 minutes):** DEMO_LINK_TO_ADD
+
+For whoever runs the app: [`RUNBOOK.md`](RUNBOOK.md). How it works: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Measured results: [`docs/EVALUATION.md`](docs/EVALUATION.md). The story: [`docs/CASE_STUDY.md`](docs/CASE_STUDY.md). All data in this repository is synthetic.
 
 ## Set it up (three steps)
 
@@ -29,9 +31,21 @@ The progress bar shows how many items are done. When it reaches the end, the pac
 
 **Reasons.** Whenever a reason is asked for, say what happened ("tip added at the table", "deposit paid at booking"). "Good", "ok", or "approved" is not accepted.
 
-**Check this pairing.** If you pair a receipt with a payment that does not fit (a different vendor, a much larger or smaller amount, days apart, or a different account), the receipt shows both side by side and lists what does not fit. Go ahead only if you can say why it is right.
+**Check this pairing.** If you pair a receipt with a payment that does not fit (a different vendor, a much larger or smaller amount, days apart, or a different account), the receipt shows both side by side and lists what does not fit. Go ahead only if you can say why it is right. A payment that is clearly someone else's (another business, more than half off, and not one of the suggested payments) is refused, with what to do instead.
 
 **Acting as.** The selector in the top bar chooses who you are. Nobody can approve a receipt they submitted: the **Approve** button stays visible but greyed out, with the reason next to it.
+
+## What it looks like
+
+The sample month, in replay mode.
+
+![The first page: start the October sample month](docs/images/1-start.png)
+
+![The review queue: one tab per group, worst first, with counts](docs/images/2-queue.png)
+
+![An amount difference: the receipt and the payment side by side, and a reason to sign off](docs/images/3-amount-difference.png)
+
+![The month-end pack: totals, downloads, and what was left out](docs/images/4-pack.png)
 
 ## What each flag means, and what to do
 
@@ -49,7 +63,7 @@ The progress bar shows how many items are done. When it reaches the end, the pac
 | No matching payment on the statement | Nothing on the statement fits. | Choose a payment from the list, choose *Paid personally: reimburse* (with a reason), or remove the receipt until the payment appears. |
 | Paid in two parts | A deposit and a balance, for example: no single payment fits, but two together do. | Under *Choose the payment*, open **Paid in more than one payment?**, tick each payment, and press **Use these payments together**. Their total is compared with the receipt. |
 | Paid personally (no flag) | A personal-card receipt with no statement line. | Approve it to reimburse the submitter. |
-| Payment with no receipt | A statement line that no receipt matched. | **Link receipt**, **Record a substitute** (a real payment whose receipt is missing; choose a category and give a reason), or **Not an expense** with a reason (a bank fee, for example). If the row says it *could be the payment for* a receipt, link it. |
+| Payment with no receipt | A statement line that no receipt matched. | **Link receipt**, **Record a substitute** (a real payment whose receipt is missing; choose a category and give a reason), or **Not an expense** with a reason (a bank fee, for example). If the row says it *could be the payment for* a receipt, link it. Where the app can tell, it suggests the category; to use another, tick **Use my category instead**. |
 | Refund or credit | A statement line where money came back to the company (a negative amount). It is never matched to a receipt. | **Record the credit** against the category it reduces, with a reason (it lowers that category's total), or **Not an expense** with a reason. |
 | Small difference badge, e.g. "+$2.00 vs receipt" | The charge is a little different, within policy (a tip or card surcharge). | Nothing extra: approve as normal. |
 

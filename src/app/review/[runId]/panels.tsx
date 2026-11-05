@@ -66,7 +66,13 @@ function PairingCheck({ r, month }: { r: ReceiptResult; month: MonthResult }) {
   const e = r.extraction;
   return (
     <div className="pairing" role="note" aria-label={`Check this pairing for ${r.id}`}>
-      <p className="pairing-head">Check this pairing: {r.concerns.length} things do not fit.</p>
+      <p className="pairing-head">
+        Check this pairing:{" "}
+        {r.concerns.length === 1
+          ? "1 thing does not fit"
+          : `${r.concerns.length} things do not fit`}
+        .
+      </p>
       <dl className="pairing-grid">
         <div>
           <dt>Receipt</dt>
