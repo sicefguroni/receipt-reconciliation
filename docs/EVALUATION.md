@@ -2,20 +2,28 @@
 
 How the system is measured, what counts as passing, and what the measurements say so far. The plan this implements is [`sprint/06-evaluation-plan.md`](sprint/06-evaluation-plan.md). Every number below is copied from a committed file under `eval-results/`; re-run the command next to it to reproduce it.
 
-**Status:** Day 4. Results below run from Day 2 (`v0-day2`) through Day 4 (`v2-day4-post`, plus a 10-case stress set). Still to come: the `final` live run (Day 5) and time to close with a person (the proxy session has not happened yet). The six Day 4 failure analyses are in [`sprint/days/day-4-evaluate-and-harden/failures.md`](sprint/days/day-4-evaluate-and-harden/failures.md).
+**Status: final** (Day 5). The `final` run was live on 2026-11-05 and is frozen; its keyless replay is identical (`final-replay`). Earlier runs are kept below as the regression history. The six Day 4 failure analyses and their follow-ups are in [`sprint/days/day-4-evaluate-and-harden/failures.md`](sprint/days/day-4-evaluate-and-harden/failures.md).
 
-## Results at a glance (Day 4, `v2-day4-post`)
+## Final results at a glance (`final`, live, `gpt-5.6-sol`, commit `b72b858`)
 
-| | Full set (40) | Holdout (16) | v1 bar |
+| | Full set (40) | Holdout (16) | Target (`03`) |
 |---|---|---|---|
 | Test cases TC01–TC12 | **12/12** | — | all pass ✔ |
-| Wrong auto-match rate | **0/33 (0%)** | **0/14 (0%)** | 0% on holdout ✔ |
-| Exception recall (amount, purpose, duplicate) | 5/5 (100%) | 3/3 (100%) | 100% on full ✔ |
-| Extraction: total / currency | 40/40, 40/40 | 16/16, 16/16 | ≥ 95% on holdout ✔ |
-| Stress cases (safe failure) | **11/11** (8 correct, 3 safe) | — | no target; was 6/10 (S11 added 2026-11-04) |
+| Wrong auto-match rate | **0/33 (0%)** | **0/14 (0%)** | 0% ✔ |
+| Exception recall (amount, purpose, duplicate) | 5/5 (100%) | 3/3 (100%) | 100% ✔ |
+| Match recall (auto-match or top candidate) | 35/35 (100%) | 15/15 (100%) | ≥ 95% ✔ |
+| Extraction: total / currency / date | 40/40 each | 16/16 each | ≥ 95% on total and currency ✔ |
+| Category accuracy (before review) | 40/40 (100%) | 16/16 (100%) | ≥ 90% ✔ |
+| Human touches (receipts) | 10/40 (25%) | 5/16 (31%) | ≤ 35% ✔ |
+| Statement lines with no receipt found | 9/9 | — | — |
+| Latency, model time per receipt | p50 2.0 s, p95 5.0 s | — | p95 < 20 s ✔ |
+| Cost for the month | at most USD 0.45 (0.0112 per receipt) | — | report it |
+| Stress cases (safe failure) | **11/11** (8 correct, 3 safe) | — | no target; 6/10 before Day 4 |
 | Same 20 receipts as B1 | 11/11 test cases; 0/14 wrong matches (B1: 3/19) | — | — |
+| Time to close, 40 receipts | **about 8 min** (builder, C1) · **9 min** (proxy, P1, assisted once) | — | ≤ 10 min ✔ (by proxy) |
+| Wrong decisions made by the person | C1: 3/40 (ledger $106.66 over) · P1: 1/40 ($10.00 over) | — | — |
 
-All four v1 criteria are met. That is on synthetic data; the stress set is where the system was broken, and four of its ten cases failed before the Day 4 fixes.
+Every `03` target is met on this synthetic month. Read with care: the data is synthetic, B1 already meets four of these targets on it, and the two people who closed the month were the builder and a proxy, not the Accounting user. The system's measured edge is correctness (0 wrong matches against B1's 16%), and the remaining errors in both cold runs were made by people, which the Day 4 guardrails now refuse (all four, tested; not yet tried on a person).
 
 ## Dataset
 
@@ -172,6 +180,21 @@ Every failure was in the rules or data contracts, not in perception: on blur, a 
 
 **Browser check (2026-11-04).** The refund wording and the split payment were checked on a production build with `fixtures/stress/statement-october-split-and-refund.csv`: 16 of 16 checks pass (details in `failures.md`, "Follow-up"). The screenshots led to two fixes no test had caught: negative amounts printed as "$-4.50", and a split form that listed every free line under each receipt.
 
+### final (Day 5)
+
+`pnpm eval -- --mode live --label final` on commit `b72b858`, then `--mode replay --label final-replay` with the key blanked: identical. Same model and prompts as every run since Day 2; the rules changed on Day 4 (R-MAT-8 to R-MAT-11, R-CUR-3, R-QUA-1, R-CAT-6), and the follow-up guardrails act on human decisions, which the evaluation does not make.
+
+| Metric (full set) | `v0-day2` | `v1-day3` | `v2-day4-pre` | `v2-day4-post` | `final` |
+|---|---|---|---|---|---|
+| Test cases | 12/12 | 12/12 | 12/12 | 12/12 | 12/12 |
+| Wrong auto-match rate | 0/33 | 0/33 | 0/33 | 0/33 | 0/33 |
+| Extraction: vendor | 38/40 | 38/40 | 38/40 | 38/40 | 38/40 |
+| Human touches | 9/40 | 9/40 | 9/40 | 9/40 | **10/40** |
+| Stress cases | — | — | 6/10 | 10/10 | 11/11 |
+| Model p50 / p95 per receipt | 2.1 / 4.6 s | 3.0 / 4.7 s | (replay) | (replay) | 2.0 / 5.0 s |
+
+**The one regression, explained:** `pnpm eval:compare -- v2-day4-post final` flags human touches 9 → 10. The receipt is R18 (a coworking pass, holdout split): this run the model read its currency, correctly, as AUD at confidence **0.77**; the recording from Day 3's live run had **0.99**. Same model, same prompt, same file, so this is run-to-run variance in the model's self-reported confidence, the effect first seen on the Day 4 stress runs. It fails safe (the receipt goes to a person). The 0.8 threshold was **not** lowered: R18 is in the holdout split, and tuning on it would void the holdout claim.
+
 ### Oracle: the rules alone
 
 `pnpm eval -- --mode oracle --label oracle-day2` feeds the ground-truth fields in place of the model, so it measures the rules and pipeline without perception. Result: 12/12 test cases and identical match, exception, and human-touch numbers to v0-day2. So every remaining error in a live run is a perception error, not a rules error, on this set. Building this mode caught one rules bug before any live run: a stationer's mixed basket ("Desk organiser") categorised as Equipment (fixed; see the TRACKER AI corrections log).
@@ -235,9 +258,11 @@ Found on Day 2 and left alone until Day 4, because `06` reserves threshold and s
 
 | What | Why | How it will be measured |
 |---|---|---|
-| Time to close with the system | No Accounting user; the proxy session and the builder cold run have not happened yet | `docs/sprint/days/day-3-working-core/first-run-observations.md` (protocol and blank record), stopwatch |
+| Time to close **by the Accounting user** | There is no Accounting user for this sprint; measured instead by the builder (C1, about 8 min) and a naive proxy (P1, 9 min) | The Accounting user runs the protocol in `docs/sprint/days/day-3-working-core/first-run-observations.md` |
+| Whether the Day 4 guardrails change what a person does | Built after P1; checked by tests and scripted browser runs only | Another proxy session, scored against the key the same way |
 | B0 accuracy | Accounting user unavailable; candidate has seen the answer key | A person who has not seen the repo runs `fixtures/dataset/baseline/b0-kit/` |
 | Cost at cached-input rates | The run log does not split cached from uncached input | Record `input_tokens_details.cached_tokens` per call |
+| Variance of a live run | Two live runs of the full month only (`v1-day3`, `final`); confidence near 0.8 moved one receipt | Repeat `final` live several times and report the spread of human touches |
 | A small screenshot of a real receipt | S03 is a chat, not a receipt; the R-QUA-1 change relies on the model flagging what it cannot read (F2 residual risk) | Add a small receipt PNG to the stress set, record live |
 
 ## How to run
@@ -248,7 +273,7 @@ pnpm eval -- --mode replay --label <name> --cases TC04   # a subset (also --ids 
 pnpm eval -- --mode live   --label <name>                # real calls; records new fixtures
 pnpm eval -- --mode oracle --label <name>                # ground-truth fields: the rules alone
 pnpm eval:compare -- <labelA> <labelB>                   # metric deltas, regressions flagged
-pnpm eval:stress -- --mode replay --label <name>         # the 10 stress cases, no API key
+pnpm eval:stress -- --mode replay --label <name>         # the 11 stress cases, no API key
 pnpm eval:stress -- --mode live --label <name> --ids S03 # record chosen stress receipts only
 pnpm dataset:stress                                      # regenerate fixtures/stress
 ```
